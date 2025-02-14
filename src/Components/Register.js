@@ -104,7 +104,7 @@ function Register() {
                             {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
                         </div>
 
-                        <button className="mt-4 w-full bg-indigo-500 text-white py-4 rounded-xl font-medium hover:bg-indigo-700">
+                        <button className="mt-4 w-full bg-indigo-500 text-white py-4 rounded-xl font-medium hover:bg-indigo-700 transition">
                             Verify Email
                         </button>
                     </form>
