@@ -3,6 +3,7 @@ import React from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
     const [email, setEmail] = useState("");
@@ -24,6 +25,7 @@ function Register() {
 
         }
     };
+    const navigate = useNavigate();
     return (
         <div className="flex h-screen">
             {/* Left Section */}
@@ -82,9 +84,9 @@ function Register() {
                         <h2 className="text-3xl font-semibold text-gray-900">Register</h2>
                         <p className="text-gray-600">
                             <span>Already have an account?</span>{" "}
-                            <a href="#" className="text-indigo-600 font-medium">
+                            <button className="text-indigo-600 font-medium"  onClick={() => navigate("/")}>
                                 Log in
-                            </a>
+                            </button>
                         </p>
                     </div>
 
