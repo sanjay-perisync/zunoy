@@ -9,19 +9,37 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 function CompleteProfile() {
     const otpVerified = true;
     const [email, setEmail] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [mobileNumber, setMobileNumber] = useState("");
+    const [learnedFrom, setLearnedFrom] = useState("");
+    // const [accountType, setAccountType] = useState("");
+    const [isFormValid, setIsFormValid] = useState(false);
+    const [accountType, setAccountType] = useState("organization");
 
     useEffect(() => {
         const savedEmail = localStorage.getItem("registrationEmail");
         if (savedEmail) {
             setEmail(savedEmail);
         }
-    }, []);
+        const isValid = firstName && lastName && mobileNumber && learnedFrom && accountType;
+        setIsFormValid(isValid);
+    }, [firstName, lastName, mobileNumber, learnedFrom, accountType]);
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (isFormValid) {
+            console.log("Form submitted!");
+        }
+    };
     return (
-        <div className="flex h-screen ">
+        <div className="flex relative  h-screen ">
 
             {/* left section */}
+            <section className="hidden lg:flex flex-col justify-between flex-[1_1_29%] border-r p-6 max-w-2xl sticky top-0 h-screen overflow-y-auto bg-white">
+                {/* <section className="hidden lg:flex flex-col justify-between flex-[1_1_29%] border-r p-6 mx-auto max-w-2xl "> */}
 
-            <section className="hidden lg:flex flex-col justify-between flex-[1_1_29%] border-r p-6 mx-auto max-w-2xl">
                 <Header />
 
                 <div className="mx-auto max-w-xs">
@@ -84,7 +102,7 @@ function CompleteProfile() {
                                     "2"
                                 )}
                             </span>
-                            <span className={ "text-gray-900 font-medium"}>
+                            <span className={"text-gray-900 font-medium"}>
                                 Setup Password
                             </span>
                             <div className="absolute left-1 top-7 w-[2px] h-6 bg-gray-300"></div>
@@ -114,7 +132,7 @@ function CompleteProfile() {
             {/* right section */}
 
 
-            <section className="flex flex-col h-screen justify-between lg:items-center lg:flex-[1_1_71%] w-full bg-white py-8">
+            <section className="flex flex-1 pt-6 px-6 overflow-y-auto flex-col space-y-4 h-screen justify-between lg:items-center lg:flex-[1_1_71%] w-full bg-white py-8">
                 <div className="w-auto lg:w-[550px]">
                     <div className="mb-8">
                         <h1 className="text-2xl font-semibold mb-2">Complete Your Registration</h1>
@@ -125,9 +143,8 @@ function CompleteProfile() {
                             </a>
                         </p>
                     </div>
+                    <form className="space-y-8" onSubmit={handleSubmit}>
 
-                    <form className="space-y-6">
-                        {/* Email  */}
                         <div>
                             <TextField
                                 label="Email"
@@ -140,94 +157,117 @@ function CompleteProfile() {
                             />
                         </div>
 
-                        <div>
 
+                        <div>
                             <TextField
-                                label="First name"
+                                label="First Name"
                                 type="text"
-                                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
+                                fullWidth
                             />
                         </div>
 
-                        <div>
 
+                        <div>
                             <TextField
-                                label="Last name"
+                                label="Last Name"
                                 type="text"
-                                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
+                                fullWidth
                             />
                         </div>
 
-                        <div>
-
+                        <div className="flex gap-4">
                             <TextField
-                                label="Country"
                                 type="text"
-                                value="India"
+                                value="+91"
                                 disabled
-                                className="w-full px-4 py-2 border rounded-lg bg-gray-50 text-gray-500"
+                                className="w-16 px-4 py-2 border rounded-l-lg bg-gray-50 text-gray-500"
+                            />
+                            <TextField
+                                type="tel"
+                                placeholder="Mobile Number"
+                                value={mobileNumber}
+                                onChange={(e) => setMobileNumber(e.target.value)}
+                                className="flex-1 px-4 py-2 border-y border-r rounded-r-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             />
                         </div>
 
-                        <div>
 
-                            <div className="flex gap-4">
-                                <TextField
-
-                                    type="text"
-                                    value="+91"
-                                    disabled
-                                    className="w-16 px-4 py-2 border rounded-l-lg bg-gray-50 text-gray-500"
-                                />
-                                <TextField
-                                    type="tel"
-                                    placeholder="Mobile Number"
-                                    className="flex-1 px-4 py-2 border-y border-r rounded-r-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                />
-                            </div>
-
+                        <div className="relative flex justify-between">
+                            <select
+                                value={learnedFrom}
+                                onChange={(e) => setLearnedFrom(e.target.value)}
+                                className="w-full px-4 py-4 border rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            >
+                                <option value="">Where did you learn about us?</option>
+                                <option value="1">Option 1</option>
+                                <option value="2">Option 2</option>
+                                <option value="3">Option 3</option>
+                                <option value="4">Option 4</option>
+                            </select>
+                            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
                         </div>
 
-                        <div>
 
-                            <div className="relative">
-                                <select className="w-full px-4 py-4 border rounded-lg appearance-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                    <option value="">Where did you learn about us?</option>
-                                    <option value="">1</option>
-                                    <option value="">2</option>
-                                    <option value="">3</option>
-                                    <option value="">4</option>
-                                </select>
-                                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
-                            </div>
-                        </div>
-
-                        <div className="flex justify-between p-6 rounded-xl border gap-4 mt-8">
-                            <div className="flex items-center gap-3">
+                    
+                        <div className="flex justify-between rounded-xl border gap-4 mt-8">
+                            <button className="flex items-center p-6 gap-3">
                                 <input
                                     type="radio"
                                     id="organization"
                                     name="accountType"
                                     className="w-5 h-5 text-blue-600"
+                                    checked={accountType === "organization"}
+                                    onChange={() => setAccountType("organization")}
                                 />
                                 <label htmlFor="organization" className="text-sm">
                                     ORGANIZATION
                                 </label>
-                            </div>
-                            <div className="flex items-center gap-3">
+                            </button>
+                            <div className="border-r"></div>
+                            <button className="flex items-center gap-3 p-6">
                                 <input
                                     type="radio"
                                     id="freelancer"
                                     name="accountType"
                                     className="w-5 h-5 text-blue-600"
+                                    checked={accountType === "freelancer"}
+                                    onChange={() => setAccountType("freelancer")}
                                 />
                                 <label htmlFor="freelancer" className="text-sm">
                                     FREELANCER
                                 </label>
-                            </div>
+                            </button>
                         </div>
 
-                        <div className="flex justify-between gap-4 pt-4">
+                     
+                        {accountType === "organization" && (
+                            <div className="mt-6">
+                                <input
+                                    type="text"
+                                    placeholder="Company Name"
+                                    className="w-full border p-3 rounded-lg mb-3"
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="Company Domain"
+                                    className="w-full border p-3 rounded-lg mb-3"
+                                />
+                                <select className="w-full border p-3 rounded-lg">
+                                    <option value="">Team Size</option>
+                                    <option value="1-10">1-10</option>
+                                    <option value="11-50">11-50</option>
+                                    <option value="51-200">51-200</option>
+                                    <option value="201+">201+</option>
+                                </select>
+                            </div>
+                        )}
+
+                        {/* Buttons */}
+                        <div className="sticky bottom-0 left-0 w-full bg-white/80 backdrop-blur-sm py-4 h-20 flex justify-between gap-4">
                             <button
                                 type="button"
                                 className="px-6 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 flex items-center"
@@ -237,12 +277,17 @@ function CompleteProfile() {
                             </button>
                             <button
                                 type="submit"
-                                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center"
+                                className={`px-6 py-2 rounded-lg flex items-center ${!isFormValid
+                                        ? 'bg-gray-400 cursor-not-allowed text-gray-300'
+                                        : 'bg-blue-600 hover:bg-blue-700 text-white'
+                                    }`}
+                                disabled={!isFormValid}
                             >
                                 Submit
                                 <FaArrowRight className="ml-2" />
                             </button>
                         </div>
+
                     </form>
                 </div>
 
