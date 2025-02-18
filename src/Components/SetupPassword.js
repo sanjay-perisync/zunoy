@@ -15,6 +15,9 @@ export default function SetupPassword() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [confirmPasswordError, setConfirmPasswordError] = useState("");
+    const [isChecked, setIsChecked] = useState(false); // State to track checkbox
+    const [termsError, setTermsError] = useState(""); // State to track terms error
+
 
     const navigate = useNavigate();
 
@@ -57,6 +60,10 @@ export default function SetupPassword() {
         e.preventDefault();
         const isPasswordValid = validatePassword(password);
         const isConfirmPasswordValid = validateConfirmPassword();
+        if (!isChecked) {
+            setTermsError("You must accept the Terms and Conditions.");
+            return;
+        }
         if (isPasswordValid && isConfirmPasswordValid) {
             navigate("/complete-profile");
             console.log("Form submitted");
@@ -174,7 +181,7 @@ export default function SetupPassword() {
                                     <button
                                         type="button"
                                         onClick={togglePasswordVisibility}
-                                       className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600"
+                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600"
                                     >
                                         {showPassword ? <FaEyeSlash /> : <FaEye />}
                                     </button>
@@ -209,14 +216,20 @@ export default function SetupPassword() {
                                     type="checkbox"
                                     id="terms"
                                     className="h-4 w-4 text-blue-600 border-gray-300 rounded"
+                                    checked={isChecked}
+                                    onChange={(e) => setIsChecked(e.target.checked)} 
                                 />
-                                <label htmlFor="terms" className="ml-2 ">
+                                <label htmlFor="terms" className="ml-2">
                                     I have read the <span className="text-indigo-600">Terms and Conditions</span>
                                 </label>
                             </div>
+                            {termsError && <p className="text-red-500 text-sm">{termsError}</p>}
 
                             {/* Submit  */}
-                            <button type="submit" className="w-full bg-indigo-500 font-semibold text-white py-3 px-4 rounded-lg hover:bg-indigo-700 transition">
+                            <button
+                                type="submit"
+                                className="w-full bg-indigo-500 font-semibold text-white py-3 px-4 rounded-lg hover:bg-indigo-700 transition"
+                            >
                                 Create Account
                             </button>
                         </form>
