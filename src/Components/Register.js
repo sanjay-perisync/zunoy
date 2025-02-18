@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { TextField } from "@mui/material";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { SendotpAPI } from "../APIconfig/getAPIconfig";
 import { VerifyOtpApi } from "../APIconfig/PutApiconfig";
@@ -7,10 +8,13 @@ import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import Footer from './Footer';
 import Header from "./Header";
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 function Register() {
     const [otpSent, setOtpSent] = useState(false);
     const [otp, setOtp] = useState(Array(6).fill(""));
+    const otpRefs = useRef([]);
     const [error, setError] = useState("");
     const [loader, setLoader] = useState(false);
     const [email, setEmailState] = useState("");
@@ -21,16 +25,54 @@ function Register() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    function CircularIndeterminate() {
+        return (
+            <CircularProgress style={{ color: 'white', margin: '0 auto', display: 'block' }} />
+        );
+    }
+
+
+
+
+
+    // useEffect(() => {
+    //     let timer;
+    //     if (resendTimer > 0) {
+    //       timer = setInterval(() => {
+    //         setResendTimer((prev) => prev - 1);
+    //       }, 1000);
+    //     } else {
+    //       clearInterval(timer);
+    //     }
+    //     return () => clearInterval(timer);
+    //   }, [resendTimer]);
+
+
     useEffect(() => {
-        if (otpSent && resendTimer > 0) {
-            const timer = setInterval(() => {
+        if (resendTimer > 0) {
+            const timer = setTimeout(() => {
                 setResendTimer((prev) => prev - 1);
             }, 1000);
-            return () => clearInterval(timer);
+            return () => clearTimeout(timer);
         } else {
             setCanResend(true);
         }
-    }, [otpSent, resendTimer]);
+    }, [resendTimer]);
+
+
+
+
+    const handleResendClick = () => {
+        if (canResend) {
+            setOtpSent(false);
+            setResendTimer(10);
+            setCanResend(false);
+            handleEmailVerification();
+        }
+    };
+
+
+
 
     const handleEmailVerification = () => {
         if (!email) {
@@ -59,23 +101,18 @@ function Register() {
             const newOtp = [...otp];
             newOtp[index] = value;
             setOtp(newOtp);
-
             if (value && index < 5) {
-                const nextInput = document.querySelector(`input[name="otp-${index + 1}"]`);
-                if (nextInput) nextInput.focus();
+                otpRefs.current[index + 1]?.focus();
             }
         }
     };
 
     const handleKeyDown = (e, index) => {
         if (e.key === 'Backspace' && !otp[index] && index > 0) {
-            const prevInput = document.querySelector(`input[name="otp-${index - 1}"]`);
-            if (prevInput) {
-                prevInput.focus();
-                const newOtp = [...otp];
-                newOtp[index - 1] = '';
-                setOtp(newOtp);
-            }
+            otpRefs.current[index - 1]?.focus();
+            const newOtp = [...otp];
+            newOtp[index - 1] = '';
+            setOtp(newOtp);
         }
     };
 
@@ -99,15 +136,6 @@ function Register() {
 
 
 
-    const handleResendOtp = () => {
-        if (canResend) {
-            setOtpSent(false);
-            setResendTimer(10);
-            setCanResend(false);
-            handleEmailVerification();
-        }
-    };
-
     const renderStep = (number, text, completed, isLast = false) => (
         <div className="flex items-center space-x-2 relative">
             <span className={`w-6 h-6 flex items-center justify-center rounded-full 
@@ -120,6 +148,10 @@ function Register() {
             {!isLast && <div className="absolute left-1 top-7 w-[2px] h-6 bg-gray-300"></div>}
         </div>
     );
+
+
+
+
 
     return (
         <div className="flex h-screen">
@@ -193,6 +225,7 @@ function Register() {
                                             value={digit}
                                             onChange={(e) => handleOtpChange(index, e.target.value)}
                                             onKeyDown={(e) => handleKeyDown(e, index)}
+                                            inputRef={(el) => (otpRefs.current[index] = el)}
                                             className="w-12"
                                         />
                                     ))}
@@ -200,16 +233,23 @@ function Register() {
                             )}
 
                             {otpSent && (
-                                <div className="flex justify-between text-gray-500 text-sm mt-2">
+                                <div className="flex justify-between items-center space-y-2">
+                                    <p className="text-gray-700">
+                                        {resendTimer > 0 ? (
+                                            <span>Resend OTP available in {resendTimer}s</span>
+                                        ) : (
+                                            "Didn't receive OTP?"
+                                        )}
+                                    </p>
+                                    <button
+                                        onClick={handleResendClick}
+                                        disabled={!canResend}
 
-                                    <span>Resend OTP available in {resendTimer}s</span>
-
-
-                                    {canResend ? (
-                                        <button onClick={handleResendOtp} className="text-indigo-600 font-medium">
-                                            Resend OTP
-                                        </button>
-                                    ) : null}
+                                        className={`px-4 py-2 rounded ${!canResend ? "" : " text-gray-700"
+                                            }`}
+                                    >
+                                        Resend OTP
+                                    </button>
                                 </div>
                             )}
 
@@ -219,7 +259,7 @@ function Register() {
                                 disabled={loader}
                                 onClick={otpSent ? handleVerifyOtp : handleEmailVerification}
                             >
-                                {loader ? "Verifying..." : otpSent ? "Verify OTP" : "Verify Email"}
+                                {loader ? <CircularIndeterminate /> : otpSent ? "Verify OTP" : "Verify Email"}
                             </button>
                         </>
 
@@ -233,3 +273,5 @@ function Register() {
 }
 
 export default Register;
+
+
