@@ -1,26 +1,31 @@
-/*eslint-disable */
-import { AccountsRootUrl, ProjectId } from "./ConstantRootURL/RootUrl";
+import { AccountsRootUrl } from "./ConstantRootURL/RootUrl";
 import { toast } from "react-hot-toast";
 import { putAPICall } from "./axiosMethodCalls";
 
-export const ResetPasswordApi = (data, { setloader, setStatus }) => {
+export const VerifyOtpApi = (data, setLoader, setStatus, navigate) => {
   return (dispatch) => {
-    putAPICall(`${AccountsRootUrl}/forgotPassword`, data)
+    putAPICall(`${AccountsRootUrl}/verifyOtp`, data)
       .then((res) => {
-        setStatus("otp sent");
-        if (res?.data?.msg === "otp sent") {
-          // GlobalToaster(5, "success");
+        setLoader(false);
+        console.log("API Response:", res);
+
+        if (res?.data.msg === "verified successfully" ) {
+          setStatus("otp verified");
+          toast.success("OTP verified successfully!");
+         
+          localStorage.setItem("registrationEmail", data.email);
+          navigate("/setup-password");
         } else {
-          toast.success(res?.data?.msg);
+          setStatus("otp failed");
+          toast.error("Invalid OTP. Please try again.");
         }
-        setloader(false);
       })
       .catch((err) => {
+        console.error("API Error:", err); 
+        setLoader(false);
         dispatch({ type: "USER_VERIFICATION_FAILED", payload: err });
-        setloader(false);
         toast.error(
-          err?.response?.data?.msg ||
-          "Unable to update. Please try again later."
+          err?.response?.data?.msg || "Unable to verify OTP. Please try again later."
         );
       });
   };

@@ -1,39 +1,6 @@
 /* eslint-disable */
-// import { toast } from "react-hot-toast";
 import { getAPICall } from "./axiosMethodCalls";
 import { AccountsRootUrl } from "./ConstantRootURL/RootUrl";
-
-// Uncomment and modify if needed
-// export const GetSessionsApi = (
-//   PageData,
-//   searchValue,
-//   { setloader, setTotalRows }
-// ) => {
-//   return (dispatch) => {
-//     const options = {
-//       headers: {
-//         Authorization: "Bearer " + localStorage.getItem("at"),
-//       },
-//     };
-//     getAPICall(
-//       `${AccountsRootUrl}/account/session?page=${PageData?.page + 1}&size=${PageData?.pageSize}&search=${searchValue}`,
-//       options
-//     )
-//       .then((res) => {
-//         setTotalRows(res?.data?.total);
-//         // dispatch(GetSessionsSuccess(res));
-//         setloader(false);
-//       })
-//       .catch((err) => {
-//         setloader(false);
-//         dispatch({ type: "GET_SESSION_FAILED", payload: err });
-//         // toast.error(
-//         //   err?.response?.data?.msg ||
-//         //   "Unable to retrieve the data. Please try again later."
-//         // );
-//       });
-//   };
-// };
 
 // Send OTP API
 export const SendotpAPI = (data, setLoader, setOtpSent, setError) => {
@@ -56,8 +23,11 @@ export const SendotpAPI = (data, setLoader, setOtpSent, setError) => {
       if (res?.data?.msg === "otp sent") {
         setOtpSent(true);
         setError("");  
+        return res;
       } else {
-        setError("Unexpected response: " + (res?.msg || "No message"));
+        const errorMsg = "Unexpected response: " + (res?.data?.msg || "No message");
+        setError(errorMsg);
+        throw new Error(errorMsg);
       }
     })
     .catch((err) => {
@@ -68,52 +38,46 @@ export const SendotpAPI = (data, setLoader, setOtpSent, setError) => {
     });
 };
 
-// Verify OTP API
-export const VerifyOtpApi = (data, setLoader, setOtpVerified, setError) => {
-  setLoader(true);
-
-  const options = {
-    headers: {
-      Authorization: "Bearer " + localStorage.getItem("at"),
-    },
-  };
-
-  return getAPICall(
-    `${AccountsRootUrl}/verifyOtp?email=${data?.email}&otp=${data?.otp}`,
-    options
-  )
-    .then((res) => {
-      console.log("Verify OTP API Response:", res);
-      setLoader(false);
-
-      if (res?.data?.msg === "otp verified") {
-        setOtpVerified(true);
-        setError("");
-      } else {
-        setError("OTP verification failed: " + (res?.msg || "Unknown error"));
-      }
-    })
-    .catch((err) => {
-      console.error("Error:", err);
-      setLoader(false);
-      setError("Error verifying OTP. Please try again.");
-      throw err;
-    });
-};
-
-
-
+// // Verify OTP API
 // export const VerifyOtpApi = (data, setLoader, setOtpVerified, setError) => {
 //   setLoader(true);
+//   console.log("Starting OTP verification with data:", data);
 
-//   return new Promise((resolve) => {
-//     setTimeout(() => {
-//       console.log("OTP Verified Successfully");
+//   const options = {
+//     headers: {
+//       Authorization: "Bearer " + localStorage.getItem("at"),
+//     },
+//   };
+
+//   // Using the same path structure as sendOtp since that works
+//   const url = `${AccountsRootUrl}/verifyOtp?email=${encodeURIComponent(data?.email)}&otp=${encodeURIComponent(data?.otp)}`;
+//   console.log("Verification URL:", url);
+
+//   return getAPICall(url, options)
+//     .then((res) => {
+//       console.log("Raw API Response:", res);
 //       setLoader(false);
-//       setOtpVerified(true);
-//       setError("");
-//       resolve({ data: { msg: "otp verified" } });
-//     }, 1000);   
-//   });
-// };
 
+//       if (res?.data?.msg === "otp verified" || res?.msg === "otp verified") {
+//         setOtpVerified(true);
+//         setError("");
+//         return res;
+//       } else {
+//         const errorMsg = "OTP verification failed: " + (res?.data?.msg || res?.msg || "Unknown error");
+//         console.log("Verification failed:", errorMsg);
+//         setError(errorMsg);
+//         throw new Error(errorMsg);
+//       }
+//     })
+//     .catch((err) => {
+//       console.error("Detailed error:", err);
+//       setLoader(false);
+//       // More specific error handling
+//       if (err.response?.status === 404) {
+//         setError("Invalid verification endpoint. Please contact support.");
+//       } else {
+//         setError(err.response?.data?.msg || "Error verifying OTP. Please try again.");
+//       }
+//       throw err;
+//     });
+// };
