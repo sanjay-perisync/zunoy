@@ -1,7 +1,7 @@
 import Footer from "./Footer";
 import Header from "./Header";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { TextField, FormControlLabel, Checkbox, Button } from "@mui/material";
+import { TextField } from "@mui/material";
 import { useState, useEffect } from 'react';
 
 export default function SetupPassword() {
