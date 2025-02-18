@@ -114,7 +114,7 @@ function CompleteProfile() {
             {/* right section */}
 
 
-            <section className="flex flex-col h-screen justify-between lg:items-center lg:flex-[1_1_71%] w-full bg-white py-10">
+            <section className="flex flex-col h-screen justify-between lg:items-center lg:flex-[1_1_71%] w-full bg-white py-8">
                 <div className="w-auto lg:w-[550px]">
                     <div className="mb-8">
                         <h1 className="text-2xl font-semibold mb-2">Complete Your Registration</h1>
