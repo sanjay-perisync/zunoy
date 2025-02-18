@@ -3,6 +3,7 @@ import Header from "./Header";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { TextField } from "@mui/material";
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function SetupPassword() {
     const otpVerified = true;
@@ -14,6 +15,8 @@ export default function SetupPassword() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [confirmPasswordError, setConfirmPasswordError] = useState("");
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const savedEmail = localStorage.getItem("registrationEmail");
@@ -55,7 +58,7 @@ export default function SetupPassword() {
         const isPasswordValid = validatePassword(password);
         const isConfirmPasswordValid = validateConfirmPassword();
         if (isPasswordValid && isConfirmPasswordValid) {
-           
+            navigate("/complete-profile");
             console.log("Form submitted");
         }
     };

@@ -209,7 +209,7 @@ function Register() {
                                 disabled={otpSent}
                             />
                             {otpSent && (
-                                <div className="flex justify-between mb-4">
+                                <div className="flex justify-between gap-2 mb-4">
                                     {otp.map((digit, index) => (
                                         <TextField
                                             key={index}
@@ -255,12 +255,13 @@ function Register() {
 
 
                             <button
-                                className="mt-4 w-full bg-indigo-500 text-white py-4 rounded-xl font-medium hover:bg-indigo-700 transition"
+                                className={`mt-4 w-full py-4 rounded-xl font-medium transition ${loader ? "bg-gray-200 cursor-not-allowed" : "bg-indigo-500 text-white hover:bg-indigo-700"}`}
                                 disabled={loader}
                                 onClick={otpSent ? handleVerifyOtp : handleEmailVerification}
                             >
                                 {loader ? <CircularIndeterminate /> : otpSent ? "Verify OTP" : "Verify Email"}
                             </button>
+
                         </>
 
                         {error && <p className="text-red-500">{error}</p>}
