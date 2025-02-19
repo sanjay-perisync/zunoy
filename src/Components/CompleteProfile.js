@@ -3,43 +3,123 @@ import Header from './Header';
 import { ChevronDown } from 'lucide-react';
 import Footer from './Footer';
 import { useState, useEffect } from 'react';
-import { TextField } from "@mui/material";
+import { TextField, CircularProgress } from "@mui/material";
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+import { CreateRegister } from '../APIconfig/PostApiconfig';
+import { useNavigate } from "react-router-dom";
+import toast from 'react-hot-toast';
 
 function CompleteProfile() {
     const otpVerified = true;
-    const [email, setEmail] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [mobileNumber, setMobileNumber] = useState("");
-    const [learnedFrom, setLearnedFrom] = useState("");
-    // const [accountType, setAccountType] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [knowAboutOptions, setKnowAboutOptions] = useState([
+        "Google",
+        "Social Media",
+        "Friends",
+        "Other"
+    ]);
     const [isFormValid, setIsFormValid] = useState(false);
-    const [accountType, setAccountType] = useState("organization");
+    const navigate = useNavigate();
+
+    const [formData, setFormData] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phoneNo: "",
+        country: "India",
+        accountType: "organization",
+        knowAboutUs: "",
+        companyName: "",
+        companyDomain: "",
+        teamSize: ""
+    });
 
     useEffect(() => {
+        // Get email from localStorage
         const savedEmail = localStorage.getItem("registrationEmail");
         if (savedEmail) {
-            setEmail(savedEmail);
+            setFormData(prev => ({ ...prev, email: savedEmail }));
         }
-        const isValid = firstName && lastName && mobileNumber && learnedFrom && accountType;
+
+        // Fetch know about options
+        const fetchKnowAboutOptions = async () => {
+            try {
+                const response = await fetch("https://api.zunoy.com/api/v1/acc/register");
+                const data = await response.json();
+                if (data?.knowAboutUsOptions) {
+                    setKnowAboutOptions(data.knowAboutUsOptions);
+                }
+            } catch (error) {
+                console.error("Error fetching KnowAboutUs options:", error);
+            }
+        };
+
+        fetchKnowAboutOptions();
+    }, []);
+
+    useEffect(() => {
+        const isValid = 
+            formData.firstName &&
+            formData.lastName &&
+            formData.email &&
+            formData.phoneNo &&
+            formData.knowAboutUs &&
+            formData.accountType &&
+            (formData.accountType === 'freelancer' || 
+                (formData.companyName && formData.companyDomain && formData.teamSize));
         setIsFormValid(isValid);
-    }, [firstName, lastName, mobileNumber, learnedFrom, accountType]);
+    }, [formData]);
 
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (isFormValid) {
-            console.log("Form submitted!");
-        }
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
     };
+
+
+    
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+       
+        const phoneNoWithCode = formData.phoneNo.startsWith('+91') 
+            ? formData.phoneNo 
+            : `+91${formData.phoneNo}`;
+    
+       
+        const apiPayload = {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            country: formData.country,
+            phoneNo: phoneNoWithCode,
+            accountType: "freelancer", 
+            knowAboutUs: formData.knowAboutUs
+        };
+
+        await CreateRegister(apiPayload, {
+            setLoader: setLoading,
+            onSuccess: (data) => {
+                console.log("✅ Registration Success:", data);
+                toast.success("🎉 Registration successful! Redirecting to login...");
+                navigate("/");
+            },
+            onError: (error) => {
+                console.log("❌ Registration Error:", error);
+            }
+        });
+    };
+    
+
+    
     return (
-        <div className="flex relative  h-screen ">
-
-            {/* left section */}
+        <div className="flex relative h-screen">
+            {/* Left section */}
             <section className="hidden lg:flex flex-col justify-between flex-[1_1_29%] border-r p-6 max-w-2xl sticky top-0 h-screen overflow-y-auto bg-white">
-                {/* <section className="hidden lg:flex flex-col justify-between flex-[1_1_29%] border-r p-6 mx-auto max-w-2xl "> */}
-
                 <Header />
 
                 <div className="mx-auto max-w-xs">
@@ -49,66 +129,53 @@ function CompleteProfile() {
                     <div className="mt-4 space-y-8">
                         {/* Step 1 */}
                         <div className="flex items-center space-x-2 relative">
-                            <span
-                                className={`w-6 h-6 flex items-center justify-center rounded-full ${otpVerified ? "bg-indigo-600 text-white" : "bg-indigo-600 text-white"} font-medium`}
-                            >
-                                {otpVerified ? (
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                        className="w-4 h-4 text-white"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="M5 13l4 4L19 7"
-                                        />
-                                    </svg>
-                                ) : (
-                                    "1"
-                                )}
+                            <span className="w-6 h-6 flex items-center justify-center rounded-full bg-indigo-600 text-white font-medium">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                    className="w-4 h-4 text-white"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M5 13l4 4L19 7"
+                                    />
+                                </svg>
                             </span>
-                            <span className={`${otpVerified ? "text-gray-900 font-medium" : "text-gray-500"}`}>
+                            <span className="text-gray-900 font-medium">
                                 Email Verification
                             </span>
                             <div className="absolute left-1 top-7 w-[2px] h-6 bg-gray-300"></div>
                         </div>
 
-
-                        {/* Step 2*/}
+                        {/* Step 2 */}
                         <div className="flex items-center space-x-2 relative">
-                            <span
-                                className={`w-6 h-6 flex items-center justify-center rounded-full ${otpVerified ? "bg-indigo-600 text-white" : "bg-indigo-600 text-white"} font-medium`}
-                            >
-                                {otpVerified ? (
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                        className="w-4 h-4 text-white"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="M5 13l4 4L19 7"
-                                        />
-                                    </svg>
-                                ) : (
-                                    "2"
-                                )}
+                            <span className="w-6 h-6 flex items-center justify-center rounded-full bg-indigo-600 text-white font-medium">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                    className="w-4 h-4 text-white"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M5 13l4 4L19 7"
+                                    />
+                                </svg>
                             </span>
-                            <span className={"text-gray-900 font-medium"}>
+                            <span className="text-gray-900 font-medium">
                                 Setup Password
                             </span>
                             <div className="absolute left-1 top-7 w-[2px] h-6 bg-gray-300"></div>
                         </div>
 
-                        {/* Step 3*/}
+                        {/* Step 3 */}
                         <div className="flex items-center space-x-2">
                             <span className="w-6 h-6 flex items-center justify-center rounded-full bg-indigo-600 text-white text-sm font-medium">
                                 3
@@ -116,9 +183,7 @@ function CompleteProfile() {
                             <span className="text-gray-900 font-medium">Complete your Profile</span>
                         </div>
                     </div>
-
                 </div>
-
 
                 <div className="mt-6 mx-auto">
                     <p className="text-black font-bold text-xl">Need assistance?</p>
@@ -128,10 +193,7 @@ function CompleteProfile() {
                 </div>
             </section>
 
-
-            {/* right section */}
-
-
+            {/* Right section */}
             <section className="flex flex-1 pt-6 px-6 overflow-y-auto flex-col space-y-4 h-screen justify-between lg:items-center lg:flex-[1_1_71%] w-full bg-white py-8">
                 <div className="w-auto lg:w-[550px]">
                     <div className="mb-8">
@@ -143,120 +205,131 @@ function CompleteProfile() {
                             </a>
                         </p>
                     </div>
+
                     <form className="space-y-8" onSubmit={handleSubmit}>
+                        <TextField
+                            name="email"
+                            label="Email"
+                            type="email"
+                            value={formData.email}
+                            disabled
+                            fullWidth
+                        />
 
-                        <div>
-                            <TextField
-                                label="Email"
-                                type="email"
-                                value={email}
-                                disabled
-                                onChange={(e) => setEmail(e.target.value)}
-                                variant="outlined"
-                                fullWidth
-                            />
-                        </div>
+                        <TextField
+                            name="firstName"
+                            label="First Name"
+                            type="text"
+                            value={formData.firstName}
+                            onChange={handleChange}
+                            fullWidth
+                            required
+                        />
 
-
-                        <div>
-                            <TextField
-                                label="First Name"
-                                type="text"
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
-                                fullWidth
-                            />
-                        </div>
-
-
-                        <div>
-                            <TextField
-                                label="Last Name"
-                                type="text"
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
-                                fullWidth
-                            />
-                        </div>
+                        <TextField
+                            name="lastName"
+                            label="Last Name"
+                            type="text"
+                            value={formData.lastName}
+                            onChange={handleChange}
+                            fullWidth
+                            required
+                        />
 
                         <div className="flex gap-4">
                             <TextField
-                                type="text"
                                 value="+91"
                                 disabled
-                                className="w-16 px-4 py-2 border rounded-l-lg bg-gray-50 text-gray-500"
+                                className="w-16"
                             />
                             <TextField
+                                name="phoneNo"
                                 type="tel"
                                 placeholder="Mobile Number"
-                                value={mobileNumber}
-                                onChange={(e) => setMobileNumber(e.target.value)}
-                                className="flex-1 px-4 py-2 border-y border-r rounded-r-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                value={formData.phoneNo}
+                                onChange={handleChange}
+                                fullWidth
+                                required
                             />
                         </div>
 
-
-                        <div className="relative flex justify-between">
+                        <div className="relative">
                             <select
-                                value={learnedFrom}
-                                onChange={(e) => setLearnedFrom(e.target.value)}
-                                className="w-full px-4 py-4 border rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                name="knowAboutUs"
+                                value={formData.knowAboutUs}
+                                onChange={handleChange}
+                                className="w-full px-4 py-4 border rounded-lg appearance-none"
+                                required
                             >
                                 <option value="">Where did you learn about us?</option>
-                                <option value="1">Option 1</option>
-                                <option value="2">Option 2</option>
-                                <option value="3">Option 3</option>
-                                <option value="4">Option 4</option>
+                                {knowAboutOptions.map((option, index) => (
+                                    <option key={index} value={option}>
+                                        {option}
+                                    </option>
+                                ))}
                             </select>
                             <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
                         </div>
 
-
-                    
-                        <div className="flex justify-between rounded-xl border gap-4 mt-8">
-                            <button className="flex items-center p-6 gap-3">
+                        <div className="flex justify-between rounded-xl border gap-4">
+                            <button
+                                type="button"
+                                className={`flex items-center p-6 gap-3 ${formData.accountType === 'organization' ? 'bg-blue-50' : ''}`}
+                                onClick={() => handleChange({ target: { name: 'accountType', value: 'organization' } })}
+                            >
                                 <input
                                     type="radio"
-                                    id="organization"
                                     name="accountType"
-                                    className="w-5 h-5 text-blue-600"
-                                    checked={accountType === "organization"}
-                                    onChange={() => setAccountType("organization")}
+                                    value="organization"
+                                    checked={formData.accountType === "organization"}
+                                    onChange={handleChange}
+                                    className="w-5 h-5"
                                 />
-                                <label htmlFor="organization" className="text-sm">
-                                    ORGANIZATION
-                                </label>
+                                <label>ORGANIZATION</label>
                             </button>
                             <div className="border-r"></div>
-                            <button className="flex items-center gap-3 p-6">
+                            <button
+                                type="button"
+                                className={`flex items-center p-6 gap-3 ${formData.accountType === 'freelancer' ? 'bg-blue-50' : ''}`}
+                                onClick={() => handleChange({ target: { name: 'accountType', value: 'freelancer' } })}
+                            >
                                 <input
                                     type="radio"
-                                    id="freelancer"
                                     name="accountType"
-                                    className="w-5 h-5 text-blue-600"
-                                    checked={accountType === "freelancer"}
-                                    onChange={() => setAccountType("freelancer")}
+                                    value="freelancer"
+                                    checked={formData.accountType === "freelancer"}
+                                    onChange={handleChange}
+                                    className="w-5 h-5"
                                 />
-                                <label htmlFor="freelancer" className="text-sm">
-                                    FREELANCER
-                                </label>
+                                <label>FREELANCER</label>
                             </button>
                         </div>
 
-                     
-                        {accountType === "organization" && (
-                            <div className="mt-6">
-                                <input
-                                    type="text"
-                                    placeholder="Company Name"
-                                    className="w-full border p-3 rounded-lg mb-3"
+                        {formData.accountType === "organization" && (
+                            <div className="space-y-4">
+                                <TextField
+                                    name="companyName"
+                                    label="Company Name"
+                                    value={formData.companyName}
+                                    onChange={handleChange}
+                                    fullWidth
+                                    required
                                 />
-                                <input
-                                    type="text"
-                                    placeholder="Company Domain"
-                                    className="w-full border p-3 rounded-lg mb-3"
+                                <TextField
+                                    name="companyDomain"
+                                    label="Company Domain"
+                                    value={formData.companyDomain}
+                                    onChange={handleChange}
+                                    fullWidth
+                                    required
                                 />
-                                <select className="w-full border p-3 rounded-lg">
+                                <select
+                                    name="teamSize"
+                                    value={formData.teamSize}
+                                    onChange={handleChange}
+                                    className="w-full px-4 py-4 border rounded-lg"
+                                    required
+                                >
                                     <option value="">Team Size</option>
                                     <option value="1-10">1-10</option>
                                     <option value="11-50">11-50</option>
@@ -266,7 +339,6 @@ function CompleteProfile() {
                             </div>
                         )}
 
-                        {/* Buttons */}
                         <div className="sticky bottom-0 left-0 w-full bg-white/80 backdrop-blur-sm py-4 h-20 flex justify-between gap-4">
                             <button
                                 type="button"
@@ -277,25 +349,21 @@ function CompleteProfile() {
                             </button>
                             <button
                                 type="submit"
-                                className={`px-6 py-2 rounded-lg flex items-center ${!isFormValid
-                                        ? 'bg-gray-400 cursor-not-allowed text-gray-300'
-                                        : 'bg-blue-600 hover:bg-blue-700 text-white'
-                                    }`}
-                                disabled={!isFormValid}
+                                className={`px-6 py-2 rounded-lg flex items-center justify-center ${
+                                    !isFormValid ? "bg-gray-400 cursor-not-allowed text-gray-300" : "bg-blue-600 hover:bg-blue-700 text-white"
+                                }`}
+                                disabled={!isFormValid || loading}
                             >
-                                Submit
-                                <FaArrowRight className="ml-2" />
+                                {loading ? <CircularProgress size={20} className="text-white" /> : "Submit"}
+                                {!loading && <FaArrowRight className="ml-2" />}
                             </button>
                         </div>
-
                     </form>
                 </div>
-
-
                 <Footer />
             </section>
         </div>
-    )
+    );
 }
 
-export default CompleteProfile
+export default CompleteProfile;

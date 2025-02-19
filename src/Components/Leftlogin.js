@@ -4,7 +4,7 @@ import Footer from './Footer';
 
 function Leftlogin() {
   return (
-    <div className='flex flex-col justify-center lg:justify-between py-4 min-h-screen '>
+    <div className='hidden lg:flex flex-col justify-center lg:justify-between py-4 min-h-screen '>
        {/* <header className='pt-4 pl-6 hidden lg:flex'>
         <img src='/images/image 314.svg' alt='' className='object-cover h-10'></img>
        </header> */}

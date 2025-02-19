@@ -136,18 +136,18 @@ function Register() {
 
 
 
-    const renderStep = (number, text, completed, isLast = false) => (
-        <div className="flex items-center space-x-2 relative">
-            <span className={`w-6 h-6 flex items-center justify-center rounded-full 
-                ${completed ? "bg-indigo-600 text-white" : "bg-gray-400"}  text-sm font-medium`}>
-                {completed ? "✔" : number}
-            </span>
-            <span className={`${completed ? "text-white font-semibold" : "text-gray-500"}`}>
-                {text}
-            </span>
-            {!isLast && <div className="absolute left-1 top-7 w-[2px] h-6 bg-gray-300"></div>}
-        </div>
-    );
+    // const renderStep = (number, text, completed, isLast = false) => (
+    //     <div className="flex items-center space-x-2 relative">
+    //         <span className={`w-6 h-6 flex items-center justify-center rounded-full 
+    //             ${completed ? "bg-indigo-600 text-white" : "bg-gray-400"}  text-sm font-medium`}>
+    //             {completed ? "✔" : number}
+    //         </span>
+    //         <span className={`${completed ? "text-white font-semibold" : "text-gray-500"}`}>
+    //             {text}
+    //         </span>
+    //         {!isLast && <div className="absolute left-1 top-7 w-[2px] h-6 bg-gray-300"></div>}
+    //     </div>
+    // );
 
 
 
@@ -162,10 +162,58 @@ function Register() {
                     <h6 className="text-[20px] font-bold pb-5">
                         Create your Zunoy account in three simple steps
                     </h6>
-                    <div className="mt-4 space-y-8">
+                    {/* <div className="mt-4 space-y-8">
                         {renderStep(1, "Email Verification", otpVerified)}
                         {renderStep(2, "Setup Password", false)}
                         {renderStep(3, "Complete your Profile", false, true)}
+                    </div> */}
+                    <div className="mt-4 space-y-8">
+                        {/* Step 1 */}
+                        <div className="flex items-center space-x-2 relative">
+                            <span
+                                className={`w-6 h-6 flex items-center justify-center rounded-full ${otpVerified ? "bg-indigo-600 text-white" : "bg-indigo-600 text-white"} font-medium`}
+                            >
+                                {otpVerified ? (
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        className="w-4 h-4 text-white"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M5 13l4 4L19 7"
+                                        />
+                                    </svg>
+                                ) : (
+                                    "1"
+                                )}
+                            </span>
+                            <span className={`${otpVerified ? "font-semibold" : "text-gray-900 font-medium"}`}>
+                                Email Verification
+                            </span>
+                            <div className="absolute left-1 top-7 w-[2px] h-6 bg-gray-300"></div>
+                        </div>
+                        {/* Step 2*/}
+                        <div className="flex items-center space-x-2 relative">
+                            <span className={`w-6 h-6 flex items-center justify-center rounded-full ${otpVerified ? "bg-indigo-600" : "bg-gray-400"} text-white font-medium`}>
+                                2
+                            </span>
+                            <span className={`${otpVerified ? "text-gray-900 font-medium" : "text-gray-500"}`}>
+                                Setup Password
+                            </span>
+                            <div className="absolute left-1 top-7 w-[2px] h-6 bg-gray-300"></div>
+                        </div>
+                        {/* Step 3*/}
+                        <div className="flex items-center space-x-2">
+                            <span className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-400 text-white font-medium">
+                                3
+                            </span>
+                            <span className="text-gray-500">Complete your Profile</span>
+                        </div>
                     </div>
                 </div>
                 <div className="mt-6 mx-auto">

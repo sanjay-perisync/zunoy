@@ -4,6 +4,8 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { TextField } from "@mui/material";
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { createUser } from "../APIconfig/PostApiconfig";
+import toast from "react-hot-toast";
 
 export default function SetupPassword() {
     const otpVerified = true;
@@ -15,18 +17,16 @@ export default function SetupPassword() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [confirmPasswordError, setConfirmPasswordError] = useState("");
-    const [isChecked, setIsChecked] = useState(false); // State to track checkbox
-    const [termsError, setTermsError] = useState(""); // State to track terms error
+    const [isChecked, setIsChecked] = useState(false); 
+    const [termsError, setTermsError] = useState(""); 
+    const [loading, setLoading] = useState(false);
+    const [identifier, setIdentifier] = useState("");
+    const [accountCreated, setAccountCreated] = useState(false);
 
 
     const navigate = useNavigate();
+    
 
-    useEffect(() => {
-        const savedEmail = localStorage.getItem("registrationEmail");
-        if (savedEmail) {
-            setEmail(savedEmail);
-        }
-    }, []);
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -37,12 +37,27 @@ export default function SetupPassword() {
     };
 
     const validatePassword = (password) => {
-        // Ensure password has at least one lowercase letter
+        if (password.length < 8) {
+            setPasswordError("Password must be at least 8 characters long.");
+            return false;
+        }
         const lowercaseRegex = /[a-z]/;
+        const uppercaseRegex = /[A-Z]/;
+        const numberRegex = /[0-9]/;
+        
         if (!lowercaseRegex.test(password)) {
             setPasswordError("Password must contain at least one lowercase letter.");
             return false;
         }
+        if (!uppercaseRegex.test(password)) {
+            setPasswordError("Password must contain at least one uppercase letter.");
+            return false;
+        }
+        if (!numberRegex.test(password)) {
+            setPasswordError("Password must contain at least one number.");
+            return false;
+        }
+        
         setPasswordError("");
         return true;
     };
@@ -56,20 +71,203 @@ export default function SetupPassword() {
         return true;
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const isPasswordValid = validatePassword(password);
-        const isConfirmPasswordValid = validateConfirmPassword();
-        if (!isChecked) {
-            setTermsError("You must accept the Terms and Conditions.");
-            return;
-        }
-        if (isPasswordValid && isConfirmPasswordValid) {
-            navigate("/complete-profile");
-            console.log("Form submitted");
-        }
-    };
+    // const handleSubmit = (e) => {
+    //     e.preventDefault();
+    //     const isPasswordValid = validatePassword(password);
+    //     const isConfirmPasswordValid = validateConfirmPassword();
+    //     if (!isChecked) {
+    //         setTermsError("You must accept the Terms and Conditions.");
+    //         return;
+    //     }
+    //     if (isPasswordValid && isConfirmPasswordValid) {
+    //         navigate("/complete-profile");
+    //         console.log("Form submitted");
+    //     }
+    // };
 
+    // useEffect(() => {
+    //     const storedEmail = localStorage.getItem("registrationEmail") || "";
+    //     const storedIdentifier = localStorage.getItem("identifier") || ""; // ✅ Ensure key matches storage
+    
+    //     console.log("📌 Loaded from LocalStorage:", { storedEmail, storedIdentifier });
+    
+    //     setEmail(storedEmail);
+    //     setIdentifier(storedIdentifier);
+    // }, []);
+    
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+        
+    //     console.log("🚀 Submitting form with identifier:", identifier); // ✅ Debugging log
+    
+    //     if (!identifier) {  
+    //         console.error("❌ Identifier is missing before API call!");
+    //         alert("Something went wrong. Please try again.");
+    //         return;
+    //     }
+    
+    //     setLoading(true);
+    //     try {
+    //         await createUser(
+    //             {
+    //                 email,
+    //                 identifier,  // ✅ Ensuring identifier is passed correctly
+    //                 password,
+    //                 policy: true,
+    //                 termsandcondition: true,
+    //                 userIP: "157.45.210.228",
+    //             },
+    //             {
+    //                 setLoader: setLoading,
+    //                 onSuccess: () => {
+    //                     localStorage.setItem("userEmail", email);
+    //                     console.log("✅ User created successfully. Navigating...");
+    //                     navigate("/complete-profile");
+    //                 },
+    //                 onError: (error) => {
+    //                     console.error("❌ API Error:", error);
+    //                     alert(error?.response?.data?.message || "Something went wrong. Please try again.");
+    //                 },
+    //             }
+    //         );
+    //     } catch (error) {
+    //         console.error("API Call Failed:", error);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+    
+    useEffect(() => {
+        const storedEmail = localStorage.getItem("registrationEmail") || "";
+        const storedIdentifier = localStorage.getItem("identifier") || "";  
+      
+        console.log(" Loaded from LocalStorage:", { storedEmail, storedIdentifier });
+      
+        setEmail(storedEmail);
+        setIdentifier(storedIdentifier);
+      }, []);
+
+
+      
+
+const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!identifier) {
+        toast.error("Something went wrong. Please try again.");
+        return;
+    }
+
+    if (!validatePassword(password) || !validateConfirmPassword()) {
+        return;
+    }
+
+    if (!isChecked) {
+        setTermsError("You must agree to the Terms and Conditions.");
+        return;
+    } else {
+        setTermsError("");
+    }
+
+    setLoading(true);
+    try {
+        await createUser(
+            {
+                email,
+                identifier,
+                password,
+                policy: true,
+                termsandcondition: true,
+                userIP: "106.51.221.186",
+            },
+            {
+                setLoader: setLoading,
+                onSuccess: () => {
+                    localStorage.setItem("userEmail", email);
+                    setAccountCreated(true);
+
+                    
+                    setTimeout(() => {
+                        navigate("/complete-profile");
+                    }, 3000);
+                },
+                onError: (error) => {
+                    toast.error(error?.response?.data?.message || "Something went wrong.");
+                },
+            }
+        );
+    } catch (error) {
+        toast.error("API Call Failed. Try again.");
+    } finally {
+        setLoading(false);
+    }
+};
+
+
+
+    //   const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    
+    //     console.log("Submitting form with identifier:", identifier);
+    
+    //     if (!identifier) {
+    //         console.error("Identifier is missing before API call!");
+    //         toast.error("Something went wrong. Please try again.");
+    //         return;
+    //     }
+    
+       
+    //     if (!validatePassword(password)) {
+    //         return;
+    //     }
+    
+     
+    //     if (!validateConfirmPassword()) {
+    //         return;
+    //     }
+    
+
+    //     if (!isChecked) {
+    //         setTermsError("You must agree to the Terms and Conditions.");
+    //         return;
+    //     } else {
+    //         setTermsError("");
+    //     }
+    
+    //     setLoading(true);
+    //     try {
+    //         await createUser(
+    //             {
+    //                 email,
+    //                 identifier,
+    //                 password,
+    //                 policy: true,
+    //                 termsandcondition: true,
+    //                 userIP: "106.51.221.186",
+    //             },
+    //             {
+    //                 setLoader: setLoading,
+    //                 onSuccess: () => {
+    //                     localStorage.setItem("userEmail", email);
+    //                     console.log("User created successfully. Navigating...");
+    //                     navigate("/complete-profile");
+    //                 },
+    //                 onError: (error) => {
+    //                     console.error("API Error:", error);
+    //                     alert(error?.response?.data?.message || "Something went wrong. Please try again.");
+    //                 },
+    //             }
+    //         );
+    //     } catch (error) {
+    //         console.error("API Call Failed:", error);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+    
+      
+
+   
     return (
         <div className="flex h-screen ">
             {/* Left Section */}
@@ -150,7 +348,16 @@ export default function SetupPassword() {
                         </div>
                     </div>
 
-                    <div className="flex flex-col gap-6 mt-5 mb-5 w-auto lg:w-[500px] px-5">
+                    <div className="flex flex-col justify-center  gap-6 mt-5 mb-5 w-auto lg:w-[500px] px-5">
+                    {accountCreated ? (
+                         <div className="bg-green-50 p-6 rounded-lg shadow-lg flex flex-col justify-center h-[500px] items-center text-center w-full">
+                         <div className="flex justify-center">
+                             <img src="https://account.zunoy.com/assets/iconly/iconly-glass-tick.svg" alt="Success" className="w-16 h-16" />
+                         </div>
+                         <h2 className="text-lg font-semibold mt-4 text-green-700">Account Created Successfully</h2>
+                         <p className="text-gray-600 mt-2">Please wait ...</p>
+                     </div>
+                 ) : (
                         <form className="space-y-6" onSubmit={handleSubmit}>
                             {/* Email  */}
                             <div>
@@ -233,6 +440,7 @@ export default function SetupPassword() {
                                 Create Account
                             </button>
                         </form>
+                         )}
                     </div>
                 </div>
 

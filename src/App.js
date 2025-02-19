@@ -6,6 +6,7 @@ import Login from "./Components/Login";
 import Register from "./Components/Register"; 
 import SetupPassword from "./Components/SetupPassword";
 import CompleteProfile from "./Components/CompleteProfile";
+import MainPage from "./Components/MainPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/setup-password" element={<SetupPassword />} />
             <Route path="/complete-profile" element={<CompleteProfile />} />
+            <Route path="/mainpage" element={<MainPage />} />
           </Routes>
         </div>
       </Router>
