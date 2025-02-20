@@ -7,6 +7,7 @@ import Register from "./Components/Register";
 import SetupPassword from "./Components/SetupPassword";
 import CompleteProfile from "./Components/CompleteProfile";
 import MainPage from "./Components/MainPage";
+import ResetPassword from "./Components/ResetPassword";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Route path="/setup-password" element={<SetupPassword />} />
             <Route path="/complete-profile" element={<CompleteProfile />} />
             <Route path="/mainpage" element={<MainPage />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
           </Routes>
         </div>
       </Router>

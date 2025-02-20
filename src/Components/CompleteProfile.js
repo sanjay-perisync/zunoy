@@ -8,10 +8,12 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { CreateRegister } from '../APIconfig/PostApiconfig';
 import { useNavigate } from "react-router-dom";
 import toast from 'react-hot-toast';
+import { Link } from "react-router-dom";
 
 function CompleteProfile() {
     const otpVerified = true;
     const [loading, setLoading] = useState(false);
+    const [focused, setFocused] = useState(false);
     const [knowAboutOptions, setKnowAboutOptions] = useState([
         "Google",
         "Social Media",
@@ -19,6 +21,7 @@ function CompleteProfile() {
         "Other"
     ]);
     const [isFormValid, setIsFormValid] = useState(false);
+    const [accountCreated, setAccountCreated] = useState(false);
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -58,14 +61,14 @@ function CompleteProfile() {
     }, []);
 
     useEffect(() => {
-        const isValid = 
+        const isValid =
             formData.firstName &&
             formData.lastName &&
             formData.email &&
             formData.phoneNo &&
             formData.knowAboutUs &&
             formData.accountType &&
-            (formData.accountType === 'freelancer' || 
+            (formData.accountType === 'freelancer' ||
                 (formData.companyName && formData.companyDomain && formData.teamSize));
         setIsFormValid(isValid);
     }, [formData]);
@@ -81,23 +84,23 @@ function CompleteProfile() {
     };
 
 
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
-       
-        const phoneNoWithCode = formData.phoneNo.startsWith('+91') 
-            ? formData.phoneNo 
+
+
+        const phoneNoWithCode = formData.phoneNo.startsWith('+91')
+            ? formData.phoneNo
             : `+91${formData.phoneNo}`;
-    
-       
+
+
         const apiPayload = {
             firstName: formData.firstName,
             lastName: formData.lastName,
             email: formData.email,
             country: formData.country,
             phoneNo: phoneNoWithCode,
-            accountType: "freelancer", 
+            accountType: "freelancer",
             knowAboutUs: formData.knowAboutUs
         };
 
@@ -105,17 +108,20 @@ function CompleteProfile() {
             setLoader: setLoading,
             onSuccess: (data) => {
                 console.log("✅ Registration Success:", data);
-                toast.success("🎉 Registration successful! Redirecting to login...");
-                navigate("/");
+                setAccountCreated(true);
+                setTimeout(() => {
+                    navigate("/");
+                }, 3000);
+
             },
             onError: (error) => {
-                console.log("❌ Registration Error:", error);
+                toast.error("❌ Registration Error:", error);
             }
         });
     };
-    
 
-    
+
+
     return (
         <div className="flex relative h-screen">
             {/* Left section */}
@@ -196,169 +202,324 @@ function CompleteProfile() {
             {/* Right section */}
             <section className="flex flex-1 pt-6 px-6 overflow-y-auto flex-col space-y-4 h-screen justify-between lg:items-center lg:flex-[1_1_71%] w-full bg-white py-8">
                 <div className="w-auto lg:w-[550px]">
+                    <header className="flex justify-start lg:hidden mb-20">
+                        <img src="/images/image 314.svg" alt="Logo" className="object-cover h-10" />
+                    </header>
                     <div className="mb-8">
                         <h1 className="text-2xl font-semibold mb-2">Complete Your Registration</h1>
                         <p className="text-gray-600">
                             Already have an account?{' '}
-                            <a href="#" className="text-indigo-500 font-semibold hover:text-blue-700">
-                                Log in
-                            </a>
+                            <Link to="/" className="text-indigo-500 font-semibold text-[16px] pl-2 hover:text-indigo-600">
+           Login
+        </Link>
                         </p>
                     </div>
 
-                    <form className="space-y-8" onSubmit={handleSubmit}>
-                        <TextField
-                            name="email"
-                            label="Email"
-                            type="email"
-                            value={formData.email}
-                            disabled
-                            fullWidth
-                        />
 
-                        <TextField
-                            name="firstName"
-                            label="First Name"
-                            type="text"
-                            value={formData.firstName}
-                            onChange={handleChange}
-                            fullWidth
-                            required
-                        />
-
-                        <TextField
-                            name="lastName"
-                            label="Last Name"
-                            type="text"
-                            value={formData.lastName}
-                            onChange={handleChange}
-                            fullWidth
-                            required
-                        />
-
-                        <div className="flex gap-4">
+                    {accountCreated ? (
+                        <div className="bg-green-50 p-6 rounded-lg shadow-lg flex flex-col justify-center h-[500px] items-center text-center w-full">
+                            <div className="flex justify-center">
+                                <img src="https://account.zunoy.com/assets/iconly/iconly-glass-tick.svg" alt="Success" className="w-16 h-16" />
+                            </div>
+                            <h2 className="text-lg font-semibold mt-4 text-green-700">Registration Completed Successfully</h2>
+                            <p className="text-gray-600 mt-2">You will be redirected to Login page Please wait ...</p>
+                        </div>
+                    ) : (
+                        <form className="space-y-8" onSubmit={handleSubmit}>
                             <TextField
-                                value="+91"
+                                name="email"
+                                label="Email"
+                                type="email"
+                                value={formData.email}
                                 disabled
-                                className="w-16"
+                                fullWidth
+                                variant="filled"
+                                sx={{
+                                    "& .MuiInputBase-root": {
+                                        border: "1px solid",
+                                        borderColor: focused ? "#1976D2" : "#F8F8F8",
+                                        borderRadius: "8px",
+                                        backgroundColor: "#F8F8F8",
+                                        transition: "border-color 0.3s ease",
+                                    },
+
+                                    "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+                                        display: "none",
+                                    },
+                                }}
                             />
+
                             <TextField
-                                name="phoneNo"
-                                type="tel"
-                                placeholder="Mobile Number"
-                                value={formData.phoneNo}
+                                name="firstName"
+                                label="First Name"
+                                type="text"
+                                variant="filled"
+                                value={formData.firstName}
                                 onChange={handleChange}
                                 fullWidth
                                 required
+                                sx={{
+                                    "& .MuiInputBase-root": {
+                                        border: "3px solid",
+                                        borderColor: focused ? "#1976D2" : "#F8F8F8",
+                                        borderRadius: "8px",
+                                        backgroundColor: "white",
+                                        transition: "border-color 0.3s ease",
+                                    },
+                                    "& .MuiInputBase-root:hover": {
+                                        borderColor: focused ? "#1976D2" : "#BEBEBE",
+                                        backgroundColor: "#F8F8F8",
+                                    },
+                                    "& .MuiInputBase-root.Mui-focused": {
+                                        borderColor: "#1976D2",
+                                        backgroundColor: "white",
+                                    },
+                                    "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+                                        display: "none",
+                                    },
+                                }}
                             />
-                        </div>
 
-                        <div className="relative">
-                            <select
-                                name="knowAboutUs"
-                                value={formData.knowAboutUs}
+                            <TextField
+                                name="lastName"
+                                label="Last Name"
+                                type="text"
+                                variant="filled"
+                                value={formData.lastName}
                                 onChange={handleChange}
-                                className="w-full px-4 py-4 border rounded-lg appearance-none"
+                                fullWidth
                                 required
-                            >
-                                <option value="">Where did you learn about us?</option>
-                                {knowAboutOptions.map((option, index) => (
-                                    <option key={index} value={option}>
-                                        {option}
-                                    </option>
-                                ))}
-                            </select>
-                            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
-                        </div>
+                                sx={{
+                                    "& .MuiInputBase-root": {
+                                        border: "3px solid",
+                                        borderColor: focused ? "#1976D2" : "#F8F8F8",
+                                        borderRadius: "8px",
+                                        backgroundColor: "white",
+                                        transition: "border-color 0.3s ease",
+                                    },
+                                    "& .MuiInputBase-root:hover": {
+                                        borderColor: focused ? "#1976D2" : "#BEBEBE",
+                                        backgroundColor: "#F8F8F8",
+                                    },
+                                    "& .MuiInputBase-root.Mui-focused": {
+                                        borderColor: "#1976D2",
+                                        backgroundColor: "white",
+                                    },
+                                    "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+                                        display: "none",
+                                    },
+                                }}
+                            />
 
-                        <div className="flex justify-between rounded-xl border gap-4">
-                            <button
-                                type="button"
-                                className={`flex items-center p-6 gap-3 ${formData.accountType === 'organization' ? 'bg-blue-50' : ''}`}
-                                onClick={() => handleChange({ target: { name: 'accountType', value: 'organization' } })}
-                            >
-                                <input
-                                    type="radio"
-                                    name="accountType"
-                                    value="organization"
-                                    checked={formData.accountType === "organization"}
-                                    onChange={handleChange}
-                                    className="w-5 h-5"
-                                />
-                                <label>ORGANIZATION</label>
-                            </button>
-                            <div className="border-r"></div>
-                            <button
-                                type="button"
-                                className={`flex items-center p-6 gap-3 ${formData.accountType === 'freelancer' ? 'bg-blue-50' : ''}`}
-                                onClick={() => handleChange({ target: { name: 'accountType', value: 'freelancer' } })}
-                            >
-                                <input
-                                    type="radio"
-                                    name="accountType"
-                                    value="freelancer"
-                                    checked={formData.accountType === "freelancer"}
-                                    onChange={handleChange}
-                                    className="w-5 h-5"
-                                />
-                                <label>FREELANCER</label>
-                            </button>
-                        </div>
-
-                        {formData.accountType === "organization" && (
-                            <div className="space-y-4">
+                            <div className="flex gap-4">
                                 <TextField
-                                    name="companyName"
-                                    label="Company Name"
-                                    value={formData.companyName}
+                                    value="+91"
+                                    disabled
+                                    variant="filled"
+                                    className="w-auto lg:w-16"
+                                    sx={{
+                                        "& .MuiInputBase-root": {
+                                            border: "1px solid",
+                                            borderColor: focused ? "#1976D2" : "#F8F8F8",
+                                            borderRadius: "8px",
+                                            backgroundColor: "#F8F8F8",
+                                            transition: "border-color 0.3s ease",
+                                            height: "62px",
+                                        },
+                                        "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+                                            display: "none",
+                                        },
+                                        "& .MuiInputBase-input": {
+                                            textAlign: "center",
+                                            padding: "0px",
+                                            height: "100%",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                        },
+                                    }}
+                                />
+
+                                <TextField
+                                    label="phoneNo"
+                                    type="tel"
+
+                                    variant="filled"
+                                    value={formData.phoneNo}
                                     onChange={handleChange}
                                     fullWidth
                                     required
+                                    sx={{
+                                        "& .MuiInputBase-root": {
+                                            border: "3px solid",
+                                            borderColor: focused ? "#1976D2" : "#F8F8F8",
+                                            borderRadius: "8px",
+                                            backgroundColor: "white",
+                                            transition: "border-color 0.3s ease",
+                                        },
+                                        "& .MuiInputBase-root:hover": {
+                                            borderColor: focused ? "#1976D2" : "#BEBEBE",
+                                            backgroundColor: "#F8F8F8",
+                                        },
+                                        "& .MuiInputBase-root.Mui-focused": {
+                                            borderColor: "#1976D2",
+                                            backgroundColor: "white",
+                                        },
+                                        "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+                                            display: "none",
+                                        },
+                                    }}
                                 />
-                                <TextField
-                                    name="companyDomain"
-                                    label="Company Domain"
-                                    value={formData.companyDomain}
-                                    onChange={handleChange}
-                                    fullWidth
-                                    required
-                                />
+                            </div>
+
+                            <div className="relative">
                                 <select
-                                    name="teamSize"
-                                    value={formData.teamSize}
+                                    name="knowAboutUs"
+                                    value={formData.knowAboutUs}
                                     onChange={handleChange}
-                                    className="w-full px-4 py-4 border rounded-lg"
+                                    className="w-full px-4 py-4 border rounded-lg appearance-none"
                                     required
                                 >
-                                    <option value="">Team Size</option>
-                                    <option value="1-10">1-10</option>
-                                    <option value="11-50">11-50</option>
-                                    <option value="51-200">51-200</option>
-                                    <option value="201+">201+</option>
+                                    <option value="">Where did you learn about us?</option>
+                                    {knowAboutOptions.map((option, index) => (
+                                        <option key={index} value={option}>
+                                            {option}
+                                        </option>
+                                    ))}
                                 </select>
+                                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
                             </div>
-                        )}
 
-                        <div className="sticky bottom-0 left-0 w-full bg-white/80 backdrop-blur-sm py-4 h-20 flex justify-between gap-4">
-                            <button
-                                type="button"
-                                className="px-6 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 flex items-center"
-                            >
-                                <FaArrowLeft className="mr-2" />
-                                Cancel
-                            </button>
-                            <button
-                                type="submit"
-                                className={`px-6 py-2 rounded-lg flex items-center justify-center ${
-                                    !isFormValid ? "bg-gray-400 cursor-not-allowed text-gray-300" : "bg-blue-600 hover:bg-blue-700 text-white"
-                                }`}
-                                disabled={!isFormValid || loading}
-                            >
-                                {loading ? <CircularProgress size={20} className="text-white" /> : "Submit"}
-                                {!loading && <FaArrowRight className="ml-2" />}
-                            </button>
-                        </div>
-                    </form>
+                            <div className="flex-col lg:flex-row flex flex-wrap justify-between rounded-xl border  w-auto">
+                                <button
+                                    type="button"
+                                    className={`flex items-center  p-6 gap-3 ${formData.accountType === 'organization' ? '' : ''}`}
+                                    onClick={() => handleChange({ target: { name: 'accountType', value: 'organization' } })}
+                                >
+                                    <input
+                                        type="radio"
+                                        name="accountType"
+                                        value="organization"
+                                        checked={formData.accountType === "organization"}
+                                        onChange={handleChange}
+                                        className="w-5 h-5"
+                                    />
+                                    <label>ORGANIZATION</label>
+                                </button>
+                                <div className="border-b lg:border-r"></div>
+                                <button
+                                    type="button"
+                                    className={`flex items-center p-6 gap-3 ${formData.accountType === 'freelancer' ? '' : ''}`}
+                                    onClick={() => handleChange({ target: { name: 'accountType', value: 'freelancer' } })}
+                                >
+                                    <input
+                                        type="radio"
+                                        name="accountType"
+                                        value="freelancer"
+                                        checked={formData.accountType === "freelancer"}
+                                        onChange={handleChange}
+                                        className="w-5 h-5"
+                                    />
+                                    <label>FREELANCER</label>
+                                </button>
+                            </div>
+
+                            {formData.accountType === "organization" && (
+                                <div className="space-y-4">
+                                    <TextField
+                                        name="companyName"
+                                        label="Company Name"
+                                        variant="filled"
+                                        value={formData.companyName}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        required
+                                        sx={{
+                                            "& .MuiInputBase-root": {
+                                                border: "3px solid",
+                                                borderColor: focused ? "#1976D2" : "#F8F8F8",
+                                                borderRadius: "8px",
+                                                backgroundColor: "white",
+                                                transition: "border-color 0.3s ease",
+                                            },
+                                            "& .MuiInputBase-root:hover": {
+                                                borderColor: focused ? "#1976D2" : "#BEBEBE",
+                                                backgroundColor: "#F8F8F8",
+                                            },
+                                            "& .MuiInputBase-root.Mui-focused": {
+                                                borderColor: "#1976D2",
+                                                backgroundColor: "white",
+                                            },
+                                            "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+                                                display: "none",
+                                            },
+                                        }}
+                                    />
+                                    <TextField
+                                        name="companyDomain"
+                                        label="Company Domain"
+                                        variant="filled"
+                                        value={formData.companyDomain}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        required
+                                        sx={{
+                                            "& .MuiInputBase-root": {
+                                                border: "3px solid",
+                                                borderColor: focused ? "#1976D2" : "#F8F8F8",
+                                                borderRadius: "8px",
+                                                backgroundColor: "white",
+                                                transition: "border-color 0.3s ease",
+                                            },
+                                            "& .MuiInputBase-root:hover": {
+                                                borderColor: focused ? "#1976D2" : "#BEBEBE",
+                                                backgroundColor: "#F8F8F8",
+                                            },
+                                            "& .MuiInputBase-root.Mui-focused": {
+                                                borderColor: "#1976D2",
+                                                backgroundColor: "white",
+                                            },
+                                            "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+                                                display: "none",
+                                            },
+                                        }}
+                                    />
+                                    <select
+                                        name="teamSize"
+                                        value={formData.teamSize}
+                                        onChange={handleChange}
+                                        className="w-full px-4 py-4 border rounded-lg"
+                                        required
+                                    >
+                                        <option value="">Team Size</option>
+                                        <option value="1-10">1-10</option>
+                                        <option value="11-50">11-50</option>
+                                        <option value="51-200">51-200</option>
+                                        <option value="201+">201+</option>
+                                    </select>
+                                </div>
+                            )}
+
+                            <div className="sticky bottom-0 left-0 z-10 w-full bg-white/80 backdrop-blur-sm py-4 h-20 flex justify-between gap-4">
+                                <button
+                                    type="button"
+                                    className="px-6 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 flex items-center"
+                                >
+                                    <FaArrowLeft className="mr-2" />
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className={`px-6 py-2 rounded-lg flex items-center justify-center ${!isFormValid ? "bg-gray-400 cursor-not-allowed text-gray-300" : "bg-blue-600 hover:bg-blue-700 text-white"
+                                        }`}
+                                    disabled={!isFormValid || loading}
+                                >
+                                    {loading ? <CircularProgress size={20} className="text-white" /> : "Submit"}
+                                    {!loading && <FaArrowRight className="ml-2" />}
+                                </button>
+                            </div>
+                        </form>
+                    )}
                 </div>
                 <Footer />
             </section>

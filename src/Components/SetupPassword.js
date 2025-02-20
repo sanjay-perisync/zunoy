@@ -22,6 +22,7 @@ export default function SetupPassword() {
     const [loading, setLoading] = useState(false);
     const [identifier, setIdentifier] = useState("");
     const [accountCreated, setAccountCreated] = useState(false);
+       const [focused, setFocused] = useState(false);
 
 
     const navigate = useNavigate();
@@ -367,8 +368,20 @@ const handleSubmit = async (e) => {
                                     value={email}
                                     disabled
                                     onChange={(e) => setEmail(e.target.value)}
-                                    variant="outlined"
+                                    variant="filled"
                                     fullWidth
+                                    sx={{
+                                        "& .MuiInputBase-root": {
+                                          border: "3px solid", 
+                                          borderColor: focused ? "#1976D2" : "#F8F8F8",
+                                          borderRadius: "8px",
+                                          backgroundColor: "#F8F8F8",
+                                          transition: "border-color 0.3s ease", 
+                                        },
+                                        "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+                                          display: "none",
+                                        },
+                                      }}
                                 />
                             </div>
 
@@ -380,10 +393,30 @@ const handleSubmit = async (e) => {
                                         type={showPassword ? "text" : "password"}
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        variant="outlined"
+                                        variant="filled"
                                         fullWidth
                                         error={!!passwordError}
                                         helperText={passwordError}
+                                        sx={{
+                                            "& .MuiInputBase-root": {
+                                              border: "3px solid", 
+                                              borderColor: focused ? "#1976D2" : "#F8F8F8",
+                                              borderRadius: "8px",
+                                              backgroundColor: "white",
+                                              transition: "border-color 0.3s ease", 
+                                            },
+                                            "& .MuiInputBase-root:hover": {
+                                              borderColor: focused ? "#1976D2" : "#BEBEBE",
+                                              backgroundColor: "#F8F8F8",
+                                            },
+                                            "& .MuiInputBase-root.Mui-focused": {
+                                              borderColor: "#1976D2",
+                                              backgroundColor: "white",
+                                            },
+                                            "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+                                              display: "none",
+                                            },
+                                          }}
                                     />
                                     <button
                                         type="button"
@@ -403,10 +436,30 @@ const handleSubmit = async (e) => {
                                         type={showConfirmPassword ? "text" : "password"}
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}
-                                        variant="outlined"
+                                        variant="filled"
                                         fullWidth
                                         error={!!confirmPasswordError}
                                         helperText={confirmPasswordError}
+                                        sx={{
+                                            "& .MuiInputBase-root": {
+                                              border: "3px solid", 
+                                              borderColor: focused ? "#1976D2" : "#F8F8F8",
+                                              borderRadius: "8px",
+                                              backgroundColor: "white",
+                                              transition: "border-color 0.3s ease", 
+                                            },
+                                            "& .MuiInputBase-root:hover": {
+                                              borderColor: focused ? "#1976D2" : "#BEBEBE",
+                                              backgroundColor: "#F8F8F8",
+                                            },
+                                            "& .MuiInputBase-root.Mui-focused": {
+                                              borderColor: "#1976D2",
+                                              backgroundColor: "white",
+                                            },
+                                            "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+                                              display: "none",
+                                            },
+                                          }}
                                     />
                                     <button
                                         type="button"

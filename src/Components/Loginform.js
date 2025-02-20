@@ -4,6 +4,7 @@ import { TextField, IconButton, InputAdornment } from "@mui/material";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 const BASE_URL = "https://znginx.perisync.work/api/v1/acc";
 
@@ -84,7 +85,7 @@ const LoginForm = () => {
         <p className="text-start text-[18px] text-gray-600">
           Don't have an account?{" "}
           <button 
-            className="text-indigo-500 hover:text-indigo-600" 
+            className="text-indigo-500 hover:text-indigo-600 font-semibold" 
             onClick={handleRegisterClick}
           >
             Register
@@ -161,9 +162,9 @@ const LoginForm = () => {
         </form>
 
         <div className="text-start mt-3">
-          <a href="#" className="text-indigo-500 font-semibold text-[16px] hover:text-indigo-600">
-            Forgot password?
-          </a>
+        <Link to="/reset-password" className="text-indigo-500 font-semibold text-[16px] hover:text-indigo-600">
+  Forgot password?
+</Link>
         </div>
 
         <div className="text-center pt-5 space-y-2">

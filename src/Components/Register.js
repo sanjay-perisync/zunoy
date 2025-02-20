@@ -22,6 +22,7 @@ function Register() {
     const [status, setStatus] = useState("");
     const [resendTimer, setResendTimer] = useState(10);
     const [canResend, setCanResend] = useState(false);
+    const [focused, setFocused] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -250,11 +251,31 @@ function Register() {
                             <TextField
                                 type="email"
                                 label="Email"
-                                variant="outlined"
+                                variant="filled"
                                 fullWidth
                                 value={email}
                                 onChange={(e) => setEmailState(e.target.value)}
                                 disabled={otpSent}
+                                sx={{
+                                    "& .MuiInputBase-root": {
+                                      border: "3px solid", 
+                                      borderColor: focused ? "#1976D2" : "#F8F8F8",
+                                      borderRadius: "8px",
+                                      backgroundColor: "white",
+                                      transition: "border-color 0.3s ease", 
+                                    },
+                                    "& .MuiInputBase-root:hover": {
+                                      borderColor: focused ? "#1976D2" : "#BEBEBE",
+                                      backgroundColor: "#F8F8F8",
+                                    },
+                                    "& .MuiInputBase-root.Mui-focused": {
+                                      borderColor: "#1976D2",
+                                      backgroundColor: "white",
+                                    },
+                                    "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+                                      display: "none",
+                                    },
+                                  }}
                             />
                             {otpSent && (
                                 <div className="flex justify-between gap-2 mb-4">
