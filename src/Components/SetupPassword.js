@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUser } from "../APIconfig/PostApiconfig";
 import toast from "react-hot-toast";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function SetupPassword() {
     const otpVerified = true;
@@ -17,16 +18,16 @@ export default function SetupPassword() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [confirmPasswordError, setConfirmPasswordError] = useState("");
-    const [isChecked, setIsChecked] = useState(false); 
-    const [termsError, setTermsError] = useState(""); 
+    const [isChecked, setIsChecked] = useState(false);
+    const [termsError, setTermsError] = useState("");
     const [loading, setLoading] = useState(false);
     const [identifier, setIdentifier] = useState("");
     const [accountCreated, setAccountCreated] = useState(false);
-       const [focused, setFocused] = useState(false);
+    const [focused, setFocused] = useState(false);
 
 
     const navigate = useNavigate();
-    
+
 
 
     const togglePasswordVisibility = () => {
@@ -45,7 +46,7 @@ export default function SetupPassword() {
         const lowercaseRegex = /[a-z]/;
         const uppercaseRegex = /[A-Z]/;
         const numberRegex = /[0-9]/;
-        
+
         if (!lowercaseRegex.test(password)) {
             setPasswordError("Password must contain at least one lowercase letter.");
             return false;
@@ -58,7 +59,7 @@ export default function SetupPassword() {
             setPasswordError("Password must contain at least one number.");
             return false;
         }
-        
+
         setPasswordError("");
         return true;
     };
@@ -89,24 +90,24 @@ export default function SetupPassword() {
     // useEffect(() => {
     //     const storedEmail = localStorage.getItem("registrationEmail") || "";
     //     const storedIdentifier = localStorage.getItem("identifier") || ""; // ✅ Ensure key matches storage
-    
+
     //     console.log("📌 Loaded from LocalStorage:", { storedEmail, storedIdentifier });
-    
+
     //     setEmail(storedEmail);
     //     setIdentifier(storedIdentifier);
     // }, []);
-    
+
     // const handleSubmit = async (e) => {
     //     e.preventDefault();
-        
+
     //     console.log("🚀 Submitting form with identifier:", identifier); // ✅ Debugging log
-    
+
     //     if (!identifier) {  
     //         console.error("❌ Identifier is missing before API call!");
     //         alert("Something went wrong. Please try again.");
     //         return;
     //     }
-    
+
     //     setLoading(true);
     //     try {
     //         await createUser(
@@ -137,96 +138,96 @@ export default function SetupPassword() {
     //         setLoading(false);
     //     }
     // };
-    
+
     useEffect(() => {
         const storedEmail = localStorage.getItem("registrationEmail") || "";
-        const storedIdentifier = localStorage.getItem("identifier") || "";  
-      
+        const storedIdentifier = localStorage.getItem("identifier") || "";
+
         console.log(" Loaded from LocalStorage:", { storedEmail, storedIdentifier });
-      
+
         setEmail(storedEmail);
         setIdentifier(storedIdentifier);
-      }, []);
+    }, []);
 
 
-      
 
-const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    if (!identifier) {
-        toast.error("Something went wrong. Please try again.");
-        return;
-    }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-    if (!validatePassword(password) || !validateConfirmPassword()) {
-        return;
-    }
+        if (!identifier) {
+            toast.error("Something went wrong. Please try again.");
+            return;
+        }
 
-    if (!isChecked) {
-        setTermsError("You must agree to the Terms and Conditions.");
-        return;
-    } else {
-        setTermsError("");
-    }
+        if (!validatePassword(password) || !validateConfirmPassword()) {
+            return;
+        }
 
-    setLoading(true);
-    try {
-        await createUser(
-            {
-                email,
-                identifier,
-                password,
-                policy: true,
-                termsandcondition: true,
-                userIP: "106.51.221.186",
-            },
-            {
-                setLoader: setLoading,
-                onSuccess: () => {
-                    localStorage.setItem("userEmail", email);
-                    setAccountCreated(true);
+        if (!isChecked) {
+            setTermsError("You must agree to the Terms and Conditions.");
+            return;
+        } else {
+            setTermsError("");
+        }
 
-                    
-                    setTimeout(() => {
-                        navigate("/complete-profile");
-                    }, 3000);
+        setLoading(true);
+        try {
+            await createUser(
+                {
+                    email,
+                    identifier,
+                    password,
+                    policy: true,
+                    termsandcondition: true,
+                    userIP: "106.51.221.186",
                 },
-                onError: (error) => {
-                    toast.error(error?.response?.data?.message || "Something went wrong.");
-                },
-            }
-        );
-    } catch (error) {
-        toast.error("API Call Failed. Try again.");
-    } finally {
-        setLoading(false);
-    }
-};
+                {
+                    setLoader: setLoading,
+                    onSuccess: () => {
+                        localStorage.setItem("userEmail", email);
+                        setAccountCreated(true);
+
+
+                        setTimeout(() => {
+                            navigate("/complete-profile");
+                        }, 3000);
+                    },
+                    onError: (error) => {
+                        toast.error(error?.response?.data?.message || "Something went wrong.");
+                    },
+                }
+            );
+        } catch (error) {
+            toast.error("API Call Failed. Try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
 
 
     //   const handleSubmit = async (e) => {
     //     e.preventDefault();
-    
+
     //     console.log("Submitting form with identifier:", identifier);
-    
+
     //     if (!identifier) {
     //         console.error("Identifier is missing before API call!");
     //         toast.error("Something went wrong. Please try again.");
     //         return;
     //     }
-    
-       
+
+
     //     if (!validatePassword(password)) {
     //         return;
     //     }
-    
-     
+
+
     //     if (!validateConfirmPassword()) {
     //         return;
     //     }
-    
+
 
     //     if (!isChecked) {
     //         setTermsError("You must agree to the Terms and Conditions.");
@@ -234,7 +235,7 @@ const handleSubmit = async (e) => {
     //     } else {
     //         setTermsError("");
     //     }
-    
+
     //     setLoading(true);
     //     try {
     //         await createUser(
@@ -265,10 +266,10 @@ const handleSubmit = async (e) => {
     //         setLoading(false);
     //     }
     // };
-    
-      
 
-   
+
+
+
     return (
         <div className="flex h-screen ">
             {/* Left Section */}
@@ -350,150 +351,157 @@ const handleSubmit = async (e) => {
                     </div>
 
                     <div className="flex flex-col justify-center  gap-6 mt-5 mb-5 w-auto lg:w-[500px] px-5">
-                    {accountCreated ? (
-                         <div className="bg-green-50 p-6 rounded-lg shadow-lg flex flex-col justify-center h-[500px] items-center text-center w-full">
-                         <div className="flex justify-center">
-                             <img src="https://account.zunoy.com/assets/iconly/iconly-glass-tick.svg" alt="Success" className="w-16 h-16" />
-                         </div>
-                         <h2 className="text-lg font-semibold mt-4 text-green-700">Account Created Successfully</h2>
-                         <p className="text-gray-600 mt-2">Please wait ...</p>
-                     </div>
-                 ) : (
-                        <form className="space-y-6" onSubmit={handleSubmit}>
-                            {/* Email  */}
-                            <div>
-                                <TextField
-                                    label="Email"
-                                    type="email"
-                                    value={email}
-                                    disabled
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    variant="filled"
-                                    fullWidth
-                                    sx={{
-                                        "& .MuiInputBase-root": {
-                                          border: "3px solid", 
-                                          borderColor: focused ? "#1976D2" : "#F8F8F8",
-                                          borderRadius: "8px",
-                                          backgroundColor: "#F8F8F8",
-                                          transition: "border-color 0.3s ease", 
-                                        },
-                                        "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
-                                          display: "none",
-                                        },
-                                      }}
-                                />
+                        {accountCreated ? (
+                            <div className="bg-green-50 p-6 rounded-lg shadow-lg flex flex-col justify-center h-[500px] items-center text-center w-full">
+                                <div className="flex justify-center">
+                                    <img src="https://account.zunoy.com/assets/iconly/iconly-glass-tick.svg" alt="Success" className="w-16 h-16" />
+                                </div>
+                                <h2 className="text-lg font-semibold mt-4 text-green-700">Account Created Successfully</h2>
+                                <p className="text-gray-600 mt-2">Please wait ...</p>
                             </div>
-
-                            {/* Password Field */}
-                            <div>
-                                <div className="relative">
+                        ) : (
+                            <form className="space-y-6" onSubmit={handleSubmit}>
+                                {/* Email  */}
+                                <div>
                                     <TextField
-                                        label="Password"
-                                        type={showPassword ? "text" : "password"}
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
+                                        label="Email"
+                                        type="email"
+                                        value={email}
+                                        disabled
+                                        onChange={(e) => setEmail(e.target.value)}
                                         variant="filled"
                                         fullWidth
-                                        error={!!passwordError}
-                                        helperText={passwordError}
                                         sx={{
                                             "& .MuiInputBase-root": {
-                                              border: "3px solid", 
-                                              borderColor: focused ? "#1976D2" : "#F8F8F8",
-                                              borderRadius: "8px",
-                                              backgroundColor: "white",
-                                              transition: "border-color 0.3s ease", 
-                                            },
-                                            "& .MuiInputBase-root:hover": {
-                                              borderColor: focused ? "#1976D2" : "#BEBEBE",
-                                              backgroundColor: "#F8F8F8",
-                                            },
-                                            "& .MuiInputBase-root.Mui-focused": {
-                                              borderColor: "#1976D2",
-                                              backgroundColor: "white",
+                                                border: "3px solid",
+                                                borderColor: focused ? "#1976D2" : "#F8F8F8",
+                                                borderRadius: "8px",
+                                                backgroundColor: "#F8F8F8",
+                                                transition: "border-color 0.3s ease",
                                             },
                                             "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
-                                              display: "none",
+                                                display: "none",
                                             },
-                                          }}
+                                        }}
                                     />
-                                    <button
-                                        type="button"
-                                        onClick={togglePasswordVisibility}
-                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600"
-                                    >
-                                        {showPassword ? <FaEyeSlash /> : <FaEye />}
-                                    </button>
                                 </div>
-                            </div>
 
-                            {/* Confirm Password  */}
-                            <div>
-                                <div className="relative">
-                                    <TextField
-                                        label="Password (Confirm)"
-                                        type={showConfirmPassword ? "text" : "password"}
-                                        value={confirmPassword}
-                                        onChange={(e) => setConfirmPassword(e.target.value)}
-                                        variant="filled"
-                                        fullWidth
-                                        error={!!confirmPasswordError}
-                                        helperText={confirmPasswordError}
-                                        sx={{
-                                            "& .MuiInputBase-root": {
-                                              border: "3px solid", 
-                                              borderColor: focused ? "#1976D2" : "#F8F8F8",
-                                              borderRadius: "8px",
-                                              backgroundColor: "white",
-                                              transition: "border-color 0.3s ease", 
-                                            },
-                                            "& .MuiInputBase-root:hover": {
-                                              borderColor: focused ? "#1976D2" : "#BEBEBE",
-                                              backgroundColor: "#F8F8F8",
-                                            },
-                                            "& .MuiInputBase-root.Mui-focused": {
-                                              borderColor: "#1976D2",
-                                              backgroundColor: "white",
-                                            },
-                                            "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
-                                              display: "none",
-                                            },
-                                          }}
+                                {/* Password Field */}
+                                <div>
+                                    <div className="relative">
+                                        <TextField
+                                            label="Password"
+                                            type={showPassword ? "text" : "password"}
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            variant="filled"
+                                            fullWidth
+                                            error={!!passwordError}
+                                            helperText={passwordError}
+                                            sx={{
+                                                "& .MuiInputBase-root": {
+                                                    border: "3px solid",
+                                                    borderColor: focused ? "#1976D2" : "#F8F8F8",
+                                                    borderRadius: "8px",
+                                                    backgroundColor: "white",
+                                                    transition: "border-color 0.3s ease",
+                                                },
+                                                "& .MuiInputBase-root:hover": {
+                                                    borderColor: focused ? "#1976D2" : "#BEBEBE",
+                                                    backgroundColor: "#F8F8F8",
+                                                },
+                                                "& .MuiInputBase-root.Mui-focused": {
+                                                    borderColor: "#1976D2",
+                                                    backgroundColor: "white",
+                                                },
+                                                "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+                                                    display: "none",
+                                                },
+                                            }}
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={togglePasswordVisibility}
+                                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600"
+                                        >
+                                            {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* Confirm Password  */}
+                                <div>
+                                    <div className="relative">
+                                        <TextField
+                                            label="Password (Confirm)"
+                                            type={showConfirmPassword ? "text" : "password"}
+                                            value={confirmPassword}
+                                            onChange={(e) => setConfirmPassword(e.target.value)}
+                                            variant="filled"
+                                            fullWidth
+                                            error={!!confirmPasswordError}
+                                            helperText={confirmPasswordError}
+                                            sx={{
+                                                "& .MuiInputBase-root": {
+                                                    border: "3px solid",
+                                                    borderColor: focused ? "#1976D2" : "#F8F8F8",
+                                                    borderRadius: "8px",
+                                                    backgroundColor: "white",
+                                                    transition: "border-color 0.3s ease",
+                                                },
+                                                "& .MuiInputBase-root:hover": {
+                                                    borderColor: focused ? "#1976D2" : "#BEBEBE",
+                                                    backgroundColor: "#F8F8F8",
+                                                },
+                                                "& .MuiInputBase-root.Mui-focused": {
+                                                    borderColor: "#1976D2",
+                                                    backgroundColor: "white",
+                                                },
+                                                "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+                                                    display: "none",
+                                                },
+                                            }}
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={toggleConfirmPasswordVisibility}
+                                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600"
+                                        >
+                                            {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        id="terms"
+                                        className="h-4 w-4 text-blue-600 border-gray-300 rounded"
+                                        checked={isChecked}
+                                        onChange={(e) => setIsChecked(e.target.checked)}
                                     />
-                                    <button
-                                        type="button"
-                                        onClick={toggleConfirmPasswordVisibility}
-                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600"
-                                    >
-                                        {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-                                    </button>
+                                    <label htmlFor="terms" className="ml-2">
+                                        I have read the <span className="text-indigo-600">Terms and Conditions</span>
+                                    </label>
                                 </div>
-                            </div>
+                                {termsError && <p className="text-red-500 text-sm">{termsError}</p>}
 
-                            <div className="flex items-center">
-                                <input
-                                    type="checkbox"
-                                    id="terms"
-                                    className="h-4 w-4 text-blue-600 border-gray-300 rounded"
-                                    checked={isChecked}
-                                    onChange={(e) => setIsChecked(e.target.checked)} 
-                                />
-                                <label htmlFor="terms" className="ml-2">
-                                    I have read the <span className="text-indigo-600">Terms and Conditions</span>
-                                </label>
-                            </div>
-                            {termsError && <p className="text-red-500 text-sm">{termsError}</p>}
-
-                            {/* Submit  */}
-                            <button
+                                {/* Submit  */}
+                                {/* <button
                                 type="submit"
                                 className="w-full bg-indigo-500 font-semibold text-white py-3 px-4 rounded-lg hover:bg-indigo-700 transition"
                             >
                                 Create Account
-                            </button>
-                        </form>
-                         )}
+                            </button> */}
+                                <button
+                                    type="submit"
+                                    className="w-full bg-indigo-500 font-semibold text-white py-3 px-4 rounded-lg hover:bg-indigo-700 transition flex justify-center items-center"
+                                    disabled={loading}
+                                >
+                                    {loading ? <CircularProgress size={24} color="inherit" /> : "Create Account"}
+                                </button>
+                            </form>
+                        )}
                     </div>
                 </div>
 

@@ -6,7 +6,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import CircularProgress from "@mui/material/CircularProgress";
-import { verifyEmail,verifyOtp,updatePassword } from "../APIconfig/PutApiconfig";
+import { verifyEmail, verifyOtp, updatePassword } from "../APIconfig/PutApiconfig";
 
 
 
@@ -23,7 +23,7 @@ const ResetPassword = () => {
   const [canResend, setCanResend] = useState(false);
   const navigate = useNavigate();
   const [accountCreated, setAccountCreated] = useState(false);
-  
+
   // const otpRefs = useRef(Array.from({ length: 6 }, () => React.createRef()));
   const [loading, setLoading] = useState(false);
 
@@ -31,7 +31,7 @@ const ResetPassword = () => {
   useEffect(() => {
     otpRefs.current = Array(6).fill().map(() => React.createRef());
   }, []);
-  
+
 
   // useEffect(() => {
   //   let timer;
@@ -126,7 +126,7 @@ const ResetPassword = () => {
         { email }
       );
       if (response.status === 200) {
-        setOtp(["", "", "", "", "", ""]); 
+        setOtp(["", "", "", "", "", ""]);
         setResendTimer(10);
         setCanResend(false);
       }
@@ -134,7 +134,7 @@ const ResetPassword = () => {
       console.error("Error resending OTP:", error);
     }
   };
-  
+
 
 
   const handleChange = (e, index) => {
@@ -281,7 +281,7 @@ const ResetPassword = () => {
       setLoading(false);
     }
   };
-  
+
 
   const handleUpdatePassword = async () => {
     if (password !== confirmPassword) {
@@ -300,35 +300,35 @@ const ResetPassword = () => {
       return;
     }
 
-  //   setLoading(true);
-  //   try {
-  //     await updatePassword(email, password, identifier);
-  //     toast.success("Password updated successfully!");
-  //     localStorage.removeItem("identifier");
-  //     navigate("/");
-  //   } catch (error) {
-  //     toast.error("Failed to update password. Please try again.");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-  setLoading(true);
-try {
-  await updatePassword(email, password, identifier);
-  toast.success("Password updated successfully!");
-  
-  setAccountCreated(true); 
+    //   setLoading(true);
+    //   try {
+    //     await updatePassword(email, password, identifier);
+    //     toast.success("Password updated successfully!");
+    //     localStorage.removeItem("identifier");
+    //     navigate("/");
+    //   } catch (error) {
+    //     toast.error("Failed to update password. Please try again.");
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // };
+    setLoading(true);
+    try {
+      await updatePassword(email, password, identifier);
+      toast.success("Password updated successfully!");
 
-  localStorage.removeItem("identifier");
+      setAccountCreated(true);
 
-  setTimeout(() => {
-    navigate("/");
-  }, 3000); 
-} catch (error) {
-  toast.error("Failed to update password. Please try again.");
-} finally {
-  setLoading(false);
-}
+      localStorage.removeItem("identifier");
+
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
+    } catch (error) {
+      toast.error("Failed to update password. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
 
@@ -356,187 +356,187 @@ try {
 
 
         {accountCreated ? (
-                        <div className="bg-green-50 p-6 rounded-lg shadow-lg flex flex-col justify-center h-[500px] items-center text-center w-full">
-                            <div className="flex justify-center">
-                                <img src="https://account.zunoy.com/assets/iconly/iconly-glass-tick.svg" alt="Success" className="w-16 h-16" />
-                            </div>
-                            <h2 className="text-lg font-semibold mt-4 text-green-700">Your password has been Updated Successfully</h2>
-                            <p className="text-gray-600 mt-2">You will be redirected to Login page Please wait ...</p>
-                        </div>
-                    ) : (
-        <form onSubmit={(e) => e.preventDefault()}>
-          {!otpSent ? (
-            <>
-              <TextField
-                type="email"
-                label="Email"
-                variant="filled"
-                fullWidth
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onFocus={() => setFocused(true)}
-                onBlur={() => setFocused(false)}
-                sx={{
-                  "& .MuiInputBase-root": {
-                    border: "3px solid",
-                    borderColor: focused ? "#1976D2" : "#F8F8F8",
-                    borderRadius: "8px",
-                    backgroundColor: "white",
-                    transition: "border-color 0.3s ease",
-                  },
-                  "& .MuiInputBase-root:hover": {
-                    borderColor: focused ? "#1976D2" : "#BEBEBE",
-                    backgroundColor: "#F8F8F8",
-                  },
-                  "& .MuiInputBase-root.Mui-focused": {
-                    borderColor: "#1976D2",
-                    backgroundColor: "white",
-                  },
-                  "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
-                    display: "none",
-                  },
-                }}
-              />
+          <div className="bg-green-50 p-6 rounded-lg shadow-lg flex flex-col justify-center h-[500px] items-center text-center w-full">
+            <div className="flex justify-center">
+              <img src="https://account.zunoy.com/assets/iconly/iconly-glass-tick.svg" alt="Success" className="w-16 h-16" />
+            </div>
+            <h2 className="text-lg font-semibold mt-4 text-green-700">Your password has been Updated Successfully</h2>
+            <p className="text-gray-600 mt-2">You will be redirected to Login page Please wait ...</p>
+          </div>
+        ) : (
+          <form onSubmit={(e) => e.preventDefault()}>
+            {!otpSent ? (
+              <>
+                <TextField
+                  type="email"
+                  label="Email"
+                  variant="filled"
+                  fullWidth
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  onFocus={() => setFocused(true)}
+                  onBlur={() => setFocused(false)}
+                  sx={{
+                    "& .MuiInputBase-root": {
+                      border: "3px solid",
+                      borderColor: focused ? "#1976D2" : "#F8F8F8",
+                      borderRadius: "8px",
+                      backgroundColor: "white",
+                      transition: "border-color 0.3s ease",
+                    },
+                    "& .MuiInputBase-root:hover": {
+                      borderColor: focused ? "#1976D2" : "#BEBEBE",
+                      backgroundColor: "#F8F8F8",
+                    },
+                    "& .MuiInputBase-root.Mui-focused": {
+                      borderColor: "#1976D2",
+                      backgroundColor: "white",
+                    },
+                    "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+                      display: "none",
+                    },
+                  }}
+                />
 
 
-              <button
-                type="button"
-                onClick={handleVerifyEmail}
-                className="w-full my-6 text-lg bg-indigo-500 text-white py-4 rounded-xl font-semibold hover:bg-blue-700 transition flex items-center justify-center"
-                disabled={loading}
-              >
-                {loading ? <CircularProgress size={24} color="inherit" /> : "Verify Email"}
-              </button>
-            </>
-          ) : !otpVerified ? (
-            <>
-              <div className="flex justify-between gap-2 mt-6">
-                {otp.map((digit, index) => (
-                  <input
-                    key={index}
-                    ref={otpRefs.current[index]}
-                    type="text"
-                    maxLength="1"
-                    value={digit}
-                    onChange={(e) => handleChange(e, index)}
-                    onKeyDown={(e) => handleKeyDown(e, index)}
-                    className="w-12 h-12 text-center text-xl  border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                ))}
+                <button
+                  type="button"
+                  onClick={handleVerifyEmail}
+                  className="w-full my-6 text-lg bg-indigo-500 text-white py-4 rounded-xl font-semibold hover:bg-blue-700 transition flex items-center justify-center"
+                  disabled={loading}
+                >
+                  {loading ? <CircularProgress size={24} color="inherit" /> : "Verify Email"}
+                </button>
+              </>
+            ) : !otpVerified ? (
+              <>
+                <div className="flex justify-between gap-2 mt-6">
+                  {otp.map((digit, index) => (
+                    <input
+                      key={index}
+                      ref={otpRefs.current[index]}
+                      type="text"
+                      maxLength="1"
+                      value={digit}
+                      onChange={(e) => handleChange(e, index)}
+                      onKeyDown={(e) => handleKeyDown(e, index)}
+                      className="w-12 h-12 text-center text-xl  border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    />
+                  ))}
+                </div>
+
+
+
+
+                <button
+                  type="button"
+                  onClick={handleVerifyOtp}
+                  className="w-full my-6 text-lg bg-indigo-500 text-white py-4 rounded-xl font-semibold hover:bg-blue-700 transition flex items-center justify-center"
+                  disabled={loading}
+                >
+                  {loading ? <CircularProgress size={24} color="inherit" /> : "Verify OTP"}
+                </button>
+
+                {otpSent && (
+                  <div className="flex justify-between items-center space-y-2 mt-4">
+                    <p className="text-gray-700">
+                      {resendTimer > 0 ? (
+                        <span>Resend OTP available in {resendTimer}s</span>
+                      ) : (
+                        "Didn't receive OTP?"
+                      )}
+                    </p>
+                    <button
+                      onClick={handleResendClick}
+                      disabled={!canResend}
+                      className={`px-4 py-2 rounded ${!canResend
+                        ? " cursor-not-allowed"
+                        : " text-black ho transition"
+                        }`}
+                    >
+                      Resend OTP
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="space-y-6">
+
+
+
+                <TextField
+                  type="password"
+                  label="Password"
+                  variant="filled"
+                  fullWidth
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  sx={{
+                    "& .MuiInputBase-root": {
+                      border: "3px solid",
+                      borderColor: focused ? "#1976D2" : "#F8F8F8",
+                      borderRadius: "8px",
+                      backgroundColor: "white",
+                      transition: "border-color 0.3s ease",
+                    },
+                    "& .MuiInputBase-root:hover": {
+                      borderColor: focused ? "#1976D2" : "#BEBEBE",
+                      backgroundColor: "#F8F8F8",
+                    },
+                    "& .MuiInputBase-root.Mui-focused": {
+                      borderColor: "#1976D2",
+                      backgroundColor: "white",
+                    },
+                    "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+                      display: "none",
+                    },
+                  }}
+                />
+                <TextField
+                  type="password"
+                  label="Confirm Password"
+                  variant="filled"
+                  fullWidth
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  sx={{
+                    "& .MuiInputBase-root": {
+                      border: "3px solid",
+                      borderColor: focused ? "#1976D2" : "#F8F8F8",
+                      borderRadius: "8px",
+                      backgroundColor: "white",
+                      transition: "border-color 0.3s ease",
+                    },
+                    "& .MuiInputBase-root:hover": {
+                      borderColor: focused ? "#1976D2" : "#BEBEBE",
+                      backgroundColor: "#F8F8F8",
+                    },
+                    "& .MuiInputBase-root.Mui-focused": {
+                      borderColor: "#1976D2",
+                      backgroundColor: "white",
+                    },
+                    "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+                      display: "none",
+                    },
+                  }}
+                />
+
+                <button
+                  type="button"
+                  onClick={handleUpdatePassword}
+                  className="w-full my-6 text-lg bg-indigo-500 text-white py-4 rounded-xl font-semibold hover:bg-blue-700 transition flex items-center justify-center"
+                  disabled={loading}
+                >
+                  {loading ? <CircularProgress size={24} color="inherit" /> : "Update Password"}
+                </button>
+
+
               </div>
 
+            )}
 
-
-
-              <button
-                type="button"
-                onClick={handleVerifyOtp}
-                className="w-full my-6 text-lg bg-indigo-500 text-white py-4 rounded-xl font-semibold hover:bg-blue-700 transition flex items-center justify-center"
-                disabled={loading}
-              >
-                {loading ? <CircularProgress size={24} color="inherit" /> : "Verify OTP"}
-              </button>
-
-              {otpSent && (
-                <div className="flex justify-between items-center space-y-2 mt-4">
-                  <p className="text-gray-700">
-                    {resendTimer > 0 ? (
-                      <span>Resend OTP available in {resendTimer}s</span>
-                    ) : (
-                      "Didn't receive OTP?"
-                    )}
-                  </p>
-                  <button
-                    onClick={handleResendClick}
-                    disabled={!canResend}
-                    className={`px-4 py-2 rounded ${!canResend
-                      ? " cursor-not-allowed"
-                      : " text-black ho transition"
-                      }`}
-                  >
-                    Resend OTP
-                  </button>
-                </div>
-              )}
-            </>
-          ) : (
-            <div className="space-y-6">
-
-
-  
-      <TextField
-        type="password"
-        label="Password"
-        variant="filled"
-        fullWidth
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        sx={{
-          "& .MuiInputBase-root": {
-            border: "3px solid",
-            borderColor: focused ? "#1976D2" : "#F8F8F8",
-            borderRadius: "8px",
-            backgroundColor: "white",
-            transition: "border-color 0.3s ease",
-          },
-          "& .MuiInputBase-root:hover": {
-            borderColor: focused ? "#1976D2" : "#BEBEBE",
-            backgroundColor: "#F8F8F8",
-          },
-          "& .MuiInputBase-root.Mui-focused": {
-            borderColor: "#1976D2",
-            backgroundColor: "white",
-          },
-          "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
-            display: "none",
-          },
-        }}
-      />
-      <TextField
-        type="password"
-        label="Confirm Password"
-        variant="filled"
-        fullWidth
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-        sx={{
-          "& .MuiInputBase-root": {
-            border: "3px solid",
-            borderColor: focused ? "#1976D2" : "#F8F8F8",
-            borderRadius: "8px",
-            backgroundColor: "white",
-            transition: "border-color 0.3s ease",
-          },
-          "& .MuiInputBase-root:hover": {
-            borderColor: focused ? "#1976D2" : "#BEBEBE",
-            backgroundColor: "#F8F8F8",
-          },
-          "& .MuiInputBase-root.Mui-focused": {
-            borderColor: "#1976D2",
-            backgroundColor: "white",
-          },
-          "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
-            display: "none",
-          },
-        }}
-      />
-
-      <button
-        type="button"
-        onClick={handleUpdatePassword}
-        className="w-full my-6 text-lg bg-indigo-500 text-white py-4 rounded-xl font-semibold hover:bg-blue-700 transition flex items-center justify-center"
-        disabled={loading}
-      >
-        {loading ? <CircularProgress size={24} color="inherit" /> : "Update Password"}
-      </button>
-
-
-</div>
-
-          )}
-
-        </form>
-         )}
+          </form>
+        )}
 
         <div className="mt-6 space-y-2">
           <p className="font-semibold text-lg lg:text-xl">Need assistance?</p>
