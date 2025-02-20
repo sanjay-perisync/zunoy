@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
+import { loginUser } from "../APIconfig/PostApiconfig";
 
 const BASE_URL = "https://znginx.perisync.work/api/v1/acc";
 
@@ -17,6 +18,7 @@ const LoginForm = () => {
   const [loading, setLoading] = useState(false);
   const [focused, setFocused] = useState(false);
   const navigate = useNavigate();
+
 
   const validateForm = () => {
     let newErrors = {};
@@ -34,44 +36,72 @@ const LoginForm = () => {
     setLoading(true);
     setErrors({});
 
-    const payload = {
-      email: email.trim(),
-      password: password.trim(),
-      otp: 0,
-      killSession: false,
-      deviceInfo: {
-        platform: "web",
-        os: "Windows 10",
-        browser: "Edge",
-        device: "133.0.0.0",
-        deviceName: "Windows 10",
-        ipAddress: "106.51.221.186"
-      }
-    };
-
     try {
-      const response = await axios({
-        method: 'POST',
-        url: `${BASE_URL}/login`,
-        data: payload,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      });
-
-      if (response.status === 200) {
-        toast.success("Login successful!");
-        navigate("/mainpage");
-      }
+      await loginUser(email, password);
+      toast.success("Login successful!");
+      navigate("/mainpage");
     } catch (error) {
-      const errorData = error.response?.data;
-
-
+      toast.error(error.message || "Login failed");
     } finally {
       setLoading(false);
     }
   };
+
+
+  // const validateForm = () => {
+  //   let newErrors = {};
+  //   if (!email) newErrors.email = "Email is required";
+  //   else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Invalid email format";
+  //   if (!password) newErrors.password = "Password is required";
+  //   setErrors(newErrors);
+  //   return Object.keys(newErrors).length === 0;
+  // };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (!validateForm()) return;
+
+  //   setLoading(true);
+  //   setErrors({});
+
+  //   const payload = {
+  //     email: email.trim(),
+  //     password: password.trim(),
+  //     otp: 0,
+  //     killSession: false,
+  //     deviceInfo: {
+  //       platform: "web",
+  //       os: "Windows 10",
+  //       browser: "Edge",
+  //       device: "133.0.0.0",
+  //       deviceName: "Windows 10",
+  //       ipAddress: "106.51.221.186"
+  //     }
+  //   };
+
+  //   try {
+  //     const response = await axios({
+  //       method: 'POST',
+  //       url: `${BASE_URL}/login`,
+  //       data: payload,
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Accept': 'application/json'
+  //       }
+  //     });
+
+  //     if (response.status === 200) {
+  //       toast.success("Login successful!");
+  //       navigate("/mainpage");
+  //     }
+  //   } catch (error) {
+  //     const errorData = error.response?.data;
+
+
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const handleRegisterClick = () => {
     navigate("/register");

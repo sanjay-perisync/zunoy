@@ -86,3 +86,33 @@ export const VerifyOtpApi = (data, setLoader, setStatus, navigate) => {
       });
   };
 };
+
+
+
+
+
+const API_BASE_URL = "https://znginx.perisync.work/api/v1/acc";
+
+export const verifyEmail = async (email) => {
+  return await axios.put(`${API_BASE_URL}/forgotPassword`, { email });
+};
+
+
+
+export const verifyOtp = async (email, otp) => {
+  return axios.put("https://znginx.perisync.work/api/v1/acc/verifyOtp", {
+    email,
+    otp: parseInt(otp, 10), 
+  });
+};
+
+
+export const updatePassword = async (email, password, identifier) => {
+  return await axios.put(`${API_BASE_URL}/setPassword`, {
+    email,
+    password,
+    identifier,
+    device: "133.0.0.0",
+    ipAddress: "106.51.219.124",
+  });
+};
