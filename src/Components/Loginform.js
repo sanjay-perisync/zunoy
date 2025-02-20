@@ -95,84 +95,85 @@ const LoginForm = () => {
         </p>
 
         <form onSubmit={handleSubmit} className="mt-10 space-y-8">
-          <TextField
-            fullWidth
-            label="Email Address"
-            variant="filled"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              setErrors((prev) => ({ ...prev, email: "" }));
-            }}
-            error={!!errors.email}
-            helperText={errors.email}
-            sx={{
-              "& .MuiInputBase-root": {
-                border: "3px solid",
-                borderColor: focused ? "#1976D2" : "#F8F8F8",
-                borderRadius: "8px",
-                backgroundColor: "white",
-                transition: "border-color 0.3s ease",
-              },
-              "& .MuiInputBase-root:hover": {
-                borderColor: focused ? "#1976D2" : "#BEBEBE",
-                backgroundColor: "#F8F8F8",
-              },
-              "& .MuiInputBase-root.Mui-focused": {
-                borderColor: "#1976D2",
-                backgroundColor: "white",
-              },
-              "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
-                display: "none",
-              },
-            }}
-          />
+        <TextField
+  fullWidth
+  label="Email Address"
+  variant="filled"
+  value={email}
+  onChange={(e) => {
+    setEmail(e.target.value);
+    setErrors((prev) => ({ ...prev, email: "" }));
+  }}
+  error={!!errors.email}
+  helperText={errors.email}
+  sx={{
+    "& .MuiInputBase-root": {
+      border: "3px solid",
+      borderColor: errors.email ? "red" : focused ? "#1976D2" : "#F8F8F8",
+      borderRadius: "8px",
+      backgroundColor: "white",
+      transition: "border-color 0.3s ease",
+    },
+    "& .MuiInputBase-root:hover": {
+      borderColor: errors.email ? "red" : focused ? "#1976D2" : "#BEBEBE",
+      backgroundColor: "#F8F8F8",
+    },
+    "& .MuiInputBase-root.Mui-focused": {
+      borderColor: errors.email ? "red" : "#1976D2",
+      backgroundColor: "white",
+    },
+    "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+      display: "none",
+    },
+  }}
+/>
 
-          <TextField
-            fullWidth
-            label="Password"
-            type={showPassword ? "text" : "password"}
-            variant="filled"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setErrors((prev) => ({ ...prev, password: "" }));
-            }}
-            error={!!errors.password}
-            helperText={errors.password}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => setShowPassword(!showPassword)}
-                    edge="end"
-                  >
-                    {showPassword ? <FaEyeSlash /> : <FaEye />}
-                  </IconButton>
-                </InputAdornment>
-              )
-            }}
-            sx={{
-              "& .MuiInputBase-root": {
-                border: "3px solid",
-                borderColor: focused ? "#1976D2" : "#F8F8F8",
-                borderRadius: "8px",
-                backgroundColor: "white",
-                transition: "border-color 0.3s ease",
-              },
-              "& .MuiInputBase-root:hover": {
-                borderColor: focused ? "#1976D2" : "#BEBEBE",
-                backgroundColor: "#F8F8F8",
-              },
-              "& .MuiInputBase-root.Mui-focused": {
-                borderColor: "#1976D2",
-                backgroundColor: "white",
-              },
-              "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
-                display: "none",
-              },
-            }}
-          />
+<TextField
+  fullWidth
+  label="Password"
+  type={showPassword ? "text" : "password"}
+  variant="filled"
+  value={password}
+  onChange={(e) => {
+    setPassword(e.target.value);
+    setErrors((prev) => ({ ...prev, password: "" }));
+  }}
+  error={!!errors.password}
+  helperText={errors.password}
+  InputProps={{
+    endAdornment: (
+      <InputAdornment position="end">
+        <IconButton
+          onClick={() => setShowPassword(!showPassword)}
+          edge="end"
+        >
+          {showPassword ? <FaEyeSlash /> : <FaEye />}
+        </IconButton>
+      </InputAdornment>
+    )
+  }}
+  sx={{
+    "& .MuiInputBase-root": {
+      border: "3px solid",
+      borderColor: errors.password ? "red" : focused ? "#1976D2" : "#F8F8F8",
+      borderRadius: "8px",
+      backgroundColor: "white",
+      transition: "border-color 0.3s ease",
+    },
+    "& .MuiInputBase-root:hover": {
+      borderColor: errors.password ? "red" : focused ? "#1976D2" : "#BEBEBE",
+      backgroundColor: "#F8F8F8",
+    },
+    "& .MuiInputBase-root.Mui-focused": {
+      borderColor: errors.password ? "red" : "#1976D2",
+      backgroundColor: "white",
+    },
+    "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+      display: "none",
+    },
+  }}
+/>
+
 
 
           <button
@@ -206,4 +207,3 @@ const LoginForm = () => {
 export default LoginForm;
 
 
-// 
