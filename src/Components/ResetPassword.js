@@ -353,6 +353,17 @@ try {
           </Link>
         </p>
 
+
+
+        {accountCreated ? (
+                        <div className="bg-green-50 p-6 rounded-lg shadow-lg flex flex-col justify-center h-[500px] items-center text-center w-full">
+                            <div className="flex justify-center">
+                                <img src="https://account.zunoy.com/assets/iconly/iconly-glass-tick.svg" alt="Success" className="w-16 h-16" />
+                            </div>
+                            <h2 className="text-lg font-semibold mt-4 text-green-700">Your password has been Updated Successfully</h2>
+                            <p className="text-gray-600 mt-2">You will be redirected to Login page Please wait ...</p>
+                        </div>
+                    ) : (
         <form onSubmit={(e) => e.preventDefault()}>
           {!otpSent ? (
             <>
@@ -450,24 +461,9 @@ try {
             </>
           ) : (
             <div className="space-y-6">
-  {accountCreated ? (
-    <div className="bg-green-50 p-6 rounded-lg shadow-lg flex flex-col justify-center h-[500px] items-center text-center w-full">
-      <div className="flex justify-center">
-        <img 
-          src="https://account.zunoy.com/assets/iconly/iconly-glass-tick.svg" 
-          alt="Success" 
-          className="w-16 h-16" 
-        />
-      </div>
-      <h2 className="text-lg font-semibold mt-4 text-green-700">
-        Password Updated Successfully
-      </h2>
-      <p className="text-gray-600 mt-2">
-        You will be redirected to the Login page. Please wait...
-      </p>
-    </div>
-  ) : (
-    <>
+
+
+  
       <TextField
         type="password"
         label="Password"
@@ -533,13 +529,14 @@ try {
       >
         {loading ? <CircularProgress size={24} color="inherit" /> : "Update Password"}
       </button>
-    </>
-  )}
+
+
 </div>
 
           )}
 
         </form>
+         )}
 
         <div className="mt-6 space-y-2">
           <p className="font-semibold text-lg lg:text-xl">Need assistance?</p>
