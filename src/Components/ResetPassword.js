@@ -4,6 +4,10 @@ import Footer from "./Footer";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import CircularProgress from "@mui/material/CircularProgress";
+
+
 
 
 const ResetPassword = () => {
@@ -18,6 +22,7 @@ const ResetPassword = () => {
   const [canResend, setCanResend] = useState(false);
   const navigate = useNavigate();
   const otpRefs = useRef(Array.from({ length: 6 }, () => React.createRef()));
+  const [loading, setLoading] = useState(false);
 
 
 
@@ -38,9 +43,9 @@ const ResetPassword = () => {
 
 
 
-  
 
   const handleVerifyEmail = async () => {
+    setLoading(true);
     try {
       const response = await axios.put(
         "https://znginx.perisync.work/api/v1/acc/forgotPassword",
@@ -48,13 +53,18 @@ const ResetPassword = () => {
       );
 
       if (response.status === 200) {
+        toast.success("OTP sent successfully!");
         setOtpSent(true);
         setResendTimer(10);
       }
     } catch (error) {
       console.error("Error sending OTP:", error);
+      toast.error("Failed to send OTP. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
+
 
 
 
@@ -68,7 +78,7 @@ const ResetPassword = () => {
         { email }
       );
       if (response.status === 200) {
-        setResendTimer(10); 
+        setResendTimer(10);
         setCanResend(false);
       }
     } catch (error) {
@@ -79,13 +89,13 @@ const ResetPassword = () => {
 
   const handleChange = (e, index) => {
     const value = e.target.value;
-    if (!/^\d?$/.test(value)) return; 
+    if (!/^\d?$/.test(value)) return;
 
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
 
-   
+
     if (value !== "" && index < 5) {
       otpRefs.current[index + 1].current.focus();
     }
@@ -99,11 +109,16 @@ const ResetPassword = () => {
 
 
 
+
+
+
+
   const handleVerifyOtp = async () => {
+    setLoading(true);
     try {
       const payload = {
         email: email.trim(),
-        otp: parseInt(otp.join(""), 10)
+        otp: parseInt(otp.join(""), 10),
       };
 
       console.log("Sending OTP verification request:", payload);
@@ -112,66 +127,97 @@ const ResetPassword = () => {
         "https://znginx.perisync.work/api/v1/acc/verifyOtp",
         payload,
         {
-          headers: { "Content-Type": "application/json" }
+          headers: { "Content-Type": "application/json" },
         }
       );
 
       console.log("Response:", response.data);
 
       if (response.status === 200) {
+        toast.success("OTP verified successfully!");
+
+        if (response.data.identifier) {
+          localStorage.setItem("identifier", response.data.identifier);
+        }
         setOtpVerified(true);
       }
     } catch (error) {
       if (error.response) {
         console.error("API Error Response:", error.response.data);
+        toast.error(error.response.data.msg || "OTP verification failed");
       } else {
         console.error("Error:", error.message);
+        toast.error("Network error occurred");
       }
+    } finally {
+      setLoading(false);
     }
   };
+
+
 
 
 
 
   const handleUpdatePassword = async () => {
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      toast.error("Passwords do not match");
       return;
     }
 
-    if (!/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
-      alert("Password must be at least 8 characters long and include an uppercase letter, a number, and a special character.");
+    if (
+      !/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)
+    ) {
+      toast.error(
+        "Password must be at least 8 characters long and include an uppercase letter, a number, and a special character."
+      );
       return;
     }
-
 
     const identifier = localStorage.getItem("identifier");
-
     if (!identifier) {
-      alert("Identifier not found. Please log in again.");
+      toast.error("Session expired. Please restart the password reset process.");
       return;
     }
 
     const payload = {
+      email: email.trim(),
+      password: password,
+      identifier: identifier,
       device: "133.0.0.0",
-      email,
-      identifier,
-      ipAddress: "106.51.221.186",
-      password,
-
+      ipAddress: "106.51.219.124",
     };
 
+    setLoading(true);
     try {
-      const response = await axios.put("https://znginx.perisync.work/api/v1/acc/setPassword", payload);
+      console.log("Sending password reset request:", payload);
+      const response = await axios.put(
+        "https://znginx.perisync.work/api/v1/acc/setPassword",
+        payload
+      );
 
       if (response.status === 200) {
-
+        toast.success("Password updated successfully!");
+        localStorage.removeItem("identifier");
         navigate("/");
       }
     } catch (error) {
-      console.error("Error updating password:", error);
+      console.error("Error Response:", error.response?.data);
+      if (error.response?.data?.code === 333) {
+        toast.error(
+          "Your session has expired. Please restart the password reset process."
+        );
+      } else if (error.response?.status === 404) {
+        toast.error("Invalid request. Please check your details and try again.");
+      } else {
+        toast.error("Failed to update password. Please try again.");
+      }
+    } finally {
+      setLoading(false);
     }
   };
+
+
 
 
 
@@ -226,12 +272,14 @@ const ResetPassword = () => {
                 }}
               />
 
+
               <button
                 type="button"
                 onClick={handleVerifyEmail}
-                className="w-full my-6 text-lg bg-indigo-500 text-white py-4 rounded-xl font-semibold hover:bg-blue-700 transition"
+                className="w-full my-6 text-lg bg-indigo-500 text-white py-4 rounded-xl font-semibold hover:bg-blue-700 transition flex items-center justify-center"
+                disabled={loading}
               >
-                Verify Email
+                {loading ? <CircularProgress size={24} color="inherit" /> : "Verify Email"}
               </button>
             </>
           ) : !otpVerified ? (
@@ -252,12 +300,15 @@ const ResetPassword = () => {
               </div>
 
 
+
+
               <button
                 type="button"
                 onClick={handleVerifyOtp}
-                className="w-full my-6 text-lg bg-indigo-500 text-white py-4 rounded-xl font-semibold hover:bg-blue-700 transition"
+                className="w-full my-6 text-lg bg-indigo-500 text-white py-4 rounded-xl font-semibold hover:bg-blue-700 transition flex items-center justify-center"
+                disabled={loading}
               >
-                Verify OTP
+                {loading ? <CircularProgress size={24} color="inherit" /> : "Verify OTP"}
               </button>
 
               {otpSent && (
@@ -273,8 +324,8 @@ const ResetPassword = () => {
                     onClick={handleResendClick}
                     disabled={!canResend}
                     className={`px-4 py-2 rounded ${!canResend
-                        ? " cursor-not-allowed"
-                        : " text-black ho transition"
+                      ? " cursor-not-allowed"
+                      : " text-black ho transition"
                       }`}
                   >
                     Resend OTP
@@ -346,9 +397,10 @@ const ResetPassword = () => {
               <button
                 type="button"
                 onClick={handleUpdatePassword}
-                className="w-full my-6 text-lg bg-indigo-500 text-white py-4 rounded-xl font-semibold hover:bg-blue-700 transition"
+                className="w-full my-6 text-lg bg-indigo-500 text-white py-4 rounded-xl font-semibold hover:bg-blue-700 transition flex items-center justify-center"
+                disabled={loading}
               >
-                Update Password
+                {loading ? <CircularProgress size={24} color="inherit" /> : "Update Password"}
               </button>
             </div>
           )}
