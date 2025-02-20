@@ -311,66 +311,66 @@ function CompleteProfile() {
                                 }}
                             />
 
-                            <div className="flex gap-4">
-                                <TextField
-                                    value="+91"
-                                    disabled
-                                    variant="filled"
-                                    className="w-auto lg:w-16"
-                                    sx={{
-                                        "& .MuiInputBase-root": {
-                                            border: "1px solid",
-                                            borderColor: focused ? "#1976D2" : "#F8F8F8",
-                                            borderRadius: "8px",
-                                            backgroundColor: "#F8F8F8",
-                                            transition: "border-color 0.3s ease",
-                                            height: "62px",
-                                        },
-                                        "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
-                                            display: "none",
-                                        },
-                                        "& .MuiInputBase-input": {
-                                            textAlign: "center",
-                                            padding: "0px",
-                                            height: "100%",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                        },
-                                    }}
-                                />
+<div className="flex gap-4">
+    <TextField
+        value="+91"
+        disabled
+        variant="filled"
+        className="w-auto lg:w-16"
+        sx={{
+            "& .MuiInputBase-root": {
+                border: "1px solid",
+                borderColor: focused ? "#1976D2" : "#F8F8F8",
+                borderRadius: "8px",
+                backgroundColor: "#F8F8F8",
+                transition: "border-color 0.3s ease",
+                height: "62px",
+            },
+            "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+                display: "none",
+            },
+            "& .MuiInputBase-input": {
+                textAlign: "center",
+                padding: "0px",
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+            },
+        }}
+    />
 
-                                <TextField
-                                    label="phoneNo"
-                                    type="tel"
-
-                                    variant="filled"
-                                    value={formData.phoneNo}
-                                    onChange={handleChange}
-                                    fullWidth
-                                    required
-                                    sx={{
-                                        "& .MuiInputBase-root": {
-                                            border: "3px solid",
-                                            borderColor: focused ? "#1976D2" : "#F8F8F8",
-                                            borderRadius: "8px",
-                                            backgroundColor: "white",
-                                            transition: "border-color 0.3s ease",
-                                        },
-                                        "& .MuiInputBase-root:hover": {
-                                            borderColor: focused ? "#1976D2" : "#BEBEBE",
-                                            backgroundColor: "#F8F8F8",
-                                        },
-                                        "& .MuiInputBase-root.Mui-focused": {
-                                            borderColor: "#1976D2",
-                                            backgroundColor: "white",
-                                        },
-                                        "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
-                                            display: "none",
-                                        },
-                                    }}
-                                />
-                            </div>
+    <TextField
+        name="phoneNo"
+        type="tel"
+        placeholder="Mobile Number"
+        value={formData.phoneNo}
+        onChange={handleChange}
+        variant="filled"
+        fullWidth
+        required
+        sx={{
+            "& .MuiInputBase-root": {
+                border: "3px solid",
+                borderColor: focused ? "#1976D2" : "#F8F8F8",
+                borderRadius: "8px",
+                backgroundColor: "white",
+                transition: "border-color 0.3s ease",
+            },
+            "& .MuiInputBase-root:hover": {
+                borderColor: focused ? "#1976D2" : "#BEBEBE",
+                backgroundColor: "#F8F8F8",
+            },
+            "& .MuiInputBase-root.Mui-focused": {
+                borderColor: "#1976D2",
+                backgroundColor: "white",
+            },
+            "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+                display: "none",
+            },
+        }}
+    />
+</div>
 
                             <div className="relative">
                                 <select
