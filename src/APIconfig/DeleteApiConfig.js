@@ -76,9 +76,9 @@ export const LogoutApi = ({ setloader }) => {
         reject(err);
       })
       .finally(() => {
-        console.log("⌛ Waiting 3 seconds before redirecting...");
+        console.log(" Waiting 3 seconds before redirecting...");
         setTimeout(() => {
-          console.log("🔄 Redirecting now...");
+          console.log("Redirecting now...");
           window.location.href = "/";
         }, 3000); 
       });

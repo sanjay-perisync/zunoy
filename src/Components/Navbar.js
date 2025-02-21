@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from "react";
 import ThemeToggle from './ThemeToggle';
 import LogoutPopup from './Logout';
+import { Link } from "react-router-dom";
 
 
 function Navbar() {
@@ -52,7 +53,7 @@ function Navbar() {
 
 
             {/* All apps */}
-            <button
+            {/* <button
               onClick={() => setActive("All apps")}
               className={`flex items-center space-x-4 px-3 py-1.5 rounded-lg font-semibold ${active === "All apps" ? "bg-gray-200" : ""
                 }`}
@@ -78,9 +79,46 @@ function Navbar() {
                 All apps
               </span>
 
-            </button>
+            </button> */}
+
+
+
+  <button
+    onClick={() => setActive("All apps")}
+    className={`flex items-center space-x-4 px-3 py-1.5 rounded-lg font-semibold ${
+      active === "All apps" ? "bg-gray-200" : ""
+    }`}
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className={`h-5 w-5 ${
+        active === "All apps" ? "text-indigo-500" : "text-gray-400"
+      }`}
+      width="18"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+      <line x1="8" y1="21" x2="16" y2="21"></line>
+      <line x1="12" y1="17" x2="12" y2="21"></line>
+    </svg>
+    <span
+      className={`font-semibold text-[16px] ${
+        active === "All apps" ? "text-black" : "text-slate-600"
+      }`}
+    >
+      All apps
+    </span>
+  </button>
+
 
             {/* Account */}
+            <Link to="/account">
             <button
               onClick={() => setActive("Account")}
               className={`flex items-center space-x-4 px-3 py-1.5 rounded-lg font-semibold ${active === "Account" ? "bg-gray-200" : ""
@@ -107,6 +145,7 @@ function Navbar() {
               </span>
 
             </button>
+            </Link>
 
             {/* Billing */}
             <button

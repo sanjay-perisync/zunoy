@@ -94,6 +94,19 @@ export const SendotpAPI = (data, setLoader, setOtpSent, setError) => {
 //   };
 // };
 
+// src/api.js
+export const fetchAccountData = async () => {
+  try {
+    const response = await fetch("https://znginx.perisync.work/api/v1/acc/account/read");
+    if (!response.ok) {
+      throw new Error("Failed to fetch account data");
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching account data:", error);
+    throw error;
+  }
+};
 
 
 
