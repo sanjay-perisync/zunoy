@@ -61,9 +61,10 @@ const uploadProfilePicture = async (file) => {
 
 const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
   const [avatars, setAvatars] = useState([]);
-  const [selectedAvatar, setSelectedAvatar] = useState(null);
+  const [selectedAvatar, setSelectedAvatar] = useState(null); // Reset selected avatar
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [uploadedAvatar, setUploadedAvatar] = useState(null);
 
   useEffect(() => {
     const fetchAvatars = async () => {
@@ -126,69 +127,180 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
       const data = await response.json();
       console.log("Avatar Uploaded Successfully:", data);
 
-     
       setProfilePicture(data.url);
-
-     
       onClose();
     } catch (error) {
       console.error("Error uploading avatar:", error.message);
     }
   };
 
+  const handleRemove = () => {
+    setUploadedAvatar(null); // Reset uploaded avatar
+    setSelectedAvatar(null); // Reset selected avatar
+    setProfilePicture(null);
+    onClose();
+  };
+
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const token = localStorage.getItem("at");
+      if (!token) {
+        console.error("No authentication token found");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await fetch("https://znginx.perisync.work/api/v1/acc/account/uploadPic", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Error uploading image:", errorData);
+          throw new Error(errorData.msg || "Failed to upload image");
+        }
+
+        const data = await response.json();
+        console.log("Image Uploaded Successfully:", data);
+
+        setUploadedAvatar(data.url); // Save the uploaded avatar URL
+        setProfilePicture(data.url); // Update profile picture immediately if successful
+        setSelectedAvatar(null); // Reset selected avatar after uploading a custom image
+      } catch (error) {
+        console.error("Error uploading image:", error.message);
+      }
+    }
+  };
+
+  const handleSelect = () => {
+    if (uploadedAvatar) {
+      setProfilePicture(uploadedAvatar); // Directly set the uploaded avatar to profile picture if it's selected
+    } else if (selectedAvatar) {
+      setProfilePicture(selectedAvatar.url); // If selected avatar is chosen, set it to profile picture
+    }
+
+    onClose(); // Close the dialog after selecting
+  };
+
+  useEffect(() => {
+    // Reset states when modal is reopened
+    if (isOpen) {
+      setSelectedAvatar(null);
+      setUploadedAvatar(null); // Ensure both are reset when the dialog opens again
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg w-[500px] p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-semibold">Choose your Avatar</h2>
+      <div className="bg-white flex flex-col justify-between rounded-lg h-[500px] w-[500px] p-4">
+        <div className="flex justify-between items-center mb-4 border-b pb-4">
+          <h2 className="text-lg font-semibold">Choose your Avatar</h2>
         </div>
 
         {loading ? (
-          <div className="text-center py-8">Loading avatars...</div>
+          <div className="text-center py-4">Loading avatars...</div>
         ) : error ? (
-          <div className="text-center text-red-500 py-8">{error}</div>
+          <div className="text-center text-red-500 py-4">{error}</div>
         ) : (
-          <div className="grid grid-cols-3 gap-4">
-            <div
-              className={`aspect-square rounded-lg border-2 ${
-                !selectedAvatar ? "border-blue-500" : "border-gray-200"
-              } flex items-center justify-center cursor-pointer overflow-hidden`}
-              onClick={() => setSelectedAvatar(null)}
-            >
-              <img src="/default-avatar.png" alt="Default Preview" className="w-full h-full object-cover" />
-            </div>
-            {avatars.map((avatar) => (
+          <div className="flex gap-4">
+            {/* Left section: Selected avatar and Remove option */}
+            <div className="flex flex-col items-center justify-center space-y-2">
               <div
-                key={avatar.id}
-                className={`aspect-square rounded-lg border-2 ${
-                  selectedAvatar?.id === avatar.id ? "border-blue-500" : "border-gray-200"
+                className={`w-32 h-32 rounded-lg border ${
+                  !selectedAvatar && !uploadedAvatar ? "border-gray-500" : "border-gray-200"
                 } flex items-center justify-center cursor-pointer overflow-hidden`}
-                onClick={() => setSelectedAvatar(avatar)}
+                onClick={handleRemove}
               >
-                <img src={avatar.url} alt={avatar.name} className="w-full h-full object-cover" />
+                {uploadedAvatar ? (
+                  <img
+                    src={uploadedAvatar}
+                    alt="Uploaded Avatar"
+                    className="w-full h-full object-cover"
+                  />
+                ) : selectedAvatar ? (
+                  <img
+                    src={selectedAvatar.url}
+                    alt={selectedAvatar.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <img src="/default-avatar.png" alt="Default Preview" className="w-full h-full object-cover" />
+                )}
               </div>
-            ))}
+              <div
+                className="w-32 h-32 flex flex-col items-center justify-center cursor-pointer"
+                onClick={handleRemove}
+              >
+                <span className=" flex gap-2 py-4 text-[18px] font-semibold">Preview</span>
+                <div className="text-white font-semibold text-[18px] px-4 py-2 bg-red-500 rounded-xl flex items-center gap-2">
+  <div>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M7.616 20q-.667 0-1.141-.475T6 18.386V6h-.5q-.213 0-.356-.144T5 5.499t.144-.356T5.5 5H9q0-.31.23-.54t.54-.23h4.46q.31 0 .54.23T15 5h3.5q.213 0 .356.144t.144.357t-.144.356T18.5 6H18v12.385q0 .666-.475 1.14t-1.14.475zM17 6H7v12.385q0 .269.173.442t.443.173h8.769q.269 0 .442-.173t.173-.442zm-6.692 11q.213 0 .357-.144t.143-.356v-8q0-.213-.144-.356T10.307 8t-.356.144t-.143.356v8q0 .213.144.356q.144.144.356.144m3.385 0q.213 0 .356-.144t.143-.356v-8q0-.213-.144-.356Q13.904 8 13.692 8q-.213 0-.357.144t-.143.356v8q0 .213.144.356t.357.144M7 6v13z"/>
+    </svg>
+  </div>
+  <div><span>Remove</span></div>
+</div>
+
+              </div>
+            </div>
+
+            {/* Right section: Available avatars */}
+            <div className="flex flex-wrap gap-4">
+              {avatars.map((avatar) => (
+                <div
+                  key={avatar.id}
+                  className={`w-24 h-24 rounded-lg p-4${
+                    selectedAvatar?.id === avatar.id ? "border-blue-500" : "border-gray-200"
+                  } flex items-center justify-center cursor-pointer overflow-hidden`}
+                  onClick={() => setSelectedAvatar(avatar)}
+                >
+                  <img src={avatar.url} alt={avatar.name} className="w-full h-full object-cover" />
+                </div>
+              ))}
+              {/* Plus button to upload image */}
+              <div className="w-24 h-24 rounded-lg border-2 border-gray-200 flex items-center justify-center cursor-pointer overflow-hidden">
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="absolute opacity-0"
+                  onChange={handleFileChange}
+                />
+                <span className="text-xl font-semibold text-gray-500">+</span>
+              </div>
+            </div>
           </div>
         )}
 
-        <div className="flex justify-end gap-4 mt-6">
-          <button onClick={onClose} className="px-4 py-2 text-red-500 font-medium">
-            Cancel
-          </button>
-          <button
-            onClick={() => selectedAvatar && handleAvatarSelect(selectedAvatar)}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg font-medium"
-            disabled={!selectedAvatar}
-          >
-            Select
-          </button>
-        </div>
+        {/* Only show Save button when an avatar or uploaded image is selected */}
+<div className="flex justify-end gap-4 mt-4">
+  <button onClick={onClose} className="px-3 py-1 text-red-500 font-medium">
+    Cancel
+  </button>
+  {(selectedAvatar || uploadedAvatar) && (
+    <button
+      onClick={handleSelect}
+      className="px-5 py-2 bg-indigo-500 text-white rounded-lg font-medium"
+    >
+      Save
+    </button>
+  )}
+</div>
+
       </div>
     </div>
   );
 };
+
 
 const Account = ({ onEdit, onRequestDelete }) => {
   const [user, setUser] = useState(null);
@@ -241,7 +353,11 @@ const Account = ({ onEdit, onRequestDelete }) => {
   };
   return (
     <div className="bg-white h-screen">
+
+      <header className="top-0 left-0 sticky z-10 bg-white">
       <Navbar />
+      </header>
+      
 
       <section className="px-4">
         <div className="flex flex-wrap justify-between items-center w-full lg:max-w-[1600px] mx-2 lg:mx-10 my-10">
@@ -255,7 +371,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
                   <img 
                     src={profilePicture} 
                     alt="Profile" 
-                    className="w-full h-full object-cover"
+                    className="h-[60px] w-[60px] object-contain"
                   />
                 ) : (
                   <span className="text-2xl">👤</span>
