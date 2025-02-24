@@ -29,17 +29,188 @@ const fetchAccountData = async () => {
   }
 };
 
+const uploadProfilePicture = async (file) => {
+  try {
+    const token = localStorage.getItem('at');
+    const formData = new FormData();
+    formData.append('profilePicture', file);
 
+    const response = await fetch("https://znginx.perisync.work/api/v1/acc/account/uploadPic", {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to upload profile picture");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error uploading profile picture:", error);
+    throw error;
+  }
+};
+
+// Avatar Selector Component
+const AvatarSelector = ({ isOpen, onClose, onSelect }) => {
+  const [avatars, setAvatars] = useState([]);
+  const [selectedAvatar, setSelectedAvatar] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchAvatars = async () => {
+      try {
+        const token = localStorage.getItem('at');
+        const response = await fetch('https://znginx.perisync.work/api/v1/acc/account/avatar', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch avatars');
+        }
+
+        const data = await response.json();
+        setAvatars(data);
+      } catch (err) {
+        setError('Failed to load avatars');
+        console.error('Error fetching avatars:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (isOpen) {
+      fetchAvatars();
+    }
+  }, [isOpen]);
+
+  const handleAvatarSelect = async (avatar) => {
+    try {
+      const token = localStorage.getItem('at');
+      const response = await fetch('https://znginx.perisync.work/api/v1/acc/account/avatar', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ avatarId: avatar.id })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update avatar');
+      }
+
+      onSelect(avatar.url);
+      onClose();
+    } catch (err) {
+      setError('Failed to update avatar');
+      console.error('Error updating avatar:', err);
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg w-[500px] p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-semibold">Choose your Avatar</h2>
+        </div>
+
+        {loading ? (
+          <div className="text-center py-8">Loading avatars...</div>
+        ) : error ? (
+          <div className="text-center text-red-500 py-8">{error}</div>
+        ) : (
+          <div className="grid grid-cols-3 gap-4">
+            <div 
+              className={`aspect-square rounded-lg border-2 ${
+                !selectedAvatar ? 'border-blue-500' : 'border-gray-200'
+              } flex items-center justify-center cursor-pointer overflow-hidden`}
+              onClick={() => setSelectedAvatar(null)}
+            >
+              <img 
+                src="/default-avatar.png" 
+                alt="Default Preview" 
+                className="w-full h-full object-cover"
+              />
+            </div>
+            {avatars.map((avatar) => (
+              <div
+                key={avatar.id}
+                className={`aspect-square rounded-lg border-2 ${
+                  selectedAvatar?.id === avatar.id ? 'border-blue-500' : 'border-gray-200'
+                } flex items-center justify-center cursor-pointer overflow-hidden`}
+                onClick={() => setSelectedAvatar(avatar)}
+              >
+                <img 
+                  src={avatar.url} 
+                  alt={avatar.name}
+                  className="w-full h-full object-cover" 
+                />
+              </div>
+            ))}
+            <div className="aspect-square rounded-lg border-2 border-gray-200 flex items-center justify-center cursor-pointer">
+              <svg 
+                className="w-8 h-8 text-gray-400" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M12 4v16m8-8H4" 
+                />
+              </svg>
+            </div>
+          </div>
+        )}
+
+        <div className="flex justify-end gap-4 mt-6">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 text-red-500 font-medium"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => selectedAvatar && handleAvatarSelect(selectedAvatar)}
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg font-medium"
+            disabled={!selectedAvatar}
+          >
+            Select
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Main Account Component
 const Account = ({ onEdit, onRequestDelete }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [profilePicture, setProfilePicture] = useState(null);
+  const [isAvatarSelectorOpen, setIsAvatarSelectorOpen] = useState(false);
 
   useEffect(() => {
     const getUserData = async () => {
       try {
         const data = await fetchAccountData();
         setUser(data);
+        if (data.profilePictureUrl) {
+          setProfilePicture(data.profilePictureUrl);
+        }
         setError(null);
       } catch (error) {
         console.error("Failed to load user data");
@@ -52,17 +223,71 @@ const Account = ({ onEdit, onRequestDelete }) => {
     getUserData();
   }, []);
 
+  const handleProfilePictureChange = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    try {
+      setLoading(true);
+      const response = await uploadProfilePicture(file);
+      if (response.profilePictureUrl) {
+        setProfilePicture(response.profilePictureUrl);
+        const userData = await fetchAccountData();
+        setUser(userData);
+      }
+    } catch (error) {
+      setError("Failed to upload profile picture. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAvatarSelect = (avatarUrl) => {
+    setProfilePicture(avatarUrl);
+  };
+
   return (
     <div className="bg-white h-screen">
       <Navbar />
 
-
       <section className="px-4">
-        <div className="flex flex-wrap  justify-between items-center w-full lg:max-w-[1600px] mx-2 lg:mx-10 my-10">
-          <div className="flex items-center space-y-5 gap-4  pb-4">
-            <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center mt-5">
-              <img src="" alt="" className="" />
-              <span className="text-2xl">👤</span>
+        <div className="flex flex-wrap justify-between items-center w-full lg:max-w-[1600px] mx-2 lg:mx-10 my-10">
+          <div className="flex items-center space-y-5 gap-4 pb-4">
+            <div className="relative">
+              <div 
+                className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center mt-5 overflow-hidden cursor-pointer"
+                onClick={() => setIsAvatarSelectorOpen(true)}
+              >
+                {profilePicture ? (
+                  <img 
+                    src={profilePicture} 
+                    alt="Profile" 
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-2xl">👤</span>
+                )}
+              </div>
+              <label className="absolute bottom-0 right-0 bg-indigo-600 rounded-full p-1 cursor-pointer">
+                <input
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                  onChange={handleProfilePictureChange}
+                />
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  className="h-4 w-4 text-white"
+                  viewBox="0 0 20 20" 
+                  fill="currentColor"
+                >
+                  <path 
+                    fillRule="evenodd" 
+                    d="M4 5a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.121-1.121A2 2 0 0011.172 3H8.828a2 2 0 00-1.414.586L6.293 4.707A1 1 0 015.586 5H4zm6 9a3 3 0 100-6 3 3 0 000 6z" 
+                    clipRule="evenodd" 
+                  />
+                </svg>
+              </label>
             </div>
             <div>
               <h2 className="text-xl font-semibold">
@@ -85,6 +310,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
               Edit
             </button>
           </div>
+
 
 
           <div className="flex items-center gap-5  pb-2">
@@ -166,7 +392,11 @@ const Account = ({ onEdit, onRequestDelete }) => {
         </div>
       </section>
 
-
+      <AvatarSelector
+        isOpen={isAvatarSelectorOpen}
+        onClose={() => setIsAvatarSelectorOpen(false)}
+        onSelect={handleAvatarSelect}
+      />
 
       <footer>
         <Mainpagefooter />
