@@ -29,33 +29,37 @@ const fetchAccountData = async () => {
   }
 };
 
+
 const uploadProfilePicture = async (file) => {
   try {
-    const token = localStorage.getItem('at');
+    const token = localStorage.getItem("at");
+    if (!token) throw new Error("No authentication token found");
+
     const formData = new FormData();
-    formData.append('profilePicture', file);
+    formData.append("file", file);
 
     const response = await fetch("https://znginx.perisync.work/api/v1/acc/account/uploadPic", {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-      body: formData
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+      body: formData,
     });
 
     if (!response.ok) {
-      throw new Error("Failed to upload profile picture");
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to upload profile picture");
     }
 
     return await response.json();
   } catch (error) {
-    console.error("Error uploading profile picture:", error);
+    console.error("Error uploading profile picture:", error.message);
     throw error;
   }
 };
 
-// Avatar Selector Component
-const AvatarSelector = ({ isOpen, onClose, onSelect }) => {
+
+
+
+const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
   const [avatars, setAvatars] = useState([]);
   const [selectedAvatar, setSelectedAvatar] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -63,55 +67,72 @@ const AvatarSelector = ({ isOpen, onClose, onSelect }) => {
 
   useEffect(() => {
     const fetchAvatars = async () => {
+      if (!isOpen) return;
+
       try {
-        const token = localStorage.getItem('at');
-        const response = await fetch('https://znginx.perisync.work/api/v1/acc/account/avatar', {
+        const token = localStorage.getItem("at");
+        if (!token) throw new Error("No authentication token found");
+
+        const response = await fetch("https://znginx.perisync.work/api/v1/acc/account/avatar", {
           headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         });
 
         if (!response.ok) {
-          throw new Error('Failed to fetch avatars');
+          throw new Error(`Failed to fetch avatars: ${response.status} ${response.statusText}`);
         }
 
         const data = await response.json();
+        if (!Array.isArray(data)) throw new Error("Invalid avatar data format");
+
         setAvatars(data);
       } catch (err) {
-        setError('Failed to load avatars');
-        console.error('Error fetching avatars:', err);
+        setError(err.message);
+        console.error("Error fetching avatars:", err);
       } finally {
         setLoading(false);
       }
     };
 
-    if (isOpen) {
-      fetchAvatars();
-    }
+    fetchAvatars();
   }, [isOpen]);
 
   const handleAvatarSelect = async (avatar) => {
     try {
-      const token = localStorage.getItem('at');
-      const response = await fetch('https://znginx.perisync.work/api/v1/acc/account/avatar', {
-        method: 'POST',
+      console.log("Selected Avatar ID:", avatar.id);
+
+      const token = localStorage.getItem("at");
+      if (!token) throw new Error("No authentication token found");
+
+      const formData = new FormData();
+      formData.append("id", avatar.id);
+
+      const response = await fetch("https://znginx.perisync.work/api/v1/acc/account/uploadPic", {
+        method: "POST",
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ avatarId: avatar.id })
+        body: formData,
       });
 
       if (!response.ok) {
-        throw new Error('Failed to update avatar');
+        const errorData = await response.json();
+        console.error("Error uploading avatar:", errorData);
+        throw new Error(errorData.msg || "Failed to upload avatar");
       }
 
-      onSelect(avatar.url);
+      const data = await response.json();
+      console.log("Avatar Uploaded Successfully:", data);
+
+     
+      setProfilePicture(data.url);
+
+     
       onClose();
-    } catch (err) {
-      setError('Failed to update avatar');
-      console.error('Error updating avatar:', err);
+    } catch (error) {
+      console.error("Error uploading avatar:", error.message);
     }
   };
 
@@ -130,56 +151,30 @@ const AvatarSelector = ({ isOpen, onClose, onSelect }) => {
           <div className="text-center text-red-500 py-8">{error}</div>
         ) : (
           <div className="grid grid-cols-3 gap-4">
-            <div 
+            <div
               className={`aspect-square rounded-lg border-2 ${
-                !selectedAvatar ? 'border-blue-500' : 'border-gray-200'
+                !selectedAvatar ? "border-blue-500" : "border-gray-200"
               } flex items-center justify-center cursor-pointer overflow-hidden`}
               onClick={() => setSelectedAvatar(null)}
             >
-              <img 
-                src="/default-avatar.png" 
-                alt="Default Preview" 
-                className="w-full h-full object-cover"
-              />
+              <img src="/default-avatar.png" alt="Default Preview" className="w-full h-full object-cover" />
             </div>
             {avatars.map((avatar) => (
               <div
                 key={avatar.id}
                 className={`aspect-square rounded-lg border-2 ${
-                  selectedAvatar?.id === avatar.id ? 'border-blue-500' : 'border-gray-200'
+                  selectedAvatar?.id === avatar.id ? "border-blue-500" : "border-gray-200"
                 } flex items-center justify-center cursor-pointer overflow-hidden`}
                 onClick={() => setSelectedAvatar(avatar)}
               >
-                <img 
-                  src={avatar.url} 
-                  alt={avatar.name}
-                  className="w-full h-full object-cover" 
-                />
+                <img src={avatar.url} alt={avatar.name} className="w-full h-full object-cover" />
               </div>
             ))}
-            <div className="aspect-square rounded-lg border-2 border-gray-200 flex items-center justify-center cursor-pointer">
-              <svg 
-                className="w-8 h-8 text-gray-400" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M12 4v16m8-8H4" 
-                />
-              </svg>
-            </div>
           </div>
         )}
 
         <div className="flex justify-end gap-4 mt-6">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 text-red-500 font-medium"
-          >
+          <button onClick={onClose} className="px-4 py-2 text-red-500 font-medium">
             Cancel
           </button>
           <button
@@ -195,7 +190,6 @@ const AvatarSelector = ({ isOpen, onClose, onSelect }) => {
   );
 };
 
-// Main Account Component
 const Account = ({ onEdit, onRequestDelete }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -245,7 +239,6 @@ const Account = ({ onEdit, onRequestDelete }) => {
   const handleAvatarSelect = (avatarUrl) => {
     setProfilePicture(avatarUrl);
   };
-
   return (
     <div className="bg-white h-screen">
       <Navbar />
@@ -396,6 +389,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
         isOpen={isAvatarSelectorOpen}
         onClose={() => setIsAvatarSelectorOpen(false)}
         onSelect={handleAvatarSelect}
+        setProfilePicture={setProfilePicture}
       />
 
       <footer>
