@@ -135,8 +135,8 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
   };
 
   const handleRemove = () => {
-    setUploadedAvatar(null); // Reset uploaded avatar
-    setSelectedAvatar(null); // Reset selected avatar
+    setUploadedAvatar(null); 
+    setSelectedAvatar(null); 
     setProfilePicture(null);
     onClose();
   };
@@ -171,30 +171,68 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
         const data = await response.json();
         console.log("Image Uploaded Successfully:", data);
 
-        setUploadedAvatar(data.url); // Save the uploaded avatar URL
-        setProfilePicture(data.url); // Update profile picture immediately if successful
-        setSelectedAvatar(null); // Reset selected avatar after uploading a custom image
+        setUploadedAvatar(data.url); 
+        setProfilePicture(data.url); 
+        setSelectedAvatar(null); 
       } catch (error) {
         console.error("Error uploading image:", error.message);
       }
     }
   };
 
-  const handleSelect = () => {
-    if (uploadedAvatar) {
-      setProfilePicture(uploadedAvatar); // Directly set the uploaded avatar to profile picture if it's selected
-    } else if (selectedAvatar) {
-      setProfilePicture(selectedAvatar.url); // If selected avatar is chosen, set it to profile picture
+  const handleSelect = async () => {
+    try {
+      let avatarToUpload = uploadedAvatar || (selectedAvatar && selectedAvatar.url);
+      
+      if (!avatarToUpload) {
+        console.log("No avatar selected.");
+        return;
+      }
+  
+  
+      if (selectedAvatar && !uploadedAvatar) {
+        const token = localStorage.getItem("at");
+        if (!token) {
+          console.error("No authentication token found");
+          return;
+        }
+  
+        const formData = new FormData();
+        formData.append("id", selectedAvatar.id); 
+  
+        const response = await fetch("https://znginx.perisync.work/api/v1/acc/account/uploadPic", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        });
+  
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Error uploading avatar:", errorData);
+          throw new Error(errorData.msg || "Failed to upload avatar");
+        }
+  
+        const data = await response.json();
+        console.log("Avatar Uploaded Successfully:", data);
+        setProfilePicture(data.url);
+      } else if (uploadedAvatar) {
+        setProfilePicture(uploadedAvatar);
+      }
+      
+      onClose(); 
+    } catch (error) {
+      console.error("Error in handleSelect:", error.message);
     }
-
-    onClose(); // Close the dialog after selecting
   };
+  
 
   useEffect(() => {
-    // Reset states when modal is reopened
+    
     if (isOpen) {
       setSelectedAvatar(null);
-      setUploadedAvatar(null); // Ensure both are reset when the dialog opens again
+      setUploadedAvatar(null); 
     }
   }, [isOpen]);
 
@@ -281,7 +319,7 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
           </div>
         )}
 
-        {/* Only show Save button when an avatar or uploaded image is selected */}
+       
 <div className="flex justify-end gap-4 mt-4">
   <button onClick={onClose} className="px-3 py-1 text-red-500 font-medium">
     Cancel
