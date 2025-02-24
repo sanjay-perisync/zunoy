@@ -23,6 +23,7 @@ function App() {
             <Route path="/mainpage" element={<MainPage />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/account" element={<Account />} />
+            <Route path="/mainpage" element={<MainPage />} />
           </Routes>
         </div>
       </Router>

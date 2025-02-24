@@ -95,19 +95,64 @@ export const SendotpAPI = (data, setLoader, setOtpSent, setError) => {
 // };
 
 // src/api.js
-export const fetchAccountData = async () => {
-  try {
-    const response = await fetch("https://znginx.perisync.work/api/v1/acc/account/read");
-    if (!response.ok) {
-      throw new Error("Failed to fetch account data");
-    }
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching account data:", error);
-    throw error;
-  }
-};
+// export const fetchAccountData = async () => {
+//   try {
+//     const response = await fetch("https://znginx.perisync.work/api/v1/acc/account/read");
+//     if (!response.ok) {
+//       throw new Error("Failed to fetch account data");
+//     }
+//     return await response.json();
+//   } catch (error) {
+//     console.error("Error fetching account data:", error);
+//     throw error;
+//   }
+// };
 
 
+
+//   try {
+//     // Get the token from localStorage
+//     const token = localStorage.getItem('auth_token'); // Make sure this matches your token key name
+    
+//     // Debug log to check if token exists
+//     if (!token) {
+//       console.log("No token found in localStorage");
+//       throw new Error("No authentication token found");
+//     }
+
+//     console.log("Token found:", token.substring(0, 10) + "..."); // Log first 10 chars for debugging
+
+//     const response = await fetch("https://znginx.perisync.work/api/v1/acc/account/read", {
+//       method: 'GET',
+//       headers: {
+//         'Authorization': `Bearer ${token}`,
+//         'Content-Type': 'application/json',
+//         'Accept': 'application/json'
+//       },
+//       credentials: 'include' // Include cookies if your API uses them
+//     });
+
+//     // Debug log for response
+//     console.log("Response status:", response.status);
+    
+//     if (!response.ok) {
+//       if (response.status === 401) {
+//         // Try to get response text for more info
+//         const errorText = await response.text();
+//         console.log("401 Error details:", errorText);
+//         throw new Error("Authentication failed");
+//       }
+//       throw new Error(`HTTP error! status: ${response.status}`);
+//     }
+    
+//     const data = await response.json();
+//     console.log("Data received:", data); // Log received data
+//     return data;
+    
+//   } catch (error) {
+//     console.error("Error fetching account data:", error);
+//     throw error;
+//   }
+// };
 
 

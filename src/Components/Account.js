@@ -1,19 +1,49 @@
 import React, { useEffect, useState } from "react";
-import { fetchAccountData } from "../APIconfig/getAPIconfig";
 import Navbar from "./Navbar";
 import Mainpagefooter from "./Mainpagefooter";
+import { Icon } from "@iconify/react";
+
+const fetchAccountData = async () => {
+  try {
+    const token = localStorage.getItem('at');
+
+    if (!token) {
+      throw new Error("No authentication token found in localStorage");
+    }
+
+    const response = await fetch("https://znginx.perisync.work/api/v1/acc/account/read", {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch account data");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching account data:", error);
+    throw error;
+  }
+};
+
 
 const Account = ({ onEdit, onRequestDelete }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const getUserData = async () => {
       try {
         const data = await fetchAccountData();
         setUser(data);
+        setError(null);
       } catch (error) {
         console.error("Failed to load user data");
+        setError("Failed to load user data. Please try logging in again.");
       } finally {
         setLoading(false);
       }
@@ -22,71 +52,127 @@ const Account = ({ onEdit, onRequestDelete }) => {
     getUserData();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
-
   return (
-    <div className="flex flex-col justify-between  bg-white h-screen">
-        <Navbar/>
-      {/* Profile Header */}
-      <div className="flex justify-between items-center max-w-[1640px] my-10">
-      <div className="flex items-center space-y-5 gap-4  px-6 pb-4 ml-5">
-        <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center mt-5">
-          {/* Profile Icon */}
-          <span className="text-2xl">👤</span>
-        </div>
-        <div>
-          <h2 className="text-xl font-semibold">{user?.fullName || "User Name"}</h2>
-          <p className="text-gray-500">{user?.email || "user@example.com"}</p>
-        </div>
-        </div>
+    <div className="bg-white h-screen">
+      <Navbar />
 
-        <div>
-          <p className="text-indigo-500  border rounded-full p-2">Joined on: 13th Feb 2025</p>
-        </div>
-        </div>
-      
 
-      {/* Profile Information */}
-      <div className=" max-w-[1600px] mx-10 space-y-4 px-5 py-4 border rounded-xl">
-        <div className="flex justify-between border-b py-2">
-          <p className="font-semibold text-[20px]">Profile Information</p>
-          <button
-          onClick={onEdit}
-          className="ml-auto px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl "
-        >
-          Edit
-        </button>
-        </div>
-        {[
-          { label: "First Name", value: user?.firstName },
-          { label: "Last Name", value: user?.lastName },
-          { label: "Contact Number", value: user?.phoneNo },
-          { label: "Email", value: user?.email },
-          { label: "Account Type", value: user?.accountType },
-          { label: "Last Login At", value: user?.updatedAt },
-        ].map((item, index) => (
-          <div key={index} className="flex flex-col  pb-2">
-            <span className="">{item.label}</span>
-            <span className="font-medium text-gray-900">{item.value}</span>
+      <section className="px-4">
+        <div className="flex flex-wrap  justify-between items-center w-full lg:max-w-[1600px] mx-2 lg:mx-10 my-10">
+          <div className="flex items-center space-y-5 gap-4  pb-4">
+            <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center mt-5">
+              <img src="" alt="" className="" />
+              <span className="text-2xl">👤</span>
+            </div>
+            <div>
+              <h2 className="text-xl font-semibold">
+                {user ? `${user.firstName} ${user.lastName}` : "User Name"}
+              </h2>
+              <p className="text-gray-500">{user?.email}</p>
+            </div>
           </div>
-        ))}
-      </div>
+          <div>
+            <p className="text-indigo-500 border rounded-full p-2">
+              Joined on: {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : ""}
+            </p>
+          </div>
+        </div>
 
-      {/* Delete Account Section */}
-      <div className="mt-6 p-4 space-y-4 border rounded-xl mx-auto max-w-[1600px]">
-        <h3 className="text-lg font-semibold border-b pb-4">Delete your Account</h3>
-        <p className="text-gray-600 text-[18px]  mt-1">
-        Deleting your Zunoy account is a permanent action that will result in the deletion of all your data across Zunoy products. If you’re sure about proceeding, click the button below to request deletion. Once proceeded, our team will contact you to discuss your request and understand your decision before finalizing the process.
-        </p>
-        <button
-          onClick={onRequestDelete}
-          className="mt-4 px-4 py-2 bg-red-500 text-white rounded-xl font-semibold hover:bg-red-600"
-        >
-          Request Account Deletion
-        </button>
-      </div>
+        <div className="w-full lg:max-w-[1600px] mx-2 lg:mx-10 space-y-4 px-5 py-4 border rounded-xl">
+          <div className="flex justify-between border-b py-2">
+            <p className="font-semibold text-[20px]">Profile Information</p>
+            <button onClick={onEdit} className="ml-auto px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl">
+              Edit
+            </button>
+          </div>
 
-      <Mainpagefooter/>
+
+          <div className="flex items-center gap-5  pb-2">
+
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" className="text-gray-400 h-8 w-8" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-5m-4 0V5a2 2 0 1 1 4 0v1m-4 0a2 2 0 1 0 4 0m-5 8a2 2 0 1 0 0-4a2 2 0 0 0 0 4m0 0c1.306 0 2.417.835 2.83 2M9 14a3 3 0 0 0-2.83 2M15 11h3m-3 4h2" /></svg>
+            </div>
+            <div className="flex flex-col pb-2">
+              <span>First Name</span>
+              <span className="font-medium text-gray-900">{user?.firstName}</span>
+            </div>
+
+
+          </div>
+
+          <div className="flex items-center gap-5  pb-2">
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" className="text-gray-400 h-8 w-8" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-5m-4 0V5a2 2 0 1 1 4 0v1m-4 0a2 2 0 1 0 4 0m-5 8a2 2 0 1 0 0-4a2 2 0 0 0 0 4m0 0c1.306 0 2.417.835 2.83 2M9 14a3 3 0 0 0-2.83 2M15 11h3m-3 4h2" /></svg>
+            </div>
+            <div className="flex flex-col pb-2">
+              <span>Last Name</span>
+              <span className="font-medium text-gray-900">{user?.lastName}</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-5  pb-2">
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" className="text-gray-400 h-8 w-8" viewBox="0 0 24 24"><path fill="currentColor" d="M4 23v-2h16v2zM4 3V1h16v2zm8 10q1.25 0 2.125-.875T15 10t-.875-2.125T12 7t-2.125.875T9 10t.875 2.125T12 13m-8 7q-.825 0-1.412-.587T2 18V6q0-.825.588-1.412T4 4h16q.825 0 1.413.588T22 6v12q0 .825-.587 1.413T20 20zm1.75-2q1.125-1.4 2.725-2.2T12 15t3.525.8T18.25 18H20V6H4v12zm2.95 0h6.6q-.725-.5-1.562-.75T12 17t-1.737.25T8.7 18m3.3-7q-.425 0-.712-.288T11 10t.288-.712T12 9t.713.288T13 10t-.288.713T12 11m0 1" /></svg></div>
+            <div className="flex flex-col pb-2">
+              <span>Contact Number</span>
+              <span className="font-medium text-gray-900">{user?.phoneNo}</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-5  pb-2">
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" className="text-gray-400 h-8 w-8" viewBox="0 0 24 24"><path fill="currentColor" d="M19 4H5a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3m-.67 2L12 10.75L5.67 6ZM19 18H5a1 1 0 0 1-1-1V7.25l7.4 5.55a1 1 0 0 0 .6.2a1 1 0 0 0 .6-.2L20 7.25V17a1 1 0 0 1-1 1" /></svg></div>
+
+            <div className="flex flex-col pb-2">
+              <span>Email</span>
+              <span className="font-medium text-gray-900">{user?.email}</span>
+            </div>
+          </div>
+
+
+
+          <div className="flex items-center gap-5  pb-2">
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" className="text-gray-400 h-8 w-8" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12.25a3.75 3.75 0 1 1 3.75-3.75A3.75 3.75 0 0 1 12 12.25m0-6a2.25 2.25 0 1 0 2.25 2.25A2.25 2.25 0 0 0 12 6.25m7 13a.76.76 0 0 1-.75-.75c0-1.95-1.06-3.25-6.25-3.25s-6.25 1.3-6.25 3.25a.75.75 0 0 1-1.5 0c0-4.75 5.43-4.75 7.75-4.75s7.75 0 7.75 4.75a.76.76 0 0 1-.75.75" /></svg>
+            </div>
+            <div className="flex flex-col pb-2">
+              <span>Account Type</span>
+              <span className="font-medium text-gray-900">{user?.accountType}</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-5  pb-2">
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" className="text-gray-400 h-8 w-8" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12.25a3.75 3.75 0 1 1 3.75-3.75A3.75 3.75 0 0 1 12 12.25m0-6a2.25 2.25 0 1 0 2.25 2.25A2.25 2.25 0 0 0 12 6.25m7 13a.76.76 0 0 1-.75-.75c0-1.95-1.06-3.25-6.25-3.25s-6.25 1.3-6.25 3.25a.75.75 0 0 1-1.5 0c0-4.75 5.43-4.75 7.75-4.75s7.75 0 7.75 4.75a.76.76 0 0 1-.75.75" /></svg>
+            </div>
+            <div className="flex flex-col pb-2">
+              <span>Last Login</span>
+              <span className="font-medium text-gray-900"> {user?.metaData?.lastLogin?.time ? new Date(user.metaData.lastLogin.time).toLocaleString() : ""}</span>
+            </div>
+          </div>
+
+
+        </div>
+
+
+        <div className="my-6 p-4 space-y-4 border rounded-xl w-full lg:max-w-[1600px] mx-2 lg:mx-10">
+          <h3 className="text-lg font-semibold border-b pb-4">Delete your Account</h3>
+          <p className="text-gray-600 text-[18px] mt-1">
+            Deleting your Zunoy account is a permanent action that will result in the deletion of all your data across Zunoy products. If you’re sure about proceeding, click the button below to request deletion. Once proceeded, our team will contact you to discuss your request and understand your decision before finalizing the process.
+          </p>
+          <button onClick={onRequestDelete} className="mt-4 px-4 py-2 bg-red-500 text-white rounded-xl font-semibold hover:bg-red-600">
+            Request Account Deletion
+          </button>
+        </div>
+      </section>
+
+
+
+      <footer>
+        <Mainpagefooter />
+      </footer>
+
+
     </div>
   );
 };
