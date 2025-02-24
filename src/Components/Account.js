@@ -25,11 +25,12 @@ const Account = ({ onEdit, onRequestDelete }) => {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="  p-6 bg-white shadow-md rounded-lg">
+    <div className="flex flex-col justify-between  bg-white h-screen">
         <Navbar/>
       {/* Profile Header */}
-      <div className="flex items-center gap-4 border-b pb-4">
-        <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center">
+      <div className="flex justify-between items-center max-w-[1640px] my-10">
+      <div className="flex items-center space-y-5 gap-4  px-6 pb-4 ml-5">
+        <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center mt-5">
           {/* Profile Icon */}
           <span className="text-2xl">👤</span>
         </div>
@@ -37,40 +38,49 @@ const Account = ({ onEdit, onRequestDelete }) => {
           <h2 className="text-xl font-semibold">{user?.fullName || "User Name"}</h2>
           <p className="text-gray-500">{user?.email || "user@example.com"}</p>
         </div>
-        <button
+        </div>
+
+        <div>
+          <p className="text-indigo-500  border rounded-full p-2">Joined on: 13th Feb 2025</p>
+        </div>
+        </div>
+      
+
+      {/* Profile Information */}
+      <div className=" max-w-[1600px] mx-10 space-y-4 px-5 py-4 border rounded-xl">
+        <div className="flex justify-between border-b py-2">
+          <p className="font-semibold text-[20px]">Profile Information</p>
+          <button
           onClick={onEdit}
-          className="ml-auto px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          className="ml-auto px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl "
         >
           Edit
         </button>
-      </div>
-
-      {/* Profile Information */}
-      <div className="mt-4 space-y-4">
+        </div>
         {[
           { label: "First Name", value: user?.firstName },
           { label: "Last Name", value: user?.lastName },
-          { label: "Contact Number", value: user?.contactNumber },
+          { label: "Contact Number", value: user?.phoneNo },
+          { label: "Email", value: user?.email },
           { label: "Account Type", value: user?.accountType },
-          { label: "Last Login At", value: user?.lastLogin },
+          { label: "Last Login At", value: user?.updatedAt },
         ].map((item, index) => (
-          <div key={index} className="flex justify-between border-b pb-2">
-            <span className="text-gray-600">{item.label}</span>
-            <span className="font-medium text-gray-900">{item.value || "N/A"}</span>
+          <div key={index} className="flex flex-col  pb-2">
+            <span className="">{item.label}</span>
+            <span className="font-medium text-gray-900">{item.value}</span>
           </div>
         ))}
       </div>
 
       {/* Delete Account Section */}
-      <div className="mt-6 p-4 border-t">
-        <h3 className="text-lg font-semibold">Delete your Account</h3>
-        <p className="text-gray-600 text-sm mt-1">
-          Deleting your account is a permanent action. If you're sure about
-          proceeding, click the button below to request deletion.
+      <div className="mt-6 p-4 space-y-4 border rounded-xl mx-auto max-w-[1600px]">
+        <h3 className="text-lg font-semibold border-b pb-4">Delete your Account</h3>
+        <p className="text-gray-600 text-[18px]  mt-1">
+        Deleting your Zunoy account is a permanent action that will result in the deletion of all your data across Zunoy products. If you’re sure about proceeding, click the button below to request deletion. Once proceeded, our team will contact you to discuss your request and understand your decision before finalizing the process.
         </p>
         <button
           onClick={onRequestDelete}
-          className="mt-4 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+          className="mt-4 px-4 py-2 bg-red-500 text-white rounded-xl font-semibold hover:bg-red-600"
         >
           Request Account Deletion
         </button>
