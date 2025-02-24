@@ -135,8 +135,8 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
   };
 
   const handleRemove = () => {
-    setUploadedAvatar(null); 
-    setSelectedAvatar(null); 
+    setUploadedAvatar(null);
+    setSelectedAvatar(null);
     setProfilePicture(null);
     onClose();
   };
@@ -171,9 +171,9 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
         const data = await response.json();
         console.log("Image Uploaded Successfully:", data);
 
-        setUploadedAvatar(data.url); 
-        setProfilePicture(data.url); 
-        setSelectedAvatar(null); 
+        setUploadedAvatar(data.url);
+        setProfilePicture(data.url);
+        setSelectedAvatar(null);
       } catch (error) {
         console.error("Error uploading image:", error.message);
       }
@@ -183,23 +183,23 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
   const handleSelect = async () => {
     try {
       let avatarToUpload = uploadedAvatar || (selectedAvatar && selectedAvatar.url);
-      
+
       if (!avatarToUpload) {
         console.log("No avatar selected.");
         return;
       }
-  
-  
+
+
       if (selectedAvatar && !uploadedAvatar) {
         const token = localStorage.getItem("at");
         if (!token) {
           console.error("No authentication token found");
           return;
         }
-  
+
         const formData = new FormData();
-        formData.append("id", selectedAvatar.id); 
-  
+        formData.append("id", selectedAvatar.id);
+
         const response = await fetch("https://znginx.perisync.work/api/v1/acc/account/uploadPic", {
           method: "POST",
           headers: {
@@ -207,32 +207,32 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
           },
           body: formData,
         });
-  
+
         if (!response.ok) {
           const errorData = await response.json();
           console.error("Error uploading avatar:", errorData);
           throw new Error(errorData.msg || "Failed to upload avatar");
         }
-  
+
         const data = await response.json();
         console.log("Avatar Uploaded Successfully:", data);
         setProfilePicture(data.url);
       } else if (uploadedAvatar) {
         setProfilePicture(uploadedAvatar);
       }
-      
-      onClose(); 
+
+      onClose();
     } catch (error) {
       console.error("Error in handleSelect:", error.message);
     }
   };
-  
+
 
   useEffect(() => {
-    
+
     if (isOpen) {
       setSelectedAvatar(null);
-      setUploadedAvatar(null); 
+      setUploadedAvatar(null);
     }
   }, [isOpen]);
 
@@ -254,9 +254,8 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
             {/* Left section: Selected avatar and Remove option */}
             <div className="flex flex-col items-center justify-center space-y-2">
               <div
-                className={`w-32 h-32 rounded-lg border ${
-                  !selectedAvatar && !uploadedAvatar ? "border-gray-500" : "border-gray-200"
-                } flex items-center justify-center cursor-pointer overflow-hidden`}
+                className={`w-32 h-32 rounded-lg border ${!selectedAvatar && !uploadedAvatar ? "border-gray-500" : "border-gray-200"
+                  } flex items-center justify-center cursor-pointer overflow-hidden`}
                 onClick={handleRemove}
               >
                 {uploadedAvatar ? (
@@ -281,13 +280,13 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
               >
                 <span className=" flex gap-2 py-4 text-[18px] font-semibold">Preview</span>
                 <div className="text-white font-semibold text-[18px] px-4 py-2 bg-red-500 rounded-xl flex items-center gap-2">
-  <div>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-      <path fill="currentColor" d="M7.616 20q-.667 0-1.141-.475T6 18.386V6h-.5q-.213 0-.356-.144T5 5.499t.144-.356T5.5 5H9q0-.31.23-.54t.54-.23h4.46q.31 0 .54.23T15 5h3.5q.213 0 .356.144t.144.357t-.144.356T18.5 6H18v12.385q0 .666-.475 1.14t-1.14.475zM17 6H7v12.385q0 .269.173.442t.443.173h8.769q.269 0 .442-.173t.173-.442zm-6.692 11q.213 0 .357-.144t.143-.356v-8q0-.213-.144-.356T10.307 8t-.356.144t-.143.356v8q0 .213.144.356q.144.144.356.144m3.385 0q.213 0 .356-.144t.143-.356v-8q0-.213-.144-.356Q13.904 8 13.692 8q-.213 0-.357.144t-.143.356v8q0 .213.144.356t.357.144M7 6v13z"/>
-    </svg>
-  </div>
-  <div><span>Remove</span></div>
-</div>
+                  <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                      <path fill="currentColor" d="M7.616 20q-.667 0-1.141-.475T6 18.386V6h-.5q-.213 0-.356-.144T5 5.499t.144-.356T5.5 5H9q0-.31.23-.54t.54-.23h4.46q.31 0 .54.23T15 5h3.5q.213 0 .356.144t.144.357t-.144.356T18.5 6H18v12.385q0 .666-.475 1.14t-1.14.475zM17 6H7v12.385q0 .269.173.442t.443.173h8.769q.269 0 .442-.173t.173-.442zm-6.692 11q.213 0 .357-.144t.143-.356v-8q0-.213-.144-.356T10.307 8t-.356.144t-.143.356v8q0 .213.144.356q.144.144.356.144m3.385 0q.213 0 .356-.144t.143-.356v-8q0-.213-.144-.356Q13.904 8 13.692 8q-.213 0-.357.144t-.143.356v8q0 .213.144.356t.357.144M7 6v13z" />
+                    </svg>
+                  </div>
+                  <div><span>Remove</span></div>
+                </div>
 
               </div>
             </div>
@@ -297,9 +296,8 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
               {avatars.map((avatar) => (
                 <div
                   key={avatar.id}
-                  className={`w-24 h-24 rounded-lg p-4${
-                    selectedAvatar?.id === avatar.id ? "border-blue-500" : "border-gray-200"
-                  } flex items-center justify-center cursor-pointer overflow-hidden`}
+                  className={`w-24 h-24 rounded-lg p-4${selectedAvatar?.id === avatar.id ? "border-blue-500" : "border-gray-200"
+                    } flex items-center justify-center cursor-pointer overflow-hidden`}
                   onClick={() => setSelectedAvatar(avatar)}
                 >
                   <img src={avatar.url} alt={avatar.name} className="w-full h-full object-cover" />
@@ -319,20 +317,20 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
           </div>
         )}
 
-       
-<div className="flex justify-end gap-4 mt-4">
-  <button onClick={onClose} className="px-3 py-1 text-red-500 font-medium">
-    Cancel
-  </button>
-  {(selectedAvatar || uploadedAvatar) && (
-    <button
-      onClick={handleSelect}
-      className="px-5 py-2 bg-indigo-500 text-white rounded-lg font-medium"
-    >
-      Save
-    </button>
-  )}
-</div>
+
+        <div className="flex justify-end gap-4 mt-4">
+          <button onClick={onClose} className="px-3 py-1 text-red-500 font-medium">
+            Cancel
+          </button>
+          {(selectedAvatar || uploadedAvatar) && (
+            <button
+              onClick={handleSelect}
+              className="px-5 py-2 bg-indigo-500 text-white rounded-lg font-medium"
+            >
+              Save
+            </button>
+          )}
+        </div>
 
       </div>
     </div>
@@ -393,22 +391,22 @@ const Account = ({ onEdit, onRequestDelete }) => {
     <div className="bg-white h-screen">
 
       <header className="top-0 left-0 sticky z-10 bg-white">
-      <Navbar />
+        <Navbar />
       </header>
-      
+
 
       <section className="px-4">
         <div className="flex flex-wrap justify-between items-center w-full lg:max-w-[1600px] mx-2 lg:mx-10 my-10">
           <div className="flex items-center space-y-5 gap-4 pb-4">
             <div className="relative">
-              <div 
+              <div
                 className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center mt-5 overflow-hidden cursor-pointer"
                 onClick={() => setIsAvatarSelectorOpen(true)}
               >
                 {profilePicture ? (
-                  <img 
-                    src={profilePicture} 
-                    alt="Profile" 
+                  <img
+                    src={profilePicture}
+                    alt="Profile"
                     className="h-[60px] w-[60px] object-contain"
                   />
                 ) : (
@@ -422,16 +420,16 @@ const Account = ({ onEdit, onRequestDelete }) => {
                   accept="image/*"
                   onChange={handleProfilePictureChange}
                 />
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
                   className="h-4 w-4 text-white"
-                  viewBox="0 0 20 20" 
+                  viewBox="0 0 20 20"
                   fill="currentColor"
                 >
-                  <path 
-                    fillRule="evenodd" 
-                    d="M4 5a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.121-1.121A2 2 0 0011.172 3H8.828a2 2 0 00-1.414.586L6.293 4.707A1 1 0 015.586 5H4zm6 9a3 3 0 100-6 3 3 0 000 6z" 
-                    clipRule="evenodd" 
+                  <path
+                    fillRule="evenodd"
+                    d="M4 5a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.121-1.121A2 2 0 0011.172 3H8.828a2 2 0 00-1.414.586L6.293 4.707A1 1 0 015.586 5H4zm6 9a3 3 0 100-6 3 3 0 000 6z"
+                    clipRule="evenodd"
                   />
                 </svg>
               </label>
