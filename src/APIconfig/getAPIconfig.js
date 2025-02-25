@@ -156,3 +156,27 @@ export const SendotpAPI = (data, setLoader, setOtpSent, setError) => {
 // };
 
 
+
+export const fetchProducts = async () => {
+  try {
+    const token = localStorage.getItem("at"); 
+    
+    const response = await fetch("https://znginx.perisync.work/api/v1/acc/products", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": token ? `Bearer ${token}` : "",
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch products: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    return result.data || [];
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    throw error;
+  }
+};

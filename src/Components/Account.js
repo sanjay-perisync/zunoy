@@ -381,9 +381,38 @@ const Account = ({ onEdit, onRequestDelete }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // const handleSave = async () => {
+  //   try {
+  //     const token = localStorage.getItem("at"); // Get authentication token from localStorage
+
+  //     const response = await fetch(
+  //       "https://znginx.perisync.work/api/v1/acc/account/update",
+  //       {
+  //         method: "PUT",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           "Authorization": `Bearer ${token}`
+  //         },
+  //         body: JSON.stringify(formData),
+  //       }
+  //     );
+
+  //     if (response.ok) {
+  //       console.log("Profile updated successfully");
+  //     } else {
+  //       console.error("Failed to update profile");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error updating profile:", error);
+  //   }
+  //   setIsEditing(false);
+  // };
+
   const handleSave = async () => {
+    setLoading(true);
+
     try {
-      const token = localStorage.getItem("at"); // Get authentication token from localStorage
+      const token = localStorage.getItem("at");
 
       const response = await fetch(
         "https://znginx.perisync.work/api/v1/acc/account/update",
@@ -404,10 +433,11 @@ const Account = ({ onEdit, onRequestDelete }) => {
       }
     } catch (error) {
       console.error("Error updating profile:", error);
+    } finally {
+      setLoading(false);
+      setIsEditing(false);
     }
-    setIsEditing(false);
   };
-
 
   useEffect(() => {
     const getUserData = async () => {
@@ -468,7 +498,6 @@ const Account = ({ onEdit, onRequestDelete }) => {
       setLoading(false);
     }
   };
-
 
 
 
@@ -886,9 +915,15 @@ const Account = ({ onEdit, onRequestDelete }) => {
               </button>
               <button
                 onClick={handleSave}
-                className="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-lg"
+                disabled={loading}
+                className={`px-6 py-2 font-semibold rounded-lg flex items-center justify-center gap-2 transition-all ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700 text-white"
+                  }`}
               >
-                Update
+                {loading ? (
+                  <CircularProgress size={20} thickness={2} style={{ color: 'white' }} />
+                ) : (
+                  "Update"
+                )}
               </button>
             </div>
           )}

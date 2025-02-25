@@ -2,7 +2,7 @@ import React from 'react';
 
 function Mainpagefooter() {
   return (
-    <footer className="flex flex-wrap justify-center lg:justify-between gap-4 items-center mx-10 max-w-[1600px] px-2 py-2 border-t">
+    <footer className="flex flex-wrap justify-center lg:justify-between gap-4 items-center mx-auto max-w-[1550px] px-2 py-2 border-t">
    
       <div className="flex flex-wrap justify-center items-center space-x-4 text-sm text-indigo-500">
         <a href="#">Zunoy.com</a>
