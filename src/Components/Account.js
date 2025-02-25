@@ -517,7 +517,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
       </header>
 
       {loading ? (
-          <div className="flex justify-center h-screen items-center py-4">
+          <div className="flex justify-center h-[700px] items-center py-4">
             <CircularProgress size={40} thickness={4} />
           </div>
         ) : error ? (
@@ -529,7 +529,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
             <div className="relative flex items-center justify-center mt-5 group">
               {/* Avatar Container */}
               <div
-                className="w-28 h-28 rounded-full flex items-center justify-center overflow-hidden cursor-pointer border-2 border-dashed border-gray-200 p-1 relative"
+                className="w-20 md:w-28 h-20 md:h-28 rounded-full flex items-center justify-center overflow-hidden cursor-pointer border-2 border-dashed border-gray-200 p-1 relative"
                 onClick={() => setIsAvatarSelectorOpen(true)}
               >
                 {profilePicture ? (
@@ -591,7 +591,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
               <h2 className="text-xl font-semibold">
                 {user ? `${user.firstName} ${user.lastName}` : "User Name"}
               </h2>
-              <p className="text-gray-500">{user?.email}</p>
+              <p className="text-gray-500 text-xs md:text-sm">{user?.email}</p>
             </div>
           </div>
           <div>
