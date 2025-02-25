@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import Mainpagefooter from "./Mainpagefooter";
 import { Icon } from "@iconify/react";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const fetchAccountData = async () => {
   try {
@@ -135,11 +136,15 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
   };
 
   const handleRemove = () => {
+
     setUploadedAvatar(null);
     setSelectedAvatar(null);
     setProfilePicture(null);
+    localStorage.removeItem("profilePicture"); 
+    console.log("Avatar removed successfully");
     onClose();
-  };
+};
+
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -183,23 +188,22 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
   const handleSelect = async () => {
     try {
       let avatarToUpload = uploadedAvatar || (selectedAvatar && selectedAvatar.url);
-
+  
       if (!avatarToUpload) {
         console.log("No avatar selected.");
         return;
       }
-
-
+  
       if (selectedAvatar && !uploadedAvatar) {
         const token = localStorage.getItem("at");
         if (!token) {
           console.error("No authentication token found");
           return;
         }
-
+  
         const formData = new FormData();
         formData.append("id", selectedAvatar.id);
-
+  
         const response = await fetch("https://znginx.perisync.work/api/v1/acc/account/uploadPic", {
           method: "POST",
           headers: {
@@ -207,26 +211,29 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
           },
           body: formData,
         });
-
+  
         if (!response.ok) {
           const errorData = await response.json();
           console.error("Error uploading avatar:", errorData);
           throw new Error(errorData.msg || "Failed to upload avatar");
         }
-
+  
         const data = await response.json();
         console.log("Avatar Uploaded Successfully:", data);
+  
         setProfilePicture(data.url);
+        localStorage.setItem("profilePicture", data.url); 
       } else if (uploadedAvatar) {
         setProfilePicture(uploadedAvatar);
+        localStorage.setItem("profilePicture", uploadedAvatar); 
       }
-
+  
       onClose();
     } catch (error) {
       console.error("Error in handleSelect:", error.message);
     }
   };
-
+  
 
   useEffect(() => {
 
@@ -246,7 +253,9 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
         </div>
 
         {loading ? (
-          <div className="text-center py-4">Loading avatars...</div>
+         <div className="flex justify-center items-center py-4">
+         <CircularProgress size={40} thickness={4} />
+       </div>
         ) : error ? (
           <div className="text-center text-red-500 py-4">{error}</div>
         ) : (
@@ -345,13 +354,24 @@ const Account = ({ onEdit, onRequestDelete }) => {
   const [profilePicture, setProfilePicture] = useState(null);
   const [isAvatarSelectorOpen, setIsAvatarSelectorOpen] = useState(false);
 
+
+  
+
   useEffect(() => {
     const getUserData = async () => {
       try {
         const data = await fetchAccountData();
         setUser(data);
+  
+        // Check if the API returns a profile picture; otherwise, use localStorage
         if (data.profilePictureUrl) {
           setProfilePicture(data.profilePictureUrl);
+          localStorage.setItem("profilePicture", data.profilePictureUrl);
+        } else {
+          const storedProfilePic = localStorage.getItem("profilePicture");
+          if (storedProfilePic) {
+            setProfilePicture(storedProfilePic);
+          }
         }
         setError(null);
       } catch (error) {
@@ -361,19 +381,25 @@ const Account = ({ onEdit, onRequestDelete }) => {
         setLoading(false);
       }
     };
-
+  
     getUserData();
   }, []);
+  
+
+
+
+
 
   const handleProfilePictureChange = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
-
+  
     try {
       setLoading(true);
       const response = await uploadProfilePicture(file);
       if (response.profilePictureUrl) {
         setProfilePicture(response.profilePictureUrl);
+        localStorage.setItem("profilePicture", response.profilePictureUrl); // Save to localStorage
         const userData = await fetchAccountData();
         setUser(userData);
       }
@@ -383,6 +409,9 @@ const Account = ({ onEdit, onRequestDelete }) => {
       setLoading(false);
     }
   };
+  
+
+
 
   const handleAvatarSelect = (avatarUrl) => {
     setProfilePicture(avatarUrl);
@@ -400,20 +429,20 @@ const Account = ({ onEdit, onRequestDelete }) => {
           <div className="flex items-center space-y-5 gap-4 pb-4">
             <div className="relative">
               <div
-                className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center mt-5 overflow-hidden cursor-pointer"
+                className="w-28 h-28 bg-gray-300 rounded-full flex items-center justify-center mt-5 overflow-hidden cursor-pointer"
                 onClick={() => setIsAvatarSelectorOpen(true)}
               >
                 {profilePicture ? (
                   <img
                     src={profilePicture}
                     alt="Profile"
-                    className="h-[60px] w-[60px] object-contain"
+                    className="h-full w-full object-cover"
                   />
                 ) : (
                   <span className="text-2xl">👤</span>
                 )}
               </div>
-              <label className="absolute bottom-0 right-0 bg-indigo-600 rounded-full p-1 cursor-pointer">
+              <label className="absolute bottom-4 right-2 bg-indigo-600 rounded-full p-1 cursor-pointer">
                 <input
                   type="file"
                   className="hidden"
