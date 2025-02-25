@@ -469,13 +469,13 @@ const Account = ({ onEdit, onRequestDelete }) => {
 
 
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <CircularProgress size={50} thickness={4} />
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="flex justify-center items-center h-screen">
+  //       <CircularProgress size={50} thickness={4} />
+  //     </div>
+  //   );
+  // }
 
 
 
@@ -516,7 +516,13 @@ const Account = ({ onEdit, onRequestDelete }) => {
         <Navbar />
       </header>
 
-
+      {loading ? (
+          <div className="flex justify-center h-screen items-center py-4">
+            <CircularProgress size={40} thickness={4} />
+          </div>
+        ) : error ? (
+          <div className="text-center text-red-500 py-4">{error}</div>
+        ) : (
       <section className="px-4">
         <div className="flex flex-wrap justify-between items-center w-full lg:max-w-[1550px] mx-auto  my-10">
           <div className="flex items-center space-y-5 gap-4 pb-4">
@@ -939,7 +945,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
           </button>
         </div>
       </section>
-
+        )}
       <AvatarSelector
         isOpen={isAvatarSelectorOpen}
         onClose={() => setIsAvatarSelectorOpen(false)}
