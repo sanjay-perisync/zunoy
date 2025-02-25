@@ -517,435 +517,439 @@ const Account = ({ onEdit, onRequestDelete }) => {
       </header>
 
       {loading ? (
-          <div className="flex justify-center h-[700px] items-center py-4">
-            <CircularProgress size={40} thickness={4} />
-          </div>
-        ) : error ? (
-          <div className="text-center text-red-500 py-4">{error}</div>
-        ) : (
-      <section className="px-4">
-        <div className="flex flex-wrap justify-between items-center w-full lg:max-w-[1550px] mx-auto  my-10">
-          <div className="flex items-center space-y-5 gap-4 pb-4">
-            <div className="relative flex items-center justify-center mt-5 group">
-              {/* Avatar Container */}
-              <div
-                className="w-20 md:w-28 h-20 md:h-28 rounded-full flex items-center justify-center overflow-hidden cursor-pointer border-2 border-dashed border-gray-200 p-1 relative"
-                onClick={() => setIsAvatarSelectorOpen(true)}
-              >
-                {profilePicture ? (
-                  <img
-                    src={profilePicture}
-                    alt="Profile"
-                    className="h-full w-full object-cover rounded-full"
-                  />
-                ) : (
-                  <span className="text-2xl">👤</span>
-                )}
+        <div className="flex justify-center h-[700px] items-center py-4">
+          <CircularProgress size={40} thickness={4} />
+        </div>
+      ) : error ? (
+        <div className="text-center text-red-500 py-4">{error}</div>
+      ) : (
+        <section className="px-4">
+          <div className="flex flex-wrap justify-between items-center w-full lg:max-w-[1550px] mx-auto  my-10">
+            <div className="flex items-center space-y-5 gap-4 pb-4">
+              <div className="relative flex items-center justify-center mt-5 group">
+                {/* Avatar Container */}
+                <div
+                  className="w-20 md:w-28 h-20 md:h-28 rounded-full flex items-center justify-center overflow-hidden cursor-pointer border-2 border-dashed border-gray-200 p-1 relative"
+                  onClick={() => setIsAvatarSelectorOpen(true)}
+                >
+                  {profilePicture ? (
+                    <img
+                      src={profilePicture}
+                      alt="Profile"
+                      className="h-full w-full object-cover rounded-full"
+                    />
+                  ) : (
+                    <span className="text-2xl">👤</span>
+                  )}
 
 
-                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="28"
+                      height="28"
+                      viewBox="0 0 24 24"
+                      className="h-6 w-6 mr-1"
+                      fill="currentColor"
+                      stroke="currentColor"
+                      strokeWidth="1"
+                    >
+                      <path d="M11.5 8C14 8 16 10 16 12.5S14 17 11.5 17S7 15 7 12.5S9 8 11.5 8m0 1A3.5 3.5 0 0 0 8 12.5a3.5 3.5 0 0 0 3.5 3.5a3.5 3.5 0 0 0 3.5-3.5A3.5 3.5 0 0 0 11.5 9M5 5h2l2-2h5l2 2h2a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V8a3 3 0 0 1 3-3m4.41-1l-2 2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-2.41l-2-2z" />
+                    </svg>
+
+                    <span className="text-[16px]">Select</span>
+                  </div>
+                </div>
+
+
+                <label
+                  className="absolute top-0 right-1 p-1 cursor-pointer "
+                  onClick={() => setIsAvatarSelectorOpen(true)}
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="28"
                     height="28"
                     viewBox="0 0 24 24"
-                    className="h-6 w-6 mr-1"
-                    fill="currentColor"
+                    className="h-6 w-6 text-indigo-600"
+                    fill="none"
                     stroke="currentColor"
-                    strokeWidth="1"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                   >
-                    <path d="M11.5 8C14 8 16 10 16 12.5S14 17 11.5 17S7 15 7 12.5S9 8 11.5 8m0 1A3.5 3.5 0 0 0 8 12.5a3.5 3.5 0 0 0 3.5 3.5a3.5 3.5 0 0 0 3.5-3.5A3.5 3.5 0 0 0 11.5 9M5 5h2l2-2h5l2 2h2a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V8a3 3 0 0 1 3-3m4.41-1l-2 2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-2.41l-2-2z" />
+                    <g>
+                      <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                      <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
+                    </g>
                   </svg>
+                </label>
+              </div>
 
-                  <span className="text-[16px]">Select</span>
+
+              <div>
+
+                <p className="text-gray-500 text-xs md:text-sm">
+                  {user?.email?.toUpperCase()}
+                </p>
+
+                <h2 className="text-xl font-semibold">
+                  {user ? `${user.firstName} ${user.lastName}` : "User Name"}
+                </h2>
+              </div>
+            </div>
+            <div>
+              <p className="text-indigo-500 border rounded-full p-2">
+                Joined on: {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : ""}
+              </p>
+            </div>
+          </div>
+
+
+
+          {/* profile details */}
+          <div className="w-full lg:max-w-[1550px] mx-auto space-y-4 px-5 py-4 border rounded-xl">
+            <div className="flex justify-between border-b py-2">
+              <p className="font-semibold text-[20px]">Profile Information</p>
+              {!isEditing ? (
+                <button
+                  onClick={handleEdit}
+                  className="ml-auto px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl"
+                >
+                  Edit
+                </button>
+              ) : null}
+            </div>
+
+            {/* First Name */}
+            <div className="flex items-center gap-5 pb-2">
+              {!isEditing && (
+                <div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    className="text-gray-400 h-8 w-8"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M10 6H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-5m-4 0V5a2 2 0 1 1 4 0v1m-4 0a2 2 0 1 0 4 0m-5 8a2 2 0 1 0 0-4a2 2 0 0 0 0 4m0 0c1.306 0 2.417.835 2.83 2M9 14a3 3 0 0 0-2.83 2M15 11h3m-3 4h2"
+                    />
+                  </svg>
+                </div>
+              )}
+
+              {/* Edit Mode */}
+              {isEditing ? (
+                <div className="flex items-center gap-3 w-full">
+                  <label htmlFor="firstName" className="text-gray-600 w-24">
+                    First Name
+                  </label>
+                  <TextField
+                    fullWidth
+                    id="firstName"
+                    name="firstName"
+                    label="First Name"
+                    variant="filled"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    sx={{
+                      "& .MuiInputBase-root": {
+                        border: "3px solid",
+                        borderColor: errors.phoneNo ? "red" : "#F8F8F8",
+                        borderRadius: "8px",
+                        backgroundColor: "white",
+                        transition: "border-color 0.3s ease",
+                      },
+                      "& .MuiInputBase-root:hover": {
+
+                        backgroundColor: "#F8F8F8",
+                      },
+                      "& .MuiInputBase-root.Mui-focused": {
+                        borderColor: errors.phoneNo ? "red" : "#1976D2",
+                        backgroundColor: "white",
+                      },
+                      "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+                        display: "none",
+                      },
+                    }}
+                  />
+                </div>
+              ) : (
+                <div className="flex flex-col pb-2">
+                  <span className="text-gray-600">First Name</span>
+                  <span className="font-medium text-gray-900">{formData.firstName}</span>
+                </div>
+              )}
+            </div>
+
+
+            {/* Last Name */}
+            <div className="flex items-center gap-5 pb-2">
+              {!isEditing && (
+                <div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    className="text-gray-400 h-8 w-8"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M10 6H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-5m-4 0V5a2 2 0 1 1 4 0v1m-4 0a2 2 0 1 0 4 0m-5 8a2 2 0 1 0 0-4a2 2 0 0 0 0 4m0 0c1.306 0 2.417.835 2.83 2M9 14a3 3 0 0 0-2.83 2M15 11h3m-3 4h2"
+                    />
+                  </svg>
+                </div>
+              )}
+
+              {/* Edit Mode  */}
+              {isEditing ? (
+                <div className="flex items-center gap-3 w-full">
+                  <label htmlFor="lastName" className="text-gray-600 w-24">
+                    Last Name
+                  </label>
+                  <TextField
+                    fullWidth
+                    id="lastName"
+                    name="lastName"
+                    label="Last Name"
+                    variant="filled"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    sx={{
+                      "& .MuiInputBase-root": {
+                        border: "3px solid",
+                        borderColor: errors.phoneNo ? "red" : "#F8F8F8",
+                        borderRadius: "8px",
+                        backgroundColor: "white",
+                        transition: "border-color 0.3s ease",
+                      },
+                      "& .MuiInputBase-root:hover": {
+
+                        backgroundColor: "#F8F8F8",
+                      },
+                      "& .MuiInputBase-root.Mui-focused": {
+                        borderColor: errors.phoneNo ? "red" : "#1976D2",
+                        backgroundColor: "white",
+                      },
+                      "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+                        display: "none",
+                      },
+                    }}
+                  />
+                </div>
+              ) : (
+                <div className="flex flex-col pb-2">
+                  <span className="text-gray-600">Last Name</span>
+                  <span className="font-medium text-gray-900">{formData.lastName}</span>
+                </div>
+              )}
+            </div>
+
+
+
+            {/* Email */}
+            <div className="flex items-center gap-5 pb-2">
+              {!isEditing && (
+                <div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    className="text-gray-400 h-8 w-8"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M19 4H5a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3m-.67 2L12 10.75L5.67 6ZM19 18H5a1 1 0 0 1-1-1V7.25l7.4 5.55a1 1 0 0 0 .6.2a1 1 0 0 0 .6-.2L20 7.25V17a1 1 0 0 1-1 1"
+                    />
+                  </svg>
+                </div>
+              )}
+
+              {/* Edit Mode  */}
+              {isEditing ? (
+                <div className="flex items-center gap-3 w-full">
+                  <label htmlFor="email" className="text-gray-600 w-24">
+                    Email
+                  </label>
+                  <TextField
+                    fullWidth
+                    id="email"
+                    name="email"
+                    label="Email Address"
+                    variant="filled"
+                    value={formData.email}
+                    disabled
+                    sx={{
+                      "& .MuiInputBase-root": {
+                        border: "3px solid",
+                        borderColor: "#F8F8F8",
+                        borderRadius: "8px",
+                        backgroundColor: "#F8F8F8",
+                        cursor: "not-allowed",
+                      },
+                      "& .MuiInputBase-root:hover": {
+                        borderColor: "#BEBEBE",
+                        backgroundColor: "#F8F8F8",
+                      },
+                      "& .MuiInputBase-root.Mui-disabled": {
+                        color: "gray",
+                        "-webkit-text-fill-color": "gray",
+                      },
+                      "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+                        display: "none",
+                      },
+                    }}
+                  />
+                </div>
+              ) : (
+                <div className="flex flex-col pb-2">
+                  <span className="text-gray-600">Email</span>
+                  <span className="font-medium text-gray-900">{formData.email}</span>
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center gap-5 pb-2">
+              {!isEditing && (
+                <div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    className="text-gray-400 h-8 w-8"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M4 23v-2h16v2zM4 3V1h16v2zm8 10q1.25 0 2.125-.875T15 10t-.875-2.125T12 7t-2.125.875T9 10t.875 2.125T12 13m-8 7q-.825 0-1.412-.587T2 18V6q0-.825.588-1.412T4 4h16q.825 0 1.413.588T22 6v12q0 .825-.587 1.413T20 20zm1.75-2q1.125-1.4 2.725-2.2T12 15t3.525.8T18.25 18H20V6H4v12zm2.95 0h6.6q-.725-.5-1.562-.75T12 17t-1.737.25T8.7 18m3.3-7q-.425 0-.712-.288T11 10t.288-.712T12 9t.713.288T13 10t-.288.713T12 11m0 1"
+                    />
+                  </svg>
+                </div>
+              )}
+
+              {/* Edit Mode */}
+              {isEditing ? (
+                <div className="flex items-center gap-3 w-full">
+                  <label htmlFor="phoneNo" className="text-gray-600 w-24">
+                    Contact No.
+                  </label>
+                  <TextField
+                    fullWidth
+                    id="phoneNo"
+                    label="phoneNo"
+                    variant="filled"
+                    name="phoneNo"
+                    value={formData.phoneNo}
+                    onChange={handleChange}
+                    error={!!errors.phoneNo}
+                    helperText={errors.phoneNo}
+                    InputLabelProps={{ shrink: true }}
+                    sx={{
+                      "& .MuiInputBase-root": {
+                        border: "3px solid",
+                        borderColor: errors.phoneNo ? "red" : "#F8F8F8",
+                        borderRadius: "8px",
+                        backgroundColor: "white",
+                        transition: "border-color 0.3s ease",
+                      },
+                      "& .MuiInputBase-root:hover": {
+
+                        backgroundColor: "#F8F8F8",
+                      },
+                      "& .MuiInputBase-root.Mui-focused": {
+                        borderColor: errors.phoneNo ? "red" : "#1976D2",
+                        backgroundColor: "white",
+                      },
+                      "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+                        display: "none",
+                      },
+                    }}
+                  />
+                </div>
+              ) : (
+                <div className="flex flex-col pb-2">
+                  <span className="text-gray-600">Contact Number</span>
+                  <span className="font-medium text-gray-900">{formData.phoneNo}</span>
+                </div>
+              )}
+            </div>
+
+
+
+            {/* Account Type - Only shown in view mode */}
+            {!isEditing && (
+              <div className="flex items-center gap-5 pb-2">
+                <div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" className="text-gray-400 h-8 w-8" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12.25a3.75 3.75 0 1 1 3.75-3.75A3.75 3.75 0 0 1 12 12.25m0-6a2.25 2.25 0 1 0 2.25 2.25A2.25 2.25 0 0 0 12 6.25m7 13a.76.76 0 0 1-.75-.75c0-1.95-1.06-3.25-6.25-3.25s-6.25 1.3-6.25 3.25a.75.75 0 0 1-1.5 0c0-4.75 5.43-4.75 7.75-4.75s7.75 0 7.75 4.75a.76.76 0 0 1-.75.75" /></svg>
+                </div>
+                <div className="flex flex-col pb-2">
+                  <span>Account Type</span>
+                  <span className="font-medium text-gray-900">{user?.accountType}</span>
                 </div>
               </div>
+            )}
 
+            {/* Last Login - Only shown in view mode */}
+            {!isEditing && (
+              <div className="flex items-center gap-5 pb-2">
+                <div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" className="text-gray-400 h-8 w-8" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12.25a3.75 3.75 0 1 1 3.75-3.75A3.75 3.75 0 0 1 12 12.25m0-6a2.25 2.25 0 1 0 2.25 2.25A2.25 2.25 0 0 0 12 6.25m7 13a.76.76 0 0 1-.75-.75c0-1.95-1.06-3.25-6.25-3.25s-6.25 1.3-6.25 3.25a.75.75 0 0 1-1.5 0c0-4.75 5.43-4.75 7.75-4.75s7.75 0 7.75 4.75a.76.76 0 0 1-.75.75" /></svg>
+                </div>
+                <div className="flex flex-col pb-2">
+                  <span>Last Login</span>
+                  <span className="font-medium text-gray-900">{user?.metaData?.lastLogin?.time ? new Date(user.metaData.lastLogin.time).toLocaleString() : ""}</span>
+                </div>
+              </div>
+            )}
 
-              <label
-                className="absolute top-0 right-1 p-1 cursor-pointer "
-                onClick={() => setIsAvatarSelectorOpen(true)}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="28"
-                  height="28"
-                  viewBox="0 0 24 24"
-                  className="h-6 w-6 text-indigo-600"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
+            {/*  Buttons */}
+            {isEditing && (
+              <div className="flex justify-end space-x-3">
+                <button
+                  onClick={() => setIsEditing(false)}
+                  className="px-6 py-2 border rounded-lg"
                 >
-                  <g>
-                    <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                    <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
-                  </g>
-                </svg>
-              </label>
-            </div>
-
-
-            <div>
-              <h2 className="text-xl font-semibold">
-                {user ? `${user.firstName} ${user.lastName}` : "User Name"}
-              </h2>
-              <p className="text-gray-500 text-xs md:text-sm">{user?.email}</p>
-            </div>
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSave}
+                  disabled={loading}
+                  className={`px-6 py-2 font-semibold rounded-lg flex items-center justify-center gap-2 transition-all ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700 text-white"
+                    }`}
+                >
+                  {loading ? (
+                    <CircularProgress size={20} thickness={2} style={{ color: 'white' }} />
+                  ) : (
+                    "Update"
+                  )}
+                </button>
+              </div>
+            )}
           </div>
-          <div>
-            <p className="text-indigo-500 border rounded-full p-2">
-              Joined on: {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : ""}
+
+          <div className="my-6 p-4 space-y-4 border rounded-xl w-full lg:max-w-[1550px] mx-auto ">
+            <h3 className="text-lg font-semibold border-b pb-4">Delete your Account</h3>
+            <p className="text-gray-600 text-[18px] mt-1">
+              Deleting your Zunoy account is a permanent action that will result in the deletion of all your data across Zunoy products. If you’re sure about proceeding, click the button below to request deletion. Once proceeded, our team will contact you to discuss your request and understand your decision before finalizing the process.
             </p>
+            <button onClick={onRequestDelete} className="mt-4 px-4 py-2 bg-red-500 text-white rounded-xl font-semibold hover:bg-red-600">
+              Request Account Deletion
+            </button>
           </div>
-        </div>
-
-
-
-        {/* profile details */}
-        <div className="w-full lg:max-w-[1550px] mx-auto space-y-4 px-5 py-4 border rounded-xl">
-          <div className="flex justify-between border-b py-2">
-            <p className="font-semibold text-[20px]">Profile Information</p>
-            {!isEditing ? (
-              <button
-                onClick={handleEdit}
-                className="ml-auto px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl"
-              >
-                Edit
-              </button>
-            ) : null}
-          </div>
-
-          {/* First Name */}
-          <div className="flex items-center gap-5 pb-2">
-            {!isEditing && (
-              <div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  className="text-gray-400 h-8 w-8"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M10 6H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-5m-4 0V5a2 2 0 1 1 4 0v1m-4 0a2 2 0 1 0 4 0m-5 8a2 2 0 1 0 0-4a2 2 0 0 0 0 4m0 0c1.306 0 2.417.835 2.83 2M9 14a3 3 0 0 0-2.83 2M15 11h3m-3 4h2"
-                  />
-                </svg>
-              </div>
-            )}
-
-            {/* Edit Mode */}
-            {isEditing ? (
-              <div className="flex items-center gap-3 w-full">
-                <label htmlFor="firstName" className="text-gray-600 w-24">
-                  First Name
-                </label>
-                <TextField
-                  fullWidth
-                  id="firstName"
-                  name="firstName"
-                  label="First Name"
-                  variant="filled"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  sx={{
-                    "& .MuiInputBase-root": {
-                      border: "3px solid",
-                      borderColor: errors.phoneNo ? "red" : "#F8F8F8",
-                      borderRadius: "8px",
-                      backgroundColor: "white",
-                      transition: "border-color 0.3s ease",
-                    },
-                    "& .MuiInputBase-root:hover": {
-
-                      backgroundColor: "#F8F8F8",
-                    },
-                    "& .MuiInputBase-root.Mui-focused": {
-                      borderColor: errors.phoneNo ? "red" : "#1976D2",
-                      backgroundColor: "white",
-                    },
-                    "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
-                      display: "none",
-                    },
-                  }}
-                />
-              </div>
-            ) : (
-              <div className="flex flex-col pb-2">
-                <span className="text-gray-600">First Name</span>
-                <span className="font-medium text-gray-900">{formData.firstName}</span>
-              </div>
-            )}
-          </div>
-
-
-          {/* Last Name */}
-          <div className="flex items-center gap-5 pb-2">
-            {!isEditing && (
-              <div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  className="text-gray-400 h-8 w-8"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M10 6H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-5m-4 0V5a2 2 0 1 1 4 0v1m-4 0a2 2 0 1 0 4 0m-5 8a2 2 0 1 0 0-4a2 2 0 0 0 0 4m0 0c1.306 0 2.417.835 2.83 2M9 14a3 3 0 0 0-2.83 2M15 11h3m-3 4h2"
-                  />
-                </svg>
-              </div>
-            )}
-
-            {/* Edit Mode  */}
-            {isEditing ? (
-              <div className="flex items-center gap-3 w-full">
-                <label htmlFor="lastName" className="text-gray-600 w-24">
-                  Last Name
-                </label>
-                <TextField
-                  fullWidth
-                  id="lastName"
-                  name="lastName"
-                  label="Last Name"
-                  variant="filled"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  sx={{
-                    "& .MuiInputBase-root": {
-                      border: "3px solid",
-                      borderColor: errors.phoneNo ? "red" : "#F8F8F8",
-                      borderRadius: "8px",
-                      backgroundColor: "white",
-                      transition: "border-color 0.3s ease",
-                    },
-                    "& .MuiInputBase-root:hover": {
-
-                      backgroundColor: "#F8F8F8",
-                    },
-                    "& .MuiInputBase-root.Mui-focused": {
-                      borderColor: errors.phoneNo ? "red" : "#1976D2",
-                      backgroundColor: "white",
-                    },
-                    "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
-                      display: "none",
-                    },
-                  }}
-                />
-              </div>
-            ) : (
-              <div className="flex flex-col pb-2">
-                <span className="text-gray-600">Last Name</span>
-                <span className="font-medium text-gray-900">{formData.lastName}</span>
-              </div>
-            )}
-          </div>
-
-
-
-          {/* Email */}
-          <div className="flex items-center gap-5 pb-2">
-            {!isEditing && (
-              <div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  className="text-gray-400 h-8 w-8"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M19 4H5a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3m-.67 2L12 10.75L5.67 6ZM19 18H5a1 1 0 0 1-1-1V7.25l7.4 5.55a1 1 0 0 0 .6.2a1 1 0 0 0 .6-.2L20 7.25V17a1 1 0 0 1-1 1"
-                  />
-                </svg>
-              </div>
-            )}
-
-            {/* Edit Mode  */}
-            {isEditing ? (
-              <div className="flex items-center gap-3 w-full">
-                <label htmlFor="email" className="text-gray-600 w-24">
-                  Email
-                </label>
-                <TextField
-                  fullWidth
-                  id="email"
-                  name="email"
-                  label="Email Address"
-                  variant="filled"
-                  value={formData.email}
-                  disabled
-                  sx={{
-                    "& .MuiInputBase-root": {
-                      border: "3px solid",
-                      borderColor: "#F8F8F8",
-                      borderRadius: "8px",
-                      backgroundColor: "#F8F8F8",
-                      cursor: "not-allowed",
-                    },
-                    "& .MuiInputBase-root:hover": {
-                      borderColor: "#BEBEBE",
-                      backgroundColor: "#F8F8F8",
-                    },
-                    "& .MuiInputBase-root.Mui-disabled": {
-                      color: "gray",
-                      "-webkit-text-fill-color": "gray",
-                    },
-                    "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
-                      display: "none",
-                    },
-                  }}
-                />
-              </div>
-            ) : (
-              <div className="flex flex-col pb-2">
-                <span className="text-gray-600">Email</span>
-                <span className="font-medium text-gray-900">{formData.email}</span>
-              </div>
-            )}
-          </div>
-
-          <div className="flex items-center gap-5 pb-2">
-            {!isEditing && (
-              <div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  className="text-gray-400 h-8 w-8"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M4 23v-2h16v2zM4 3V1h16v2zm8 10q1.25 0 2.125-.875T15 10t-.875-2.125T12 7t-2.125.875T9 10t.875 2.125T12 13m-8 7q-.825 0-1.412-.587T2 18V6q0-.825.588-1.412T4 4h16q.825 0 1.413.588T22 6v12q0 .825-.587 1.413T20 20zm1.75-2q1.125-1.4 2.725-2.2T12 15t3.525.8T18.25 18H20V6H4v12zm2.95 0h6.6q-.725-.5-1.562-.75T12 17t-1.737.25T8.7 18m3.3-7q-.425 0-.712-.288T11 10t.288-.712T12 9t.713.288T13 10t-.288.713T12 11m0 1"
-                  />
-                </svg>
-              </div>
-            )}
-
-            {/* Edit Mode */}
-            {isEditing ? (
-              <div className="flex items-center gap-3 w-full">
-                <label htmlFor="phoneNo" className="text-gray-600 w-24">
-                  Contact No.
-                </label>
-                <TextField
-                  fullWidth
-                  id="phoneNo"
-                  label="phoneNo"
-                  variant="filled"
-                  name="phoneNo"
-                  value={formData.phoneNo}
-                  onChange={handleChange}
-                  error={!!errors.phoneNo}
-                  helperText={errors.phoneNo}
-                  InputLabelProps={{ shrink: true }}
-                  sx={{
-                    "& .MuiInputBase-root": {
-                      border: "3px solid",
-                      borderColor: errors.phoneNo ? "red" : "#F8F8F8",
-                      borderRadius: "8px",
-                      backgroundColor: "white",
-                      transition: "border-color 0.3s ease",
-                    },
-                    "& .MuiInputBase-root:hover": {
-
-                      backgroundColor: "#F8F8F8",
-                    },
-                    "& .MuiInputBase-root.Mui-focused": {
-                      borderColor: errors.phoneNo ? "red" : "#1976D2",
-                      backgroundColor: "white",
-                    },
-                    "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
-                      display: "none",
-                    },
-                  }}
-                />
-              </div>
-            ) : (
-              <div className="flex flex-col pb-2">
-                <span className="text-gray-600">Contact Number</span>
-                <span className="font-medium text-gray-900">{formData.phoneNo}</span>
-              </div>
-            )}
-          </div>
-
-
-
-          {/* Account Type - Only shown in view mode */}
-          {!isEditing && (
-            <div className="flex items-center gap-5 pb-2">
-              <div>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" className="text-gray-400 h-8 w-8" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12.25a3.75 3.75 0 1 1 3.75-3.75A3.75 3.75 0 0 1 12 12.25m0-6a2.25 2.25 0 1 0 2.25 2.25A2.25 2.25 0 0 0 12 6.25m7 13a.76.76 0 0 1-.75-.75c0-1.95-1.06-3.25-6.25-3.25s-6.25 1.3-6.25 3.25a.75.75 0 0 1-1.5 0c0-4.75 5.43-4.75 7.75-4.75s7.75 0 7.75 4.75a.76.76 0 0 1-.75.75" /></svg>
-              </div>
-              <div className="flex flex-col pb-2">
-                <span>Account Type</span>
-                <span className="font-medium text-gray-900">{user?.accountType}</span>
-              </div>
-            </div>
-          )}
-
-          {/* Last Login - Only shown in view mode */}
-          {!isEditing && (
-            <div className="flex items-center gap-5 pb-2">
-              <div>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" className="text-gray-400 h-8 w-8" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12.25a3.75 3.75 0 1 1 3.75-3.75A3.75 3.75 0 0 1 12 12.25m0-6a2.25 2.25 0 1 0 2.25 2.25A2.25 2.25 0 0 0 12 6.25m7 13a.76.76 0 0 1-.75-.75c0-1.95-1.06-3.25-6.25-3.25s-6.25 1.3-6.25 3.25a.75.75 0 0 1-1.5 0c0-4.75 5.43-4.75 7.75-4.75s7.75 0 7.75 4.75a.76.76 0 0 1-.75.75" /></svg>
-              </div>
-              <div className="flex flex-col pb-2">
-                <span>Last Login</span>
-                <span className="font-medium text-gray-900">{user?.metaData?.lastLogin?.time ? new Date(user.metaData.lastLogin.time).toLocaleString() : ""}</span>
-              </div>
-            </div>
-          )}
-
-          {/*  Buttons */}
-          {isEditing && (
-            <div className="flex justify-end space-x-3">
-              <button
-                onClick={() => setIsEditing(false)}
-                className="px-6 py-2 border rounded-lg"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSave}
-                disabled={loading}
-                className={`px-6 py-2 font-semibold rounded-lg flex items-center justify-center gap-2 transition-all ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700 text-white"
-                  }`}
-              >
-                {loading ? (
-                  <CircularProgress size={20} thickness={2} style={{ color: 'white' }} />
-                ) : (
-                  "Update"
-                )}
-              </button>
-            </div>
-          )}
-        </div>
-
-        <div className="my-6 p-4 space-y-4 border rounded-xl w-full lg:max-w-[1550px] mx-auto ">
-          <h3 className="text-lg font-semibold border-b pb-4">Delete your Account</h3>
-          <p className="text-gray-600 text-[18px] mt-1">
-            Deleting your Zunoy account is a permanent action that will result in the deletion of all your data across Zunoy products. If you’re sure about proceeding, click the button below to request deletion. Once proceeded, our team will contact you to discuss your request and understand your decision before finalizing the process.
-          </p>
-          <button onClick={onRequestDelete} className="mt-4 px-4 py-2 bg-red-500 text-white rounded-xl font-semibold hover:bg-red-600">
-            Request Account Deletion
-          </button>
-        </div>
-      </section>
-        )}
+        </section>
+      )}
       <AvatarSelector
         isOpen={isAvatarSelectorOpen}
         onClose={() => setIsAvatarSelectorOpen(false)}
