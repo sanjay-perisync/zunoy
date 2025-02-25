@@ -8,14 +8,16 @@ import { Link } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import { loginUser } from "../APIconfig/PostApiconfig";
 
+
 const BASE_URL = "https://znginx.perisync.work/api/v1/acc";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState({});
+  
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
   const [focused, setFocused] = useState(false);
   const navigate = useNavigate();
 
