@@ -1,7 +1,7 @@
 const Banner = () => {
     return (
       <section 
-        className="bg-[rgb(28,37,54)] bg-no-repeat bg-top bg-cover text-gray-200 py-28 mt-16"
+        className="bg-[rgb(28,37,54)] bg-no-repeat bg-top bg-cover text-gray-200 py-10 lg:py-28 mt-16"
         style={{ backgroundImage: "url('https://account.zunoy.com/assets/gradient-bg.svg')" }}
       >
         <div className="text-center max-w-5xl mx-auto px-4">
