@@ -140,10 +140,10 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
     setUploadedAvatar(null);
     setSelectedAvatar(null);
     setProfilePicture(null);
-    localStorage.removeItem("profilePicture"); 
+    localStorage.removeItem("profilePicture");
     console.log("Avatar removed successfully");
     onClose();
-};
+  };
 
 
   const handleFileChange = async (event) => {
@@ -188,22 +188,22 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
   const handleSelect = async () => {
     try {
       let avatarToUpload = uploadedAvatar || (selectedAvatar && selectedAvatar.url);
-  
+
       if (!avatarToUpload) {
         console.log("No avatar selected.");
         return;
       }
-  
+
       if (selectedAvatar && !uploadedAvatar) {
         const token = localStorage.getItem("at");
         if (!token) {
           console.error("No authentication token found");
           return;
         }
-  
+
         const formData = new FormData();
         formData.append("id", selectedAvatar.id);
-  
+
         const response = await fetch("https://znginx.perisync.work/api/v1/acc/account/uploadPic", {
           method: "POST",
           headers: {
@@ -211,29 +211,29 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
           },
           body: formData,
         });
-  
+
         if (!response.ok) {
           const errorData = await response.json();
           console.error("Error uploading avatar:", errorData);
           throw new Error(errorData.msg || "Failed to upload avatar");
         }
-  
+
         const data = await response.json();
         console.log("Avatar Uploaded Successfully:", data);
-  
+
         setProfilePicture(data.url);
-        localStorage.setItem("profilePicture", data.url); 
+        localStorage.setItem("profilePicture", data.url);
       } else if (uploadedAvatar) {
         setProfilePicture(uploadedAvatar);
-        localStorage.setItem("profilePicture", uploadedAvatar); 
+        localStorage.setItem("profilePicture", uploadedAvatar);
       }
-  
+
       onClose();
     } catch (error) {
       console.error("Error in handleSelect:", error.message);
     }
   };
-  
+
 
   useEffect(() => {
 
@@ -253,9 +253,9 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
         </div>
 
         {loading ? (
-         <div className="flex justify-center items-center py-4">
-         <CircularProgress size={40} thickness={4} />
-       </div>
+          <div className="flex justify-center items-center py-4">
+            <CircularProgress size={40} thickness={4} />
+          </div>
         ) : error ? (
           <div className="text-center text-red-500 py-4">{error}</div>
         ) : (
@@ -355,15 +355,15 @@ const Account = ({ onEdit, onRequestDelete }) => {
   const [isAvatarSelectorOpen, setIsAvatarSelectorOpen] = useState(false);
 
 
-  
+
 
   useEffect(() => {
     const getUserData = async () => {
       try {
         const data = await fetchAccountData();
         setUser(data);
-  
-        
+
+
         if (data.profilePictureUrl) {
           setProfilePicture(data.profilePictureUrl);
           localStorage.setItem("profilePicture", data.profilePictureUrl);
@@ -381,10 +381,10 @@ const Account = ({ onEdit, onRequestDelete }) => {
         setLoading(false);
       }
     };
-  
+
     getUserData();
   }, []);
-  
+
 
 
   if (loading) {
@@ -400,7 +400,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
   const handleProfilePictureChange = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
-  
+
     try {
       setLoading(true);
       const response = await uploadProfilePicture(file);
@@ -416,7 +416,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
       setLoading(false);
     }
   };
-  
+
 
 
 
@@ -432,44 +432,69 @@ const Account = ({ onEdit, onRequestDelete }) => {
 
 
       <section className="px-4">
-        <div className="flex flex-wrap justify-between items-center w-full lg:max-w-[1600px] mx-2 lg:mx-10 my-10">
+        <div className="flex flex-wrap justify-between items-center w-full lg:max-w-[1550px] mx-auto  my-10">
           <div className="flex items-center space-y-5 gap-4 pb-4">
-            <div className="relative">
-              <div
-                className="w-28 h-28 bg-gray-300 rounded-full flex items-center justify-center mt-5 overflow-hidden cursor-pointer"
-                onClick={() => setIsAvatarSelectorOpen(true)}
-              >
-                {profilePicture ? (
-                  <img
-                    src={profilePicture}
-                    alt="Profile"
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <span className="text-2xl">👤</span>
-                )}
-              </div>
-              <label className="absolute bottom-4 right-2 bg-indigo-600 rounded-full p-1 cursor-pointer">
-                <input
-                  type="file"
-                  className="hidden"
-                  accept="image/*"
-                  onChange={handleProfilePictureChange}
-                />
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 text-white"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M4 5a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.121-1.121A2 2 0 0011.172 3H8.828a2 2 0 00-1.414.586L6.293 4.707A1 1 0 015.586 5H4zm6 9a3 3 0 100-6 3 3 0 000 6z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </label>
-            </div>
+          <div className="relative flex items-center justify-center mt-5 group">
+  {/* Avatar Container */}
+  <div
+    className="w-28 h-28 rounded-full flex items-center justify-center overflow-hidden cursor-pointer border-2 border-dashed border-gray-200 p-1 relative"
+    onClick={() => setIsAvatarSelectorOpen(true)}
+  >
+    {profilePicture ? (
+      <img
+        src={profilePicture}
+        alt="Profile"
+        className="h-full w-full object-cover rounded-full"
+      />
+    ) : (
+      <span className="text-2xl">👤</span>
+    )}
+
+    {/* Center "Select" Text with Camera Icon - Only visible on hover */}
+    <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+    <svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="28"
+  height="28"
+  viewBox="0 0 24 24"
+  className="h-6 w-6 mr-1"
+  fill="currentColor"
+  stroke="currentColor"
+  strokeWidth="1"
+>
+  <path d="M11.5 8C14 8 16 10 16 12.5S14 17 11.5 17S7 15 7 12.5S9 8 11.5 8m0 1A3.5 3.5 0 0 0 8 12.5a3.5 3.5 0 0 0 3.5 3.5a3.5 3.5 0 0 0 3.5-3.5A3.5 3.5 0 0 0 11.5 9M5 5h2l2-2h5l2 2h2a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V8a3 3 0 0 1 3-3m4.41-1l-2 2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-2.41l-2-2z" />
+</svg>
+
+      <span className="text-[16px]">Select</span>
+    </div>
+  </div>
+
+ 
+  <label
+    className="absolute top-0 right-1 p-1 cursor-pointer "
+    onClick={() => setIsAvatarSelectorOpen(true)}
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      className="h-6 w-6 text-indigo-600"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+    >
+      <g>
+        <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+        <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
+      </g>
+    </svg>
+  </label>
+</div>
+
+
             <div>
               <h2 className="text-xl font-semibold">
                 {user ? `${user.firstName} ${user.lastName}` : "User Name"}
@@ -484,7 +509,10 @@ const Account = ({ onEdit, onRequestDelete }) => {
           </div>
         </div>
 
-        <div className="w-full lg:max-w-[1600px] mx-2 lg:mx-10 space-y-4 px-5 py-4 border rounded-xl">
+
+
+{/* profile details */}
+        <div className="w-full lg:max-w-[1550px] mx-auto  space-y-4 px-5 py-4 border rounded-xl">
           <div className="flex justify-between border-b py-2">
             <p className="font-semibold text-[20px]">Profile Information</p>
             <button onClick={onEdit} className="ml-auto px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl">
@@ -562,7 +590,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
         </div>
 
 
-        <div className="my-6 p-4 space-y-4 border rounded-xl w-full lg:max-w-[1600px] mx-2 lg:mx-10">
+        <div className="my-6 p-4 space-y-4 border rounded-xl w-full lg:max-w-[1550px] mx-auto ">
           <h3 className="text-lg font-semibold border-b pb-4">Delete your Account</h3>
           <p className="text-gray-600 text-[18px] mt-1">
             Deleting your Zunoy account is a permanent action that will result in the deletion of all your data across Zunoy products. If you’re sure about proceeding, click the button below to request deletion. Once proceeded, our team will contact you to discuss your request and understand your decision before finalizing the process.
@@ -580,7 +608,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
         setProfilePicture={setProfilePicture}
       />
 
-      <footer>
+      <footer className="mx-auto max-w-[1620px]">
         <Mainpagefooter />
       </footer>
 
