@@ -363,7 +363,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
         const data = await fetchAccountData();
         setUser(data);
   
-        // Check if the API returns a profile picture; otherwise, use localStorage
+        
         if (data.profilePictureUrl) {
           setProfilePicture(data.profilePictureUrl);
           localStorage.setItem("profilePicture", data.profilePictureUrl);
@@ -387,6 +387,13 @@ const Account = ({ onEdit, onRequestDelete }) => {
   
 
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <CircularProgress size={50} thickness={4} />
+      </div>
+    );
+  }
 
 
 
