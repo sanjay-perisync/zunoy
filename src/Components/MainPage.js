@@ -48,7 +48,7 @@ function MainPage() {
           {loading ? (
             /* Skeleton Loader Grid */
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-              {Array(4).fill().map((_, index) => (
+              {Array(3).fill().map((_, index) => (
                 <div key={index} className="bg-white p-8 rounded-lg border h-[450px]">
                   <Skeleton variant="rectangular" width="100%" height={200} />
                   <div className="mt-4">
