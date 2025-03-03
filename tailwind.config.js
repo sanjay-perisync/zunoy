@@ -6,7 +6,8 @@ module.exports = {
     extend: {
       colors: {
         customBgBlack: "#1f1f1f", 
-        customleftblack:"#121212"
+        customleftblack:"#121212",
+        customGreen:"#10B981"
       },
     },
   },

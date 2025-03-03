@@ -261,7 +261,7 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
           <div className="text-center text-red-500 py-4">{error}</div>
         ) : (
           <div className="flex gap-4">
-            {/* Left section: Selected avatar and Remove option */}
+            {/*Selected avatar and Remove option */}
             <div className="flex flex-col items-center justify-center space-y-2">
               <div
                 className={`w-32 h-32 rounded-lg border ${!selectedAvatar && !uploadedAvatar ? "border-gray-500" : "border-gray-200"
@@ -301,7 +301,7 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
               </div>
             </div>
 
-            {/* Right section: Available avatars */}
+            {/*  Available avatars */}
             <div className="flex flex-wrap gap-4">
               {avatars.map((avatar) => (
                 <div
@@ -313,7 +313,7 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
                   <img src={avatar.url} alt={avatar.name} className="w-full h-full object-cover" />
                 </div>
               ))}
-              {/* Plus button to upload image */}
+              {/* upload image */}
               <div className="w-24 h-24 rounded-lg border-2 border-gray-200 flex items-center justify-center cursor-pointer overflow-hidden">
                 <input
                   type="file"
@@ -622,7 +622,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
             </div>
 
             {/* First Name */}
-            <div className="flex items-center gap-5 pb-2">
+            <div className="flex items-center gap-5 pb-2 border-b">
               {!isEditing && (
                 <div>
                   <svg
@@ -690,7 +690,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
 
 
             {/* Last Name */}
-            <div className="flex items-center gap-5 pb-2">
+            <div className="flex items-center gap-5 pb-2 border-b">
               {!isEditing && (
                 <div>
                   <svg
@@ -714,7 +714,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
 
               {/* Edit Mode  */}
               {isEditing ? (
-                <div className="flex items-center gap-3 w-full">
+                <div className="flex items-center gap-3 w-full ">
                   <label htmlFor="lastName" className="text-gray-600 w-24">
                     Last Name
                   </label>
@@ -759,7 +759,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
 
 
             {/* Email */}
-            <div className="flex items-center gap-5 pb-2">
+            <div className="flex items-center gap-5 pb-2 border-b">
               {!isEditing && (
                 <div>
                   <svg
@@ -821,7 +821,10 @@ const Account = ({ onEdit, onRequestDelete }) => {
               )}
             </div>
 
-            <div className="flex items-center gap-5 pb-2">
+
+
+              {/* mobile number */}
+            <div className="flex items-center gap-5 pb-2 border-b">
               {!isEditing && (
                 <div>
                   <svg
@@ -888,7 +891,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
 
 
 
-            {/* Account Type - Only shown in view mode */}
+            {/* Account Type  */}
             {!isEditing && (
               <div className="flex items-center gap-5 pb-2">
                 <div>
@@ -901,7 +904,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
               </div>
             )}
 
-            {/* Last Login - Only shown in view mode */}
+            {/* Last Login */}
             {!isEditing && (
               <div className="flex items-center gap-5 pb-2">
                 <div>

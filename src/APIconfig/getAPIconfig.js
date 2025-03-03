@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { getAPICall } from "./axiosMethodCalls";
 import { AccountsRootUrl } from "./ConstantRootURL/RootUrl";
+import toast from "react-hot-toast";
 
 // Send OTP API
 export const SendotpAPI = (data, setLoader, setOtpSent, setError) => {
@@ -179,4 +180,36 @@ export const fetchProducts = async () => {
     console.error("Error fetching products:", error);
     throw error;
   }
+};
+
+
+
+
+
+
+export const requestOtpFor2FA = async (password) => {
+    const url = `https://znginx.perisync.work/api/v1/acc/account/toggleTwoFA?status=true&password=${encodeURIComponent(password)}&otp=0&reqOtp=false`;
+
+    try {
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("at")}`,
+            },
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || "Invalid password");
+
+        if (data.msg === "otp sent") {
+            toast.success("OTP has been sent.");
+            return true;
+        } else {
+            toast.error("Unexpected response from server.");
+            return false;
+        }
+    } catch (error) {
+        toast.error(error.message || "Error validating password");
+        return false; 
+    }
 };

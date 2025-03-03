@@ -107,7 +107,7 @@ function CompleteProfile() {
         await CreateRegister(apiPayload, {
             setLoader: setLoading,
             onSuccess: (data) => {
-                console.log("✅ Registration Success:", data);
+                console.log("Registration Success:", data);
                 setAccountCreated(true);
                 setTimeout(() => {
                     navigate("/");
@@ -115,7 +115,7 @@ function CompleteProfile() {
 
             },
             onError: (error) => {
-                toast.error("❌ Registration Error:", error);
+                toast.error("Registration Error:", error);
             }
         });
     };

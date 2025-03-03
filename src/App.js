@@ -9,6 +9,7 @@ import CompleteProfile from "./Components/CompleteProfile";
 import MainPage from "./Components/MainPage";
 import ResetPassword from "./Components/ResetPassword";
 import Account from "./Components/Account";
+import Security from "./Components/Security";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/account" element={<Account />} />
             <Route path="/mainpage" element={<MainPage />} />
+            <Route path="/security" element={<Security />} />
           </Routes>
         </div>
       </Router>

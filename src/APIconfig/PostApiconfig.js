@@ -218,31 +218,28 @@ export const loginUser = async (email, password) => {
     };
 
     const response = await api.post("/login", payload);
-    console.log("✅ Login API Response:", response?.data);
+    console.log(" Login API Response:", response?.data);
 
-    // Get token from response data
     const { token } = response?.data || {};
 
-    // 🔹 Save token from response body if available
     if (token) {
       localStorage.setItem("at", token); 
-      console.log("🔑 Token stored from response body:", token);
+      console.log("Token stored from response body:", token);
     } else {
-      console.warn("⚠️ No token received from API body.");
+      console.warn(" No token received from API body.");
     }
 
-    // 🔹 Save token from response headers (if exists)
     const headerToken = response?.headers?.at;
     if (headerToken) {
       localStorage.setItem("at", headerToken);
-      console.log("🔑 Token stored from headers:", headerToken);
+      console.log("Token stored from headers:", headerToken);
     } else {
-      console.warn("⚠️ No token found in headers.");
+      console.warn(" No token found in headers.");
     }
 
     return response.data;
   } catch (error) {
-    console.error("❌ Login API Error:", error);
+    console.error("Login API Error:", error);
     throw error.response?.data || error.message;
   }
 };
