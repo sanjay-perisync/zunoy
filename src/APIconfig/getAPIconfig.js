@@ -235,7 +235,7 @@ export const toggleTwoFA = async (password, otp, status) => {
       if (!response.ok) throw new Error(data.message || "Error toggling 2FA");
 
       if (data.msg === "toggle 2FA success") {
-          return { success: true, message: "Two-Factor Authentication updated successfully" };
+          return { success: true, message: "Multi Factor Authentication updated successfully" };
       } else {
           return { success: false, message: data.msg || "Unexpected server response" };
       }
