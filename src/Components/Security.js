@@ -7,7 +7,8 @@ import { Accordion, AccordionSummary, AccordionDetails, TextField, Checkbox, Cir
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ExpandMore } from "@mui/icons-material";
 import { requestOtpFor2FA } from '../APIconfig/getAPIconfig';
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
+import { toggleTwoFA } from '../APIconfig/getAPIconfig';
 
 
 
@@ -37,6 +38,8 @@ function Security() {
     const [isResendDisabled, setIsResendDisabled] = useState(true);
 
 
+    const [is2FAEnabled, setIs2FAEnabled] = useState(false);
+
     useEffect(() => {
         if (isDialogOpen) {
             document.body.style.overflow = "hidden";
@@ -65,6 +68,8 @@ function Security() {
     }, [isDialogOpen]);
 
 
+
+
     const handlePasswordValidation = async () => {
         if (!userPassword) {
             toast.error("Please enter your password");
@@ -72,14 +77,22 @@ function Security() {
         }
 
         setLoading(true);
-        const isValid = await requestOtpFor2FA(userPassword);
-        setLoading(false);
-
-        if (isValid) {
-            setOtpVisible(true);
-            inputRefs.current[0]?.focus();
+        try {
+            const isValid = await requestOtpFor2FA(userPassword);
+            if (isValid) {
+                setOtp(["", "", "", "", "", ""]);
+                setOtpVisible(true);
+                inputRefs.current[0]?.focus();
+            } else {
+                toast.error("Invalid password");
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error("An error occurred. Please try again.");
         }
+        setLoading(false);
     };
+
 
     const handleOtpChange = (index, value) => {
         if (!/^\d*$/.test(value)) return;
@@ -119,7 +132,29 @@ function Security() {
     const handleResendOtp = () => {
         handlePasswordValidation();
         setIsResendDisabled(true);
-        setResendTimer(10);
+        setResendTimer(60);
+    };
+
+
+
+
+    const handleToggle2FA = async () => {
+        if (!userPassword || !otp) {
+            toast.error("Please enter password and OTP.");
+            return;
+        }
+
+        setLoading(true);
+        const result = await toggleTwoFA(userPassword, otp, !is2FAEnabled);
+        setLoading(false);
+
+        if (result.success) {
+            toast.success(result.message);
+            setIs2FAEnabled(!is2FAEnabled);
+            setIsDialogOpen(false);
+        } else {
+            toast.error(result.message);
+        }
     };
     return (
         <div className='h-screen flex flex-col justify-between'>
@@ -146,15 +181,35 @@ function Security() {
                             <p className="text-[16px] md:text-[18px] font-semibold">Multi Factor Authentication</p>
                         </AccordionSummary>
 
-                        <AccordionDetails className="space-y-4 pt-5 border-t">
+                        <AccordionDetails className="space-y-5 my-8 border-t">
 
                             <div>
-                                <button
-                                    className="bg-customGreen text-white text-sm font-semibold rounded-lg px-5 py-3 mt-5"
+                                {/* <button
+                                    className="bg-customGreen text-white text-sm font-semibold rounded-xl px-5 py-2 mt-5"
                                     onClick={() => setIsDialogOpen(true)}
                                 >
                                     Turn On
+                                </button> */}
+
+
+
+                                <button
+                                    className={`text-white text-sm font-semibold rounded-xl px-5 py-2 mt-5 ${is2FAEnabled ? "bg-red-500 hover:bg-red-600" : "bg-customGreen hover:bg-teal-500"
+                                        }`}
+                                    onClick={() => {
+                                        setUserPassword("");
+                                        setOtp(["", "", "", "", "", ""]);
+                                        setOtpVisible(false);
+                                        setIsDialogOpen(true);
+                                    }}
+                                >
+                                    Turn {is2FAEnabled ? "Off" : "On"}
                                 </button>
+
+
+
+
+
 
                                 {isDialogOpen && (
                                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center px-4 z-50">
@@ -215,7 +270,7 @@ function Security() {
                                             {otpVisible && (
                                                 <div>
 
-                                                    <div className="flex justify-between gap-3 mt-3">
+                                                    <div className="flex justify-between gap-1 md:gap-3 mt-3">
                                                         {otp.map((digit, index) => (
                                                             <input
                                                                 key={index}
@@ -225,15 +280,15 @@ function Security() {
                                                                 onChange={(e) => handleOtpChange(index, e.target.value)}
                                                                 onKeyDown={(e) => handleKeyDown(index, e)}
                                                                 maxLength="1"
-                                                                className="w-20 h-14 border text-center text-lg font-bold outline-none rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                                                className="w-10 h-10 mx-1 lg:w-16 lg:h-14 border text-center text-lg font-bold outline-none rounded-lg focus:ring-2 focus:ring-indigo-500"
                                                             />
                                                         ))}
                                                     </div>
 
 
                                                     <div className="flex justify-between mt-3">
-                                                        <p>
-                                                            Didn't receive OTP? {isResendDisabled && <span className="text-gray-500">({resendTimer}s)</span>}
+                                                        <p className="text-gray-500">
+                                                            Didn't receive OTP? {isResendDisabled && <span >{resendTimer}s</span>}
                                                         </p>
                                                         <button
                                                             className={`text-indigo-500 font-semibold hover:underline ${isResendDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
@@ -256,13 +311,25 @@ function Security() {
                                                     >
                                                         Close
                                                     </button>
-                                                    <button
+                                                    {/* <button
                                                         className={`px-4 py-2 rounded-lg font-semibold text-white ${isOtpComplete ? "bg-indigo-500 hover:bg-indigo-600" : "bg-gray-300 cursor-not-allowed"
                                                             }`}
                                                         disabled={!isOtpComplete}
                                                     >
                                                         Verify & Validate
+                                                    </button> */}
+
+                                                    <button
+                                                        className={`px-4 py-2 rounded-lg font-semibold text-white ${isOtpComplete ? "bg-indigo-500 hover:bg-indigo-600" : "bg-gray-300 cursor-not-allowed"
+                                                            }`}
+                                                        disabled={!isOtpComplete}
+                                                        onClick={handleToggle2FA}
+                                                    >
+                                                        Verify & Validate
                                                     </button>
+
+
+
                                                 </div>
                                             )}
 
@@ -272,7 +339,12 @@ function Security() {
                             </div>
 
                             <div className="space-y-2">
-                                <p className="text-red-500">Off</p>
+                                {/* <p className="text-red-500">Off</p> */}
+                                <p className={`flex items-center font-semibold ${is2FAEnabled ? "text-green-500" : "text-red-500"}`}>
+                                    <span className={`w-2 h-2 mr-2 rounded-full ${is2FAEnabled ? "bg-green-500" : "bg-red-500"}`}></span>
+                                    {is2FAEnabled ? "On" : "Off"}
+                                </p>
+
                                 <h6>Enhance your account security with Two-Factor Authentication by entering an OTP during login to confirm your identity.</h6>
                             </div>
                         </AccordionDetails>
