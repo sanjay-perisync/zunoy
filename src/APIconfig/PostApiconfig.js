@@ -176,29 +176,7 @@ export const CreateRegister = async (data, { setLoader, onSuccess, onError }) =>
 
 
 
-// export const loginUser = async (email, password) => {
-//   try {
-//     const payload = {
-//       email: email.trim(),
-//       password: password.trim(),
-//       otp: 0,
-//       killSession: false,
-//       deviceInfo: {
-//         platform: "web",
-//         os: "Windows 10",
-//         browser: "Edge",
-//         device: "133.0.0.0",
-//         deviceName: "Windows 10",
-//         ipAddress: "106.51.221.186",
-//       },
-//     };
 
-//     const response = await api.post("/login", payload);
-//     return response.data;
-//   } catch (error) {
-//     throw error.response?.data || error.message;
-//   }
-// };
 
 export const loginUser = async (email, password) => {
   try {

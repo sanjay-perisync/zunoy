@@ -3,12 +3,12 @@ import Navbar from './Navbar';
 import Mainpagefooter from './Mainpagefooter';
 import { useState, useRef, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Accordion, AccordionSummary, AccordionDetails, TextField, Checkbox, CircularProgress } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Accordion, AccordionSummary, AccordionDetails, TextField, CircularProgress } from "@mui/material";
 import { ExpandMore } from "@mui/icons-material";
 import { requestOtpFor2FA } from '../APIconfig/getAPIconfig';
 import toast from "react-hot-toast";
 import { toggleTwoFA } from '../APIconfig/getAPIconfig';
+import ChangePassword from './ChangePassword';
 
 
 
@@ -17,12 +17,7 @@ import { toggleTwoFA } from '../APIconfig/getAPIconfig';
 
 function Security() {
 
-    const [expanded, setExpanded] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [focused, setFocused] = useState(false);
+   
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [userPassword, setUserPassword] = useState("");
@@ -40,6 +35,10 @@ function Security() {
 
     // const [is2FAEnabled, setIs2FAEnabled] = useState(false);
     const [is2FAEnabled, setIs2FAEnabled] = useState(localStorage.getItem("twoFAStatus") === "true");
+
+
+
+
 
 
     useEffect(() => {
@@ -158,6 +157,11 @@ function Security() {
         setLoading(false);
     };
 
+
+
+
+
+    
     return (
         <div className='h-screen flex flex-col justify-between'>
 
@@ -313,13 +317,7 @@ function Security() {
                                                     >
                                                         Close
                                                     </button>
-                                                    {/* <button
-                                                        className={`px-4 py-2 rounded-lg font-semibold text-white ${isOtpComplete ? "bg-indigo-500 hover:bg-indigo-600" : "bg-gray-300 cursor-not-allowed"
-                                                            }`}
-                                                        disabled={!isOtpComplete}
-                                                    >
-                                                        Verify & Validate
-                                                    </button> */}
+                                                  
 
                                                     <button
                                                         className={`px-4 py-2 rounded-lg font-semibold text-white ${isOtpComplete ? "bg-indigo-500 hover:bg-indigo-600" : "bg-gray-300 cursor-not-allowed"
@@ -359,151 +357,8 @@ function Security() {
 
 
 
-                {/* Change password */}
-                <section className="mx-auto max-w-[1550px] border rounded-2xl mb-10">
-                    <Accordion
-                        expanded={expanded}
-                        onChange={() => setExpanded(!expanded)}
-                        sx={{
 
-                            backgroundColor: "transparent",
-                            boxShadow: "none",
-                            overflow: "hidden",
-                            paddingTop: "20px",
-                            paddingBottom: "20px"
-                        }}
-                    >
-                        <AccordionSummary expandIcon={<ExpandMoreIcon />} className="py-8 px-5">
-                            <p className="text-[16px] md:text-[18px] font-semibold">Change Password</p>
-                        </AccordionSummary>
-                        <AccordionDetails className="border-t px-4">
-                            <div className="space-y-6 mt-6 mx-auto max-w-xl">
-
-                                {/* Old Password */}
-                                <div className="relative">
-                                    <TextField
-                                        label="Old Password"
-                                        variant="filled"
-                                        fullWidth
-                                        sx={{
-                                            "& .MuiInputBase-root": {
-                                                border: "3px solid",
-                                                borderColor: focused ? "#1976D2" : "#F8F8F8",
-                                                borderRadius: "8px",
-                                                backgroundColor: "white",
-                                                transition: "border-color 0.3s ease",
-                                            },
-                                            "& .MuiInputBase-root:hover": {
-                                                borderColor: focused ? "#1976D2" : "#BEBEBE",
-                                                backgroundColor: "#F8F8F8",
-                                            },
-                                            "& .MuiInputBase-root.Mui-focused": {
-                                                borderColor: "#1976D2",
-                                                backgroundColor: "white",
-                                            },
-                                            "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
-                                                display: "none",
-                                            },
-                                        }}
-                                    />
-                                </div>
-
-                                {/* New Password */}
-                                <div className="relative">
-                                    <TextField
-                                        label="New Password"
-                                        type={showPassword ? "text" : "password"}
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        variant="filled"
-                                        fullWidth
-                                        sx={{
-                                            "& .MuiInputBase-root": {
-                                                border: "3px solid",
-                                                borderColor: focused ? "#1976D2" : "#F8F8F8",
-                                                borderRadius: "8px",
-                                                backgroundColor: "white",
-                                                transition: "border-color 0.3s ease",
-                                            },
-                                            "& .MuiInputBase-root:hover": {
-                                                borderColor: focused ? "#1976D2" : "#BEBEBE",
-                                                backgroundColor: "#F8F8F8",
-                                            },
-                                            "& .MuiInputBase-root.Mui-focused": {
-                                                borderColor: "#1976D2",
-                                                backgroundColor: "white",
-                                            },
-                                            "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
-                                                display: "none",
-                                            },
-                                        }}
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600"
-                                    >
-                                        {showPassword ? <FaEyeSlash /> : <FaEye />}
-                                    </button>
-                                </div>
-
-                                {/* Confirm New Password */}
-                                <div className="relative">
-                                    <TextField
-                                        label="Confirm New Password"
-                                        type={showConfirmPassword ? "text" : "password"}
-                                        value={confirmPassword}
-                                        onChange={(e) => setConfirmPassword(e.target.value)}
-                                        variant="filled"
-                                        fullWidth
-                                        sx={{
-                                            "& .MuiInputBase-root": {
-                                                border: "3px solid",
-                                                borderColor: focused ? "#1976D2" : "#F8F8F8",
-                                                borderRadius: "8px",
-                                                backgroundColor: "white",
-                                                transition: "border-color 0.3s ease",
-                                            },
-                                            "& .MuiInputBase-root:hover": {
-                                                borderColor: focused ? "#1976D2" : "#BEBEBE",
-                                                backgroundColor: "#F8F8F8",
-                                            },
-                                            "& .MuiInputBase-root.Mui-focused": {
-                                                borderColor: "#1976D2",
-                                                backgroundColor: "white",
-                                            },
-                                            "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
-                                                display: "none",
-                                            },
-                                        }}
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600"
-                                    >
-                                        {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-                                    </button>
-                                </div>
-
-
-                                <div className="flex items-center">
-                                    <Checkbox color="primary" />
-                                    <label className="ml-2">Logout from all devices</label>
-                                </div>
-
-
-                                <div className="lg:ml-40 pb-8">
-                                    <button className="bg-indigo-500 px-4 py-2 rounded-xl text-white font-semibold">
-                                        Update Password
-                                    </button>
-                                </div>
-                            </div>
-                        </AccordionDetails>
-                    </Accordion>
-                </section>
-
-
+                <ChangePassword/>
 
 
 

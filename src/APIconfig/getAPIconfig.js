@@ -219,30 +219,6 @@ export const requestOtpFor2FA = async (password) => {
 
 
 
-// export const toggleTwoFA = async (password, otp, status) => {
-//   const otpString = otp.join(""); 
-//   const url = `https://znginx.perisync.work/api/v1/acc/account/toggleTwoFA?status=${status}&password=${encodeURIComponent(password)}&otp=${otpString}&reqOtp=false`;
-
-//   try {
-//       const response = await fetch(url, {
-//           method: "GET",
-//           headers: {
-//               Authorization: `Bearer ${localStorage.getItem("at")}`,
-//           },
-//       });
-
-//       const data = await response.json();
-//       if (!response.ok) throw new Error(data.message || "Error toggling 2FA");
-
-//       if (data.msg === "toggle 2FA success") {
-//           return { success: true, message: "Multi Factor Authentication updated successfully" };
-//       } else {
-//           return { success: false, message: data.msg || "Unexpected server response" };
-//       }
-//   } catch (error) {
-//       return { success: false, message: error.message || "Error toggling 2FA" };
-//   }
-// };
 
 export const toggleTwoFA = async (password, otp, status) => {
   const otpString = otp.join("");
@@ -261,7 +237,7 @@ export const toggleTwoFA = async (password, otp, status) => {
 
       if (data.msg === "toggle 2FA success") {
           localStorage.setItem("twoFAStatus", status); 
-          return { success: true, status, message: "Multi-Factor Authentication updated successfully" };
+          return { success: true, status, message: "MFA updated successfully" };
       } else {
           return { success: false, message: data.msg || "Unexpected server response" };
       }
@@ -269,4 +245,8 @@ export const toggleTwoFA = async (password, otp, status) => {
       return { success: false, message: error.message || "Error toggling 2FA" };
   }
 };
+
+
+
+
 
