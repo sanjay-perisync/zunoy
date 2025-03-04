@@ -38,7 +38,9 @@ function Security() {
     const [isResendDisabled, setIsResendDisabled] = useState(true);
 
 
-    const [is2FAEnabled, setIs2FAEnabled] = useState(false);
+    // const [is2FAEnabled, setIs2FAEnabled] = useState(false);
+    const [is2FAEnabled, setIs2FAEnabled] = useState(localStorage.getItem("twoFAStatus") === "true");
+
 
     useEffect(() => {
         if (isDialogOpen) {
@@ -83,8 +85,6 @@ function Security() {
                 setOtp(["", "", "", "", "", ""]);
                 setOtpVisible(true);
                 inputRefs.current[0]?.focus();
-            } else {
-                toast.error("Invalid password");
             }
         } catch (error) {
             console.error(error);
@@ -138,24 +138,26 @@ function Security() {
 
 
 
+
     const handleToggle2FA = async () => {
-        if (!userPassword || !otp) {
-            toast.error("Please enter password and OTP.");
+        if (!userPassword || !isOtpComplete) {
+            toast.error("Please enter required fields");
             return;
         }
 
         setLoading(true);
         const result = await toggleTwoFA(userPassword, otp, !is2FAEnabled);
-        setLoading(false);
 
         if (result.success) {
-            toast.success(result.message);
             setIs2FAEnabled(!is2FAEnabled);
+            toast.success(result.message);
             setIsDialogOpen(false);
         } else {
             toast.error(result.message);
         }
+        setLoading(false);
     };
+
     return (
         <div className='h-screen flex flex-col justify-between'>
 
@@ -181,7 +183,7 @@ function Security() {
                             <p className="text-[16px] md:text-[18px] font-semibold">Multi Factor Authentication</p>
                         </AccordionSummary>
 
-                        <AccordionDetails className="space-y-5 my-8 border-t">
+                        <AccordionDetails className="space-y-5  border-t">
 
                             <div>
                                 {/* <button
