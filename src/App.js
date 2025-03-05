@@ -10,6 +10,8 @@ import MainPage from "./Components/MainPage";
 import ResetPassword from "./Components/ResetPassword";
 import Account from "./Components/Account";
 import Security from "./Components/Security";
+import Support from "./Components/Support";
+import Billing from "./Components/Billing";
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
             <Route path="/account" element={<Account />} />
             <Route path="/mainpage" element={<MainPage />} />
             <Route path="/security" element={<Security />} />
+            <Route path="/support" element={<Support />} />
+            <Route path="/billing" element={<Billing />} />
           </Routes>
         </div>
       </Router>

@@ -43,7 +43,7 @@ const LoginForm = () => {
       toast.success("Login successful!");
       navigate("/mainpage");
     } catch (error) {
-      toast.error(error.message || "Login failed");
+      toast.error(error.message || "Invalid Creds");
     } finally {
       setLoading(false);
     }

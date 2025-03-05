@@ -42,7 +42,7 @@ function MainPage() {
       </header>
 
       <section>
-        <div className="mx-auto max-w-[1550px] p-6 mt-10">
+        <div className="mx-auto max-w-[1400px] p-6 mt-10">
           <h2 className="text-[28px] font-bold mb-6">Our Products</h2>
 
           {loading ? (
@@ -169,7 +169,7 @@ function MainPage() {
         <Banner />
       </section>
 
-      <footer>
+      <footer className='mx-auto max-w-[1400px]'>
         <Mainpagefooter />
       </footer>
     </div>

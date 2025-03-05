@@ -59,8 +59,8 @@ export const LogoutApi = ({ setloader }) => {
       .then((res) => {
         console.log("Logout API Success:", res);
         setloader(false);
-        localStorage.clear(); 
-        toast.success("You've logged out successfully"); 
+        localStorage.clear();
+        toast.success("You've logged out successfully");
         resolve(res);
       })
       .catch((err) => {
@@ -83,4 +83,85 @@ export const LogoutApi = ({ setloader }) => {
         }, 3000);
       });
   });
+};
+
+
+
+
+
+export const handleConfirmDelete = async (selectedSession) => {
+  if (!selectedSession) {
+    return { success: false, message: "No session selected" };
+  }
+
+  try {
+    const token = localStorage.getItem("at");
+    const response = await fetch(
+      `https://znginx.perisync.work/api/v1/acc/account/session?id=${selectedSession.id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const data = await response.json();
+
+    if (response.ok) {
+      return {
+        success: true,
+        message: "Session deleted successfully"
+      };
+    } else {
+      return {
+        success: false,
+        message: data.msg || "Failed to delete session"
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: "Error deleting session"
+    };
+  }
+};
+
+
+
+
+export const endAllSessions = async () => {
+  try {
+      const token = localStorage.getItem("at");
+      const response = await fetch(
+          "https://znginx.perisync.work/api/v1/acc/account/session/kill",
+          {
+              method: "DELETE",
+              headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+              },
+          }
+      );
+
+      const data = await response.json();
+      
+      if (response.ok) {
+          return { 
+              success: true, 
+              message: "All sessions ended successfully" 
+          };
+      } else {
+          return { 
+              success: false, 
+              message: data.msg || "Failed to end all sessions" 
+          };
+      }
+  } catch (error) {
+      return { 
+          success: false, 
+          message: "Error ending all sessions" 
+      };
+  }
 };

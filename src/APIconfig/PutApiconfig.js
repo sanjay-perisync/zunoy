@@ -83,56 +83,98 @@ export const updatePassword = async (email, password, identifier) => {
 
 
 
-export const changePassword = async ({ oldPassword, newPassword, otp, killSession }) => {
+// export const changePassword = async ({ oldPassword, newPassword, otp, killSession }) => {
+//   try {
+//       const token = localStorage.getItem("at");
+
+//       const payload = {
+//           oldPassword,
+//           newPassword,
+//           killSession,
+//           otp: otp ?? 0,
+//       };
+
+//       // Add OTP only if MFA is enabled
+//       if (otp !== undefined && otp !== null) {
+//           payload.otp = otp;
+//       }
+
+//       const response = await fetch("https://znginx.perisync.work/api/v1/acc/account/resetPassword", {
+//           method: "PUT",
+//           headers: {
+//               "Content-Type": "application/json",
+//               Authorization: `Bearer ${token}`,
+//           },
+//           body: JSON.stringify(payload),
+//       });
+
+//       const data = await response.json();
+//       return { success: response.ok, data };
+//   } catch (error) {
+//       console.error("Error:", error);
+//       return { success: false, error: "Something went wrong." };
+//   }
+// };
+
+
+
+
+// export const changePasswordMFA = async ({ oldPassword, newPassword, otp, killSession }) => { 
+//   try {
+//       const token = localStorage.getItem("at");
+
+//       const payload = {
+//           oldPassword,
+//           newPassword,
+//           killSession,
+//           otp: otp || 0,  
+//       };
+
+//       console.log("Request URL: https://znginx.perisync.work/api/v1/acc/account/resetPassword");
+//       console.log("Request Method: PUT");
+//       console.log("Payload:", JSON.stringify(payload, null, 2));
+
+//       const response = await fetch("https://znginx.perisync.work/api/v1/acc/account/resetPassword", {
+//           method: "PUT",
+//           headers: {
+//               "Content-Type": "application/json",
+//               Authorization: `Bearer ${token}`,
+//           },
+//           body: JSON.stringify(payload),
+//       });
+
+//       const data = await response.json();
+
+//       console.log("Status Code:", response.status, response.ok ? "OK" : "FAILED");
+//       console.log("Preview:\n", JSON.stringify(data, null, 2));
+
+//       return { success: response.ok, data };
+//   } catch (error) {
+//       console.error("Error:", error);
+//       return { success: false, error: "Something went wrong." };
+//   }
+// };
+
+
+export const changePassword = async ({ oldPassword, newPassword, otp, killSession, is2FAEnabled }) => {
   try {
       const token = localStorage.getItem("at");
-
-      const payload = {
-          oldPassword,
-          newPassword,
-          killSession,
-          otp: otp ?? 0,
-      };
-
-      // Add OTP only if MFA is enabled
-      if (otp !== undefined && otp !== null) {
-          payload.otp = otp;
+      if (!token) {
+          return { success: false, message: "Authentication error. Please log in again." };
       }
 
-      const response = await fetch("https://znginx.perisync.work/api/v1/acc/account/resetPassword", {
-          method: "PUT",
-          headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-      });
-
-      const data = await response.json();
-      return { success: response.ok, data };
-  } catch (error) {
-      console.error("Error:", error);
-      return { success: false, error: "Something went wrong." };
-  }
-};
-
-
-
-
-export const changePasswordMFA = async ({ oldPassword, newPassword, otp, killSession }) => { 
-  try {
-      const token = localStorage.getItem("at");
-
       const payload = {
           oldPassword,
           newPassword,
           killSession,
-          otp: otp || 0,  
       };
 
-      console.log("Request URL: https://znginx.perisync.work/api/v1/acc/account/resetPassword");
-      console.log("Request Method: PUT");
-      console.log("Payload:", JSON.stringify(payload, null, 2));
+   
+      if (is2FAEnabled) {
+          payload.otp = otp ?? 0;
+      }
+
+      console.log("Sending API Request:", payload);
 
       const response = await fetch("https://znginx.perisync.work/api/v1/acc/account/resetPassword", {
           method: "PUT",
@@ -144,14 +186,21 @@ export const changePasswordMFA = async ({ oldPassword, newPassword, otp, killSes
       });
 
       const data = await response.json();
+      console.log("API Response Data:", data);
 
-      console.log("Status Code:", response.status, response.ok ? "OK" : "FAILED");
-      console.log("Preview:\n", JSON.stringify(data, null, 2));
+      if (!response.ok) {
+          throw new Error(data.msg || "Error updating password");
+      }
 
-      return { success: response.ok, data };
+      return { success: true, message: data.msg };
   } catch (error) {
       console.error("Error:", error);
-      return { success: false, error: "Something went wrong." };
+      return { success: false, message: error.message || "Something went wrong." };
   }
 };
+
+
+
+
+
 

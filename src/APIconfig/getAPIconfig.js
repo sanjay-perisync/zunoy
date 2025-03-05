@@ -249,4 +249,23 @@ export const toggleTwoFA = async (password, otp, status) => {
 
 
 
+export const fetchSessions = async (authToken) => {
+  try {
+    const response = await fetch(
+      "https://znginx.perisync.work/api/v1/acc/account/session?page=1&size=100&search=",
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const result = await response.json();
+    return result.data || []; 
+  } catch (error) {
+    console.error("Error fetching sessions:", error);
+    throw error;
+  }
+};
 

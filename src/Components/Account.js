@@ -524,7 +524,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
         <div className="text-center text-red-500 py-4">{error}</div>
       ) : (
         <section className="px-4">
-          <div className="flex flex-wrap justify-between items-center w-full lg:max-w-[1550px] mx-auto  my-10">
+          <div className="flex flex-wrap justify-between items-center w-full lg:max-w-[1400px] mx-auto  my-10">
             <div className="flex items-center space-y-5 gap-4 pb-4">
               <div className="relative flex items-center justify-center mt-5 group">
                 {/* Avatar Container */}
@@ -608,7 +608,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
 
 
           {/* profile details */}
-          <div className="w-full lg:max-w-[1550px] mx-auto space-y-4 px-5 py-4 border rounded-xl">
+          <div className="w-full lg:max-w-[1400px] mx-auto space-y-4 px-5 py-4 border rounded-xl">
             <div className="flex justify-between border-b py-2">
               <p className="font-semibold text-[20px]">Profile Information</p>
               {!isEditing ? (
@@ -942,7 +942,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
             )}
           </div>
 
-          <div className="my-6 p-4 space-y-4 border rounded-xl w-full lg:max-w-[1550px] mx-auto ">
+          <div className="my-6 p-4 space-y-4 border rounded-xl w-full lg:max-w-[1400px] mx-auto ">
             <h3 className="text-lg font-semibold border-b pb-4">Delete your Account</h3>
             <p className="text-gray-600 text-[18px] mt-1">
               Deleting your Zunoy account is a permanent action that will result in the deletion of all your data across Zunoy products. If you’re sure about proceeding, click the button below to request deletion. Once proceeded, our team will contact you to discuss your request and understand your decision before finalizing the process.
@@ -960,7 +960,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
         setProfilePicture={setProfilePicture}
       />
 
-      <footer className="mx-auto max-w-[1620px]">
+      <footer className="mx-auto max-w-[1400px]">
         <Mainpagefooter />
       </footer>
 
