@@ -17,6 +17,9 @@ export const putAPICall = (url, data, options) => {
 // export const deleteAPICall = (url, options) => {
 //     return axios.delete(url, options)
 // }
+
+
+
 export const deleteAPICall = async (url, options = {}) => {
     try {
       console.log("Executing deleteAPICall for:", url);

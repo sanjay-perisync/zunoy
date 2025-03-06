@@ -162,7 +162,9 @@ export const fetchProducts = async () => {
   try {
     const token = localStorage.getItem("at"); 
     
-    const response = await fetch("https://znginx.perisync.work/api/v1/acc/products", {
+    // const response = await fetch("https://znginx.perisync.work/api/v1/acc/products", {
+      const response = await fetch(`${AccountsRootUrl}/products`, {
+
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -188,7 +190,8 @@ export const fetchProducts = async () => {
 
 
 export const requestOtpFor2FA = async (password) => {
-    const url = `https://znginx.perisync.work/api/v1/acc/account/toggleTwoFA?status=true&password=${encodeURIComponent(password)}&otp=0&reqOtp=false`;
+    // const url = `https://znginx.perisync.work/api/v1/acc/account/toggleTwoFA?status=true&password=${encodeURIComponent(password)}&otp=0&reqOtp=false`;
+    const url = `${AccountsRootUrl}/account/toggleTwoFA?status=true&password=${encodeURIComponent(password)}&otp=0&reqOtp=false`;
 
     try {
         const response = await fetch(url, {
@@ -222,7 +225,8 @@ export const requestOtpFor2FA = async (password) => {
 
 export const toggleTwoFA = async (password, otp, status) => {
   const otpString = otp.join("");
-  const url = `https://znginx.perisync.work/api/v1/acc/account/toggleTwoFA?status=${status}&password=${encodeURIComponent(password)}&otp=${otpString}&reqOtp=false`;
+  // const url = `https://znginx.perisync.work/api/v1/acc/account/toggleTwoFA?status=${status}&password=${encodeURIComponent(password)}&otp=${otpString}&reqOtp=false`;
+  const url = `${AccountsRootUrl}/account/toggleTwoFA?status=${status}&password=${encodeURIComponent(password)}&otp=${otpString}&reqOtp=false`;
 
   try {
       const response = await fetch(url, {
@@ -251,8 +255,11 @@ export const toggleTwoFA = async (password, otp, status) => {
 
 export const fetchSessions = async (authToken) => {
   try {
+    // const response = await fetch(
+    //   "https://znginx.perisync.work/api/v1/acc/account/session?page=1&size=100&search=",
     const response = await fetch(
-      "https://znginx.perisync.work/api/v1/acc/account/session?page=1&size=100&search=",
+      `${AccountsRootUrl}/account/session?page=1&size=100&search=`,
+    
       {
         method: "GET",
         headers: {
