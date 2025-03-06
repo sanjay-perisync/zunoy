@@ -61,7 +61,9 @@ export const verifyEmail = async (email) => {
 
 
 export const verifyOtp = async (email, otp) => {
-  return axios.put("https://znginx.perisync.work/api/v1/acc/verifyOtp", {
+  // return axios.put("https://znginx.perisync.work/api/v1/acc/verifyOtp", {
+    return axios.put(`${AccountsRootUrl}/verifyOtp`, {
+
     email,
     otp: parseInt(otp, 10), 
   });
