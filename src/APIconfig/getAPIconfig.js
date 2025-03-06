@@ -306,6 +306,8 @@ export const fetchSupportTickets = async (page = 1, size = 5, searchKey = "", st
 };
 
 
+
+
 export const fetchStatusCounts = async (searchKey = "", productId = "") => {
   const token = localStorage.getItem("at"); 
 

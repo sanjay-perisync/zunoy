@@ -48,6 +48,13 @@ function Support() {
     setStatusCounts(response || {});
   };
 
+  const productLogos = {
+    "FormFlow": "https://account.zunoy.com/images/zoopform.svg",
+    "MockAPI": "https://account.zunoy.com/images/zoopapi.svg",
+    "WatchTower": "https://account.zunoy.com/images/zooptime.svg",
+    "Accounts": "https://dev-account.zoop360.com/images/zunoy.svg",
+  };
+  
   return (
     <Box>
       <Box position="sticky" top={0} zIndex={10} bgcolor="white">
@@ -188,13 +195,41 @@ function Support() {
                       No Tickets found.
                     </div>
                   ) : (
-                    <ul>
+                    <table className="min-w-full border border-gray-200 rounded-md">
+                    <thead className="bg-gray-100 text-gray-700">
+                      <tr>
+                        <th className="p-3 text-left">Id</th>
+                        <th className="p-3 text-left">Product</th>
+                        <th className="p-3 text-left">Status</th>
+                        <th className="p-3 text-left">Priority</th>
+                        <th className="p-3 text-left">Created at</th>
+                      </tr>
+                    </thead>
+                    <tbody>
                       {tickets.map((ticket) => (
-                        <li key={ticket.id} className="p-3 border-b">
-                          <strong>{ticket.title}</strong> - {ticket.status}
-                        </li>
+                        <tr key={ticket.id} className="border-b">
+                          <td className="p-3">{ticket.id}</td>
+                          <td className="p-3 flex items-center gap-2">
+                            <img
+                              src={productLogos[ticket.product?.name] || "https://via.placeholder.com/40"}
+                              alt={ticket.product?.name}
+                              className="w-6 h-6"
+                            />
+                            {ticket.product?.name}
+                          </td>
+                          <td className="p-3">
+                            <span className="bg-red-100 text-red-500 px-2 py-1 rounded-full">{ticket.status}</span>
+                          </td>
+                          <td className="p-3">
+                            <span className="bg-orange-100 text-orange-500 px-2 py-1 rounded-full">{ticket.priority}</span>
+                          </td>
+                          <td className="p-3">{new Date(ticket.createdAt).toLocaleString()}</td>
+                        </tr>
                       ))}
-                    </ul>
+                    </tbody>
+                  </table>
+                  
+
                   )}
                 </Box>
 

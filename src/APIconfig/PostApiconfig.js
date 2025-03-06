@@ -220,3 +220,32 @@ export const loginUser = async (email, password) => {
     throw error.response?.data || error.message;
   }
 };
+
+
+
+
+
+const API_BASE_URL = "https://znginx.perisync.work/api/v1";
+
+export const createSupportTicket = async (ticketData) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/support`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("at")}`, 
+            },
+            body: JSON.stringify(ticketData),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            return { success: true, data };
+        } else {
+            return { success: false, error: data.msg || "Failed to create ticket." };
+        }
+    } catch (error) {
+        return { success: false, error: "An error occurred. Please try again." };
+    }
+};
