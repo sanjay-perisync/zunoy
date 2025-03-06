@@ -11,7 +11,7 @@ export const VerifyOtpApi = (data, setLoader, setStatus, navigate) => {
     putAPICall(`${AccountsRootUrl}/verifyOtp`, data)
       .then((res) => {
         setLoader(false);
-        console.log("✅ API Response:", res);
+        console.log("API Response:", res);
 
         if (res?.data?.msg === "verified successfully") {
           setStatus("otp verified");
@@ -23,7 +23,7 @@ export const VerifyOtpApi = (data, setLoader, setStatus, navigate) => {
           if (identifier) {
             localStorage.setItem("identifier", identifier);  
           } else {
-            console.error("❌ Identifier is missing in API response:", res?.data);
+            console.error(" Identifier is missing in API response:", res?.data);
           }
 
           if (email) {
