@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import Mainpagefooter from "./Mainpagefooter";
-import { fetchSupportTickets } from "../APIconfig/getAPIconfig";
+import { fetchSupportTickets, fetchStatusCounts } from "../APIconfig/getAPIconfig";
 import {
   Box,
   Paper,
@@ -25,6 +25,7 @@ function Support() {
   const [searchFocus, setSearchFocus] = useState(false);
   const [tickets, setTickets] = useState([]);
   const [totalTickets, setTotalTickets] = useState(0);
+  const [statusCounts, setStatusCounts] = useState({});
   const [page, setPage] = useState(1);
   const [searchKey, setSearchKey] = useState("");
 
@@ -32,6 +33,7 @@ function Support() {
 
   useEffect(() => {
     loadTickets();
+    loadStatusCounts();
   }, [page, activeTab, selectedProduct, searchKey]);
 
   const loadTickets = async () => {
@@ -39,6 +41,11 @@ function Support() {
     const response = await fetchSupportTickets(page, 5, searchKey, status, "", selectedProduct);
     setTickets(response.data || []);
     setTotalTickets(response.total || 0);
+  };
+
+  const loadStatusCounts = async () => {
+    const response = await fetchStatusCounts(searchKey, selectedProduct);
+    setStatusCounts(response || {});
   };
 
   return (
@@ -79,7 +86,8 @@ function Support() {
                           setPage(1);
                         }}
                       >
-                        {tab}
+                     {tab} {statusCounts[tab.toLowerCase()] > 0 ? `(${statusCounts[tab.toLowerCase()]})` : ""}
+
                       </Button>
                     </Grid>
                   ))}
@@ -94,7 +102,6 @@ function Support() {
                       variant="filled"
                       placeholder="Search by product, name, email"
                       value={searchKey}
-                     
                       onChange={(e) => setSearchKey(e.target.value)}
                       onFocus={() => setSearchFocus(true)}
                       onBlur={() => setSearchFocus(false)}
@@ -118,7 +125,6 @@ function Support() {
                           display: "none",
                         },
                       }}
-                  
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position="start">
@@ -152,13 +158,11 @@ function Support() {
                           display: "none",
                         },
                       }}
-                  
                     >
                       <InputLabel id="product-select-label">Product/Service</InputLabel>
                       <Select
                         labelId="product-select-label"
                         value={selectedProduct}
-                        
                         onChange={(e) => setSelectedProduct(e.target.value)}
                         onFocus={() => setFocused(true)}
                         onBlur={() => setFocused(false)}

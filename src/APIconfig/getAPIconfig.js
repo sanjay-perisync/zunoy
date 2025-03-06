@@ -304,3 +304,27 @@ export const fetchSupportTickets = async (page = 1, size = 5, searchKey = "", st
     return { data: null, total: 0 };
   }
 };
+
+
+export const fetchStatusCounts = async (searchKey = "", productId = "") => {
+  const token = localStorage.getItem("at"); 
+
+  try {
+    const response = await fetch(
+      `https://znginx.perisync.work/api/v1/support/statusCount?searchKey=${searchKey}&productId=${productId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching status counts:", error);
+    return { all: 0, closed: 0, inProgress: 0, open: 0, resolved: 0 };
+  }
+};
