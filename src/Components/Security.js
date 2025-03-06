@@ -354,6 +354,7 @@ function Security() {
             sortable: false,
             resizable: false,
             disableColumnMenu: true,
+            
             renderCell: (params) => {
                 const session = params.row;
                 return (
