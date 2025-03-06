@@ -9,11 +9,12 @@ function Navbar() {
 
 
   const activeTab =
-    location.pathname === "/account" ? "Account" :
-      location.pathname === "/billing" ? "Billing" :
-        location.pathname === "/security" ? "Security" :
-          location.pathname === "/support" ? "Support" :
-            "All apps"; 
+  location.pathname.startsWith("/support") ? "Support" :
+  location.pathname === "/account" ? "Account" :
+  location.pathname === "/billing" ? "Billing" :
+  location.pathname === "/security" ? "Security" :
+  "All apps";
+   
 
   return (
     <div>

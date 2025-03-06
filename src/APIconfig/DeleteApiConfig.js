@@ -60,7 +60,7 @@ export const LogoutApi = ({ setloader }) => {
         console.log("Logout API Success:", res);
         setloader(false);
         localStorage.clear();
-        toast.success("You've logged out successfully");
+        // toast.success("You've logged out successfully");
         resolve(res);
       })
       .catch((err) => {
@@ -75,13 +75,6 @@ export const LogoutApi = ({ setloader }) => {
         }
         reject(err);
       })
-      .finally(() => {
-        console.log(" Waiting 3 seconds before redirecting...");
-        setTimeout(() => {
-          console.log("Redirecting now...");
-          window.location.href = "/";
-        }, 3000);
-      });
   });
 };
 

@@ -12,6 +12,7 @@ import Account from "./Components/Account";
 import Security from "./Components/Security";
 import Support from "./Components/Support";
 import Billing from "./Components/Billing";
+import CreateTicket from "./Components/CreateTicket";
 
 function App() {
   return (
@@ -30,6 +31,8 @@ function App() {
             <Route path="/security" element={<Security />} />
             <Route path="/support" element={<Support />} />
             <Route path="/billing" element={<Billing />} />
+            <Route path="/support/create" element={<CreateTicket />} />
+
           </Routes>
         </div>
       </Router>

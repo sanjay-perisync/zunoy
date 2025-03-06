@@ -276,3 +276,31 @@ export const fetchSessions = async (authToken) => {
   }
 };
 
+
+
+
+
+const API_BASE_URL = "https://znginx.perisync.work/api/v1/support";
+
+export const fetchSupportTickets = async (page = 1, size = 5, searchKey = "", status = "all", userId = "", productId = "") => {
+  const token = localStorage.getItem("at"); 
+
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/tickets?page=${page}&size=${size}&searchKey=${searchKey}&status=${status}&userId=${userId}&productId=${productId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching support tickets:", error);
+    return { data: null, total: 0 };
+  }
+};
