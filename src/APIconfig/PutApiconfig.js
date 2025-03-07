@@ -55,7 +55,7 @@ export const VerifyOtpApi = (data, setLoader, setStatus, navigate) => {
 const API_BASE_URL = "https://znginx.perisync.work/api/v1/acc";
 
 export const verifyEmail = async (email) => {
-  return await axios.put(`${API_BASE_URL}/forgotPassword`, { email });
+  return await axios.put(`${API_BASE_URL}/forgotPassword`, { email }); 
 };
 
 
