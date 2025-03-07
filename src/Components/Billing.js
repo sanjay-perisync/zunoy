@@ -36,14 +36,14 @@ function Billing() {
       <Navbar />
       <div className="mx-auto max-w-[1400px] my-5">
 
-        <Tabs value={activeTab} onChange={(_, newValue) => setActiveTab(newValue)} indicatorColor="primary">
+        <Tabs value={activeTab} onChange={(_, newValue) => setActiveTab(newValue)} indicatorColor="primary" className="px-2">
           <Tab label="Billing Address" />
           <Tab label="Invoice" />
         </Tabs>
 
 
         {activeTab === 0 && (
-          <div className="border rounded-xl mt-5 p-0">
+          <div className="border rounded-xl mt-5 p-0 mx-2">
             {!showForm && (
               <div className="flex justify-between items-center border-b border-gray-300 p-4">
                 <h6 className="font-semibold text-xl">Billing Information</h6>

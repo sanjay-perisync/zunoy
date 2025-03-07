@@ -126,10 +126,12 @@ function Support() {
             fontSize: "14px",
             fontWeight: "500",
             textTransform: "capitalize",
+            borderColor: "gray", 
           }}
         />
       ),
     },
+    
 
     {
       field: "priority",

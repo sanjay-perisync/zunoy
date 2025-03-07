@@ -439,7 +439,7 @@ function Security() {
 
                                     {isDialogOpen && (
                                         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center px-4 z-50">
-                                            <div className="bg-white rounded-lg shadow-lg max-w-xl w-full p-6" ref={modalRef} >
+                                            <div className="bg-white rounded-lg shadow-lg max-w-xl w-ful" ref={modalRef} >
                                                 <h2 className="text-[24px] font-semibold">Enter password & validate</h2>
 
 
@@ -597,76 +597,6 @@ function Security() {
                         </div>
 
 
-                        {/* <div className="w-full">
-                            <table className="w-full ">
-                           
-                                <thead>
-                                    <tr className="bg-gray-100 text-gray-600 text-left">
-                                        <th className="py-3 px-5 text-sm">Device Name</th>
-                                        <th className="py-3 px-5 text-sm">Location</th>
-                                        <th className="py-3 px-5 text-sm">Last Used</th>
-                                        <th className="py-3 px-5 text-sm text-center">Actions</th>
-                                    </tr>
-                                </thead>
-
-                            
-                                <tbody>
-                                    {sessions.length > 0 ? (
-                                        sessions.map((session) => (
-                                            <tr key={session.id} className="border-t">
-                                                <td className="py-4 px-5 text-sm">{session.browser}</td>
-                                                <td className="py-4 px-5 text-sm">{session.location}</td>
-                                                <td className="py-4 px-5 text-sm">
-                                                    {new Date(session.lastUsed).toLocaleDateString("en-GB", {
-                                                        day: "2-digit",
-                                                        month: "short",
-                                                        year: "numeric",
-                                                    })}
-                                                    ,{" "}
-                                                    {new Date(session.lastUsed).toLocaleTimeString("en-US", {
-                                                        hour: "2-digit",
-                                                        minute: "2-digit",
-                                                        hour12: true,
-                                                    })}
-                                                </td>
-                                                <td className="py-4 px-4 text-sm text-center">
-                                                    <button
-                                                        className={`text-gray-500 ${session.current ? "cursor-not-allowed opacity-50" : "hover:text-red-500"
-                                                            }`}
-                                                        onClick={() => handleDeleteClick(session)}
-                                                        disabled={session.current}
-                                                    >
-                                                        <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            width="24"
-                                                            height="24"
-                                                            viewBox="0 0 24 24"
-                                                        >
-                                                            <path
-                                                                fill={session.current ? "gray" : "red"}
-                                                                d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6zM8 9h8v10H8zm7.5-5l-1-1h-5l-1 1H5v2h14V4z"
-                                                            />
-                                                        </svg>
-                                                    </button>
-                                                </td>
-
-                                            </tr>
-                                        ))
-                                    ) : (
-                                        <tr>
-                                            <td colSpan="3" className="text-center py-4 text-gray-500">
-                                                No active sessions found.
-                                            </td>
-                                        </tr>
-                                    )}
-                                </tbody>
-
-
-
-
-                            </table>
-                        </div> */}
-
 <div className="w-full">
  
     <DataGrid
@@ -748,15 +678,15 @@ function Security() {
 
             {isModalOpen && selectedSession && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20">
-                    <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full">
-                        <h2 className="text-lg font-semibold">Confirmation!</h2>
-                        <p className="mt-2 text-sm text-gray-600">
+                    <div className="bg-white  rounded-xl shadow-lg max-w-sm w-full">
+                        <h2 className="text-2xl font-semibold border-b p-4">Confirmation!</h2>
+                        <p className="mt-2 px-4 py-2 text-[20px] text-gray-600 font-semibold">
                             Would you like to delete this session?
                         </p>
-                        <p className="mt-1 text-xs text-gray-500 break-all">
+                        <p className="mt-1 px-4 text-sm text-gray-500 break-all">
                             {selectedSession.session}
                         </p>
-                        <div className="mt-4 flex justify-end space-x-2">
+                        <div className="mt-4 flex justify-end space-x-2 p-4">
                             <button
                                 className="px-4 py-2 text-gray-600 border rounded-lg"
                                 onClick={() => setIsModalOpen(false)}

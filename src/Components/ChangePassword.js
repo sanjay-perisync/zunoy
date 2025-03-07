@@ -340,7 +340,7 @@ const ChangePassword = ({ is2FAEnabled, onLogout }) => {
 
 <div className="flex justify-center mt-4">
   <button  
-    className="bg-indigo-500 hover:bg-indigo-600 px-6 py-2 rounded-lg text-white" 
+    className="bg-indigo-500 hover:bg-indigo-600 px-5 py-2 rounded-lg font-semibold text-white" 
     onClick={handleUpdatePassword}
   >
     Update Password
