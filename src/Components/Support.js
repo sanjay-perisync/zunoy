@@ -126,12 +126,12 @@ function Support() {
             fontSize: "14px",
             fontWeight: "500",
             textTransform: "capitalize",
-            borderColor: "gray", 
+            borderColor: "gray",
           }}
         />
       ),
     },
-    
+
 
     {
       field: "priority",
@@ -140,13 +140,13 @@ function Support() {
       minWidth: 120,
       disableColumnMenu: true,
       renderCell: (params) => {
-        let bgColor = "#1976D2"; 
+        let bgColor = "#1976D2";
         if (params.value?.toLowerCase() === "high") {
           bgColor = "#D32F2F";
         } else if (params.value?.toLowerCase() === "medium") {
-          bgColor = "#FFA500"; 
+          bgColor = "#FFA500";
         }
-    
+
         return (
           <Chip
             label={params.value}
@@ -218,17 +218,24 @@ function Support() {
                         borderBottom: activeTab === tab ? 2 : 0,
                         borderColor: activeTab === tab ? "primary.main" : "transparent",
                         borderRadius: 0,
+                        textTransform: "none",
                       }}
                       onClick={() => {
                         setActiveTab(tab);
                         setPage(1);
                       }}
                     >
-                      {tab} {statusCounts[tab.toLowerCase()] > 0 ? `(${statusCounts[tab.toLowerCase()]})` : ""}
+                      {tab}{" "}
+                      {statusCounts[tab.toLowerCase()] > 0 && (
+                        <span className="bg-indigo-100 text-indigo-700 px-3  rounded-full ml-2">
+                          {statusCounts[tab.toLowerCase()]}
+                        </span>
+                      )}
                     </Button>
                   </Grid>
                 ))}
               </Grid>
+
             </Box>
 
             <Grid container spacing={2} alignItems="center" mb={3}>
@@ -269,39 +276,39 @@ function Support() {
                 />
               </Grid>
               <Grid item xs={12} md={4}>
-              <FormControl
-  fullWidth
-  variant="filled"
-  sx={{
-    "& .MuiInputBase-root": {
-      border: "3px solid",
-      borderColor: focused ? "#1976D2" : "#F8F8F8",
-      borderRadius: "8px",
-      backgroundColor: "white",
-      transition: "border-color 0.3s ease",
-    },
-    "& .MuiInputBase-root:hover": {
-      borderColor: focused ? "#1976D2" : "#BEBEBE",
-      backgroundColor: "#F8F8F8",
-    },
-    "& .MuiInputBase-root.Mui-focused": {
-      borderColor: "#1976D2",
-      backgroundColor: "white",
-    },
-    "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
-      display: "none",
-    },
-  }}
->
-  <InputLabel>Product/Service</InputLabel>
-  <Select value={selectedProduct} onChange={(e) => setSelectedProduct(e.target.value)}>
-    <MenuItem value="">All</MenuItem>
-    <MenuItem value="Zunoy-ACC">Zunoy-ACC</MenuItem>
-    <MenuItem value="Zunoy-Watch Tower">Zunoy-Watch Tower</MenuItem>
-    <MenuItem value="Zunoy-Endpoint">Zunoy-Endpoint</MenuItem>
-    <MenuItem value="Zunoy-FormFlow">Zunoy-FormFlow</MenuItem>
-  </Select>
-</FormControl>
+                <FormControl
+                  fullWidth
+                  variant="filled"
+                  sx={{
+                    "& .MuiInputBase-root": {
+                      border: "3px solid",
+                      borderColor: focused ? "#1976D2" : "#F8F8F8",
+                      borderRadius: "8px",
+                      backgroundColor: "white",
+                      transition: "border-color 0.3s ease",
+                    },
+                    "& .MuiInputBase-root:hover": {
+                      borderColor: focused ? "#1976D2" : "#BEBEBE",
+                      backgroundColor: "#F8F8F8",
+                    },
+                    "& .MuiInputBase-root.Mui-focused": {
+                      borderColor: "#1976D2",
+                      backgroundColor: "white",
+                    },
+                    "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+                      display: "none",
+                    },
+                  }}
+                >
+                  <InputLabel>Product/Service</InputLabel>
+                  <Select value={selectedProduct} onChange={(e) => setSelectedProduct(e.target.value)}>
+                    <MenuItem value="">All</MenuItem>
+                    <MenuItem value="Zunoy-ACC">Zunoy-ACC</MenuItem>
+                    <MenuItem value="Zunoy-Watch Tower">Zunoy-Watch Tower</MenuItem>
+                    <MenuItem value="Zunoy-Endpoint">Zunoy-Endpoint</MenuItem>
+                    <MenuItem value="Zunoy-FormFlow">Zunoy-FormFlow</MenuItem>
+                  </Select>
+                </FormControl>
 
 
               </Grid>
@@ -335,7 +342,7 @@ function Support() {
                   columns={columns}
                   hideFooter={true}
                   autoHeight
-                  onRowClick={(params) => navigate(`/support/details/${params.row.id}`)} 
+                  onRowClick={(params) => navigate(`/support/details/${params.row.id}`)}
                   sx={{
                     "& .MuiDataGrid-columnSeparator": { display: "none" },
                     "& .MuiDataGrid-columnHeaders": { borderBottom: "none" },
