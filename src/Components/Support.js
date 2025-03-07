@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import Mainpagefooter from "./Mainpagefooter";
 import { fetchSupportTickets, fetchStatusCounts } from "../APIconfig/getAPIconfig";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Paper,
@@ -15,7 +16,9 @@ import {
   InputAdornment,
   Pagination,
   Typography,
-  IconButton
+  IconButton,
+  Chip,
+  CircularProgress
 } from "@mui/material";
 import { Add as AddIcon, Search as SearchIcon } from "@mui/icons-material";
 import { Link } from "react-router-dom";
@@ -24,23 +27,12 @@ import { DataGrid } from "@mui/x-data-grid";
 
 const productLogos = {
   FormFlow: "https://account.zunoy.com/images/zoopform.svg",
-  MockAPI: "https://account.zunoy.com/images/zoopapi.svg",
+  Endpoint: "https://account.zunoy.com/images/zoopapi.svg",
   WatchTower: "https://account.zunoy.com/images/zooptime.svg",
   Accounts: "https://dev-account.zoop360.com/images/zunoy.svg",
 };
 
-const statusStyles = {
-  Open: { color: "#D32F2F", background: "#FFF0F0" },
-  "In Progress": { color: "#1565C0", background: "#E3F2FD" },
-  Resolved: { color: "#2E7D32", background: "#E8F5E9" },
-  Closed: { color: "#616161", background: "#F5F5F5" },
-};
 
-const priorityStyles = {
-  High: { color: "#FFFFFF", background: "#D32F2F" },
-  Medium: { color: "#FFFFFF", background: "#FB8C00" },
-  Low: { color: "#FFFFFF", background: "#1976D2" },
-};
 
 function Support() {
   const [activeTab, setActiveTab] = useState("All");
@@ -51,141 +43,149 @@ function Support() {
   const [statusCounts, setStatusCounts] = useState({});
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
-
+  const [pageSize, setPageSize] = useState(5);
+  const [focused, setFocused] = useState(false);
+  const navigate = useNavigate();
   const tabs = ["All", "Open", "In Progress", "Resolved", "Closed"];
+
+
 
   useEffect(() => {
     loadTickets();
     loadStatusCounts();
-  }, [page, activeTab, selectedProduct, searchKey]);
+  }, [page, pageSize, activeTab, selectedProduct, searchKey]);
 
-  const loadTickets = async () => {
+
+
+  const loadTickets = async (currentPage = page, currentPageSize = pageSize) => {
     setLoading(true);
     const status = activeTab === "All" ? "all" : activeTab.toLowerCase();
-    const response = await fetchSupportTickets(page, 5, searchKey, status, "", selectedProduct);
+    const response = await fetchSupportTickets(
+      currentPage,
+      currentPageSize,
+      searchKey,
+      status,
+      "",
+      selectedProduct
+    );
     setTickets(response.data || []);
     setTotalTickets(response.total || 0);
     setLoading(false);
   };
-
   const loadStatusCounts = async () => {
     const response = await fetchStatusCounts(searchKey, selectedProduct);
     setStatusCounts(response || {});
   };
 
- 
 
-const columns = [
-  { 
-    field: "id", 
-    headerName: "Id", 
-    flex: 0.5, 
-    minWidth: 80, 
-    sortable: true, 
-    disableColumnMenu: true 
-  },
-  
-  {
-    field: "product",
-    headerName: "Product",
-    flex: 2,
-    minWidth: 200,
-    sortable: true, 
-    disableColumnMenu: true,
-    renderCell: (params) => (
-      <Box display="flex" alignItems="center" gap={1}>
-        <img
-          src={productLogos[params.value?.name] || ""}
-          alt={params.value?.name}
-          style={{ width: 24, height: 24 }}
+
+  const columns = [
+    {
+      field: "id",
+      headerName: "Id",
+      flex: 0.5,
+      minWidth: 80,
+      sortable: true,
+      disableColumnMenu: true
+    },
+
+    {
+      field: "product",
+      headerName: "Product",
+      flex: 2,
+      minWidth: 200,
+      sortable: true,
+      disableColumnMenu: true,
+      renderCell: (params) => (
+        <Box display="flex" alignItems="center" gap={1}>
+          <img
+            src={productLogos[params.value?.name] || ""}
+            alt={params.value?.name}
+            style={{ width: 24, height: 24 }}
+          />
+          <span style={{ fontWeight: "500", color: "#495057" }}>
+            {params.value?.name}
+          </span>
+        </Box>
+      ),
+    },
+
+    {
+      field: "status",
+      headerName: "Status",
+      flex: 1.5,
+      minWidth: 150,
+      sortable: true,
+      disableColumnMenu: true,
+      renderCell: (params) => (
+        <Chip
+          label={params.value}
+          color={params.value === "Open" ? "primary" : "error"}
+          variant="outlined"
+          sx={{
+            fontSize: "14px",
+            fontWeight: "500",
+            textTransform: "capitalize",
+          }}
         />
-        <span style={{ fontWeight: "500", color: "#495057" }}>
-          {params.value?.name}
-        </span>
-      </Box>
-    ),
-  },
-  
-  {
-    field: "status",
-    headerName: "Status",
-    flex: 1.5,
-    minWidth: 150,
-    sortable: true, 
-    disableColumnMenu: true,
-    renderCell: (params) => {
-     
-      return (
-        <Box
-          sx={{
-            color: statusStyles[params.value]?.color,
-            backgroundColor: statusStyles[params.value]?.background,
-            padding: "4px 12px",
-            borderRadius: "16px",
-            fontWeight: "500",
-            fontSize: "0.8125rem",
-            textTransform: "capitalize",
-            display: "inline-block",
-          }}
-        >
-          {params.value}
-        </Box>
-      );
+      ),
     },
-  },
-  
-  {
-    field: "priority",
-    headerName: "Priority",
-    flex: 1.5,
-    minWidth: 120,
-    disableColumnMenu: true,
-    renderCell: (params) => {
+
+    {
+      field: "priority",
+      headerName: "Priority",
+      flex: 1.5,
+      minWidth: 120,
+      disableColumnMenu: true,
+      renderCell: (params) => {
+        let bgColor = "#1976D2"; 
+        if (params.value?.toLowerCase() === "high") {
+          bgColor = "#D32F2F";
+        } else if (params.value?.toLowerCase() === "medium") {
+          bgColor = "#FFA500"; 
+        }
     
-      return (
-        <Box
-          sx={{
-            color: priorityStyles[params.value]?.color,
-            backgroundColor: priorityStyles[params.value]?.background,
-            padding: "4px 12px",
-            borderRadius: "16px",
-            fontWeight: "500",
-            fontSize: "0.8125rem",
-            textAlign: "center",
-            textTransform: "capitalize",
-            display: "inline-block",
-          }}
-        >
-          {params.value}
-        </Box>
-      );
-    },
-  },
-  {
-    field: "createdAt",
-    headerName: "Created at",
-    flex: 1,
-    minWidth: 200,
-    disableColumnMenu: true,
-    renderCell: (params) => (
-      <span className="p-3">
-        {params.value
-          ? new Date(params.value).toLocaleString("en-GB", {
+        return (
+          <Chip
+            label={params.value}
+            sx={{
+              backgroundColor: bgColor,
+              color: "white",
+              borderRadius: "14px",
+              fontSize: "14px",
+              textTransform: "capitalize",
+            }}
+          />
+        );
+      },
+    }
+    ,
+
+    {
+      field: "createdAt",
+      headerName: "Created at",
+      flex: 1,
+      minWidth: 200,
+      disableColumnMenu: true,
+      renderCell: (params) => (
+        <span className="p-3">
+          {params.value
+            ? new Date(params.value).toLocaleString("en-GB", {
               day: "2-digit",
               month: "short",
               year: "numeric",
               hour: "2-digit",
               minute: "2-digit",
-              hour12: true, 
+              hour12: true,
             })
-          : "N/A"}
-      </span>
-    ),
-  },
-  
-];
-  
-  
+            : "N/A"}
+        </span>
+      ),
+    },
+
+  ];
+
+
 
   return (
     <Box>
@@ -237,6 +237,26 @@ const columns = [
                   placeholder="Search by product, name, email"
                   value={searchKey}
                   onChange={(e) => setSearchKey(e.target.value)}
+                  sx={{
+                    "& .MuiInputBase-root": {
+                      border: "3px solid",
+                      borderColor: focused ? "#1976D2" : "#F8F8F8",
+                      borderRadius: "8px",
+                      backgroundColor: "white",
+                      transition: "border-color 0.3s ease",
+                    },
+                    "& .MuiInputBase-root:hover": {
+                      borderColor: focused ? "#1976D2" : "#BEBEBE",
+                      backgroundColor: "#F8F8F8",
+                    },
+                    "& .MuiInputBase-root.Mui-focused": {
+                      borderColor: "#1976D2",
+                      backgroundColor: "white",
+                    },
+                    "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+                      display: "none",
+                    },
+                  }}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -247,94 +267,146 @@ const columns = [
                 />
               </Grid>
               <Grid item xs={12} md={4}>
-                <FormControl fullWidth variant="filled">
-                  <InputLabel>Product/Service</InputLabel>
-                  <Select value={selectedProduct} onChange={(e) => setSelectedProduct(e.target.value)}>
-                    <MenuItem value="">All</MenuItem>
-                    <MenuItem value="Zunoy-ACC">Zunoy-ACC</MenuItem>
-                    <MenuItem value="Zunoy-Watch Tower">Zunoy-Watch Tower</MenuItem>
-                    <MenuItem value="Zunoy-Endpoint">Zunoy-Endpoint</MenuItem>
-                  </Select>
-                </FormControl>
+              <FormControl
+  fullWidth
+  variant="filled"
+  sx={{
+    "& .MuiInputBase-root": {
+      border: "3px solid",
+      borderColor: focused ? "#1976D2" : "#F8F8F8",
+      borderRadius: "8px",
+      backgroundColor: "white",
+      transition: "border-color 0.3s ease",
+    },
+    "& .MuiInputBase-root:hover": {
+      borderColor: focused ? "#1976D2" : "#BEBEBE",
+      backgroundColor: "#F8F8F8",
+    },
+    "& .MuiInputBase-root.Mui-focused": {
+      borderColor: "#1976D2",
+      backgroundColor: "white",
+    },
+    "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+      display: "none",
+    },
+  }}
+>
+  <InputLabel>Product/Service</InputLabel>
+  <Select value={selectedProduct} onChange={(e) => setSelectedProduct(e.target.value)}>
+    <MenuItem value="">All</MenuItem>
+    <MenuItem value="Zunoy-ACC">Zunoy-ACC</MenuItem>
+    <MenuItem value="Zunoy-Watch Tower">Zunoy-Watch Tower</MenuItem>
+    <MenuItem value="Zunoy-Endpoint">Zunoy-Endpoint</MenuItem>
+    <MenuItem value="Zunoy-FormFlow">Zunoy-FormFlow</MenuItem>
+  </Select>
+</FormControl>
+
+
               </Grid>
             </Grid>
 
 
 
-            
-            <DataGrid
-  rows={tickets}
-  columns={columns}
-  pageSize={5} 
-  pagination
-  paginationMode="server"
-  rowCount={totalTickets} 
-  onPageChange={(newPage) => setPage(newPage + 1)} 
-  loading={loading}
-  autoHeight
-  sx={{
-    "& .MuiDataGrid-columnSeparator": { display: "none" },
-    "& .MuiDataGrid-columnHeaders": { borderBottom: "none" },
-    "& .MuiDataGrid-cell": { borderBottom: "none" },
-  }}
-/>
-
-<Box
-  display="flex"
-  justifyContent="flex-end"
-  alignItems="center"
-  gap={2}
-  mt={2}
-  px={1}
-  py={1}
-  sx={{ borderTop: "1px solid #f0f0f0" }}
->
-
-  <Box display="flex" alignItems="center" gap={1}>
-    <Typography variant="body2" color="text.secondary">
-      Rows per page:
-    </Typography>
-    <Select
-      value={5}
-      size="small"
-      onChange={(e) => {
-        setPage(1); 
-        loadTickets(); 
-      }}
-      sx={{ minWidth: 70, height: 32, fontSize: "0.875rem" }}
-    >
-      <MenuItem value={5}>5</MenuItem>
-      <MenuItem value={10}>10</MenuItem>
-      <MenuItem value={25}>25</MenuItem>
-    </Select>
-  </Box>
 
 
-  <Box display="flex" alignItems="center">
-    <Typography variant="body2" color="text.secondary" sx={{ mr: 1 }}>
-      {`${(page - 1) * 5 + 1}-${Math.min(page * 5, totalTickets)} of ${totalTickets}`}
-    </Typography>
-    <Box display="flex">
-      <IconButton
-        size="small"
-        onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-        disabled={page === 1}
-      >
-        <span>&lt;</span>
-      </IconButton>
-      <IconButton
-        size="small"
-        onClick={() => setPage((prev) => (prev * 5 < totalTickets ? prev + 1 : prev))}
-        disabled={page * 5 >= totalTickets}
-      >
-        <span>&gt;</span>
-      </IconButton>
-    </Box>
-  </Box>
-</Box>
+            {loading ? (
+              <Box display="flex" justifyContent="center" alignItems="center" py={4}>
+                <CircularProgress />
+              </Box>
+            ) : tickets.length === 0 ? (
+              <Box py={4} textAlign="center">
+                <div className="flex flex-col justify-center items-center">
+                  <img
+                    src="https://dev-account.zoop360.com/assets/errors/no-data.svg"
+                    alt="No tickets"
+                    className="h-64 w-42"
+                  />
+                  <Typography variant="body1" color="text.secondary">
+                    No Tickets found.
+                  </Typography>
+                </div>
+              </Box>
+            ) : (
+              <>
+                <DataGrid
+                  rows={tickets}
+                  columns={columns}
+                  hideFooter={true}
+                  autoHeight
+                  onRowClick={(params) => navigate(`/support/details/${params.row.id}`)} 
+                  sx={{
+                    "& .MuiDataGrid-columnSeparator": { display: "none" },
+                    "& .MuiDataGrid-columnHeaders": { borderBottom: "none" },
+                    "& .MuiDataGrid-cell": { borderBottom: "none" },
+                  }}
+                />
 
+                <Box
+                  display="flex"
+                  justifyContent="flex-end"
+                  alignItems="center"
+                  gap={2}
+                  mt={2}
+                  px={1}
+                  py={1}
+                  sx={{ borderTop: "1px solid #f0f0f0" }}
+                >
+                  <Box display="flex" justifyContent={"flex-end"} alignItems="center" gap={1}>
+                    <Typography variant="body2" color="text.secondary">
+                      Rows per page:
+                    </Typography>
+                    <Select
+                      value={pageSize}
+                      size="small"
+                      onChange={(e) => {
+                        const newPageSize = e.target.value;
+                        setPageSize(newPageSize);
+                        setPage(1);
+                        loadTickets(1, newPageSize);
+                      }}
+                      sx={{ minWidth: 70, height: 32, fontSize: "0.875rem" }}
+                    >
+                      <MenuItem value={5}>5</MenuItem>
+                      <MenuItem value={10}>10</MenuItem>
+                      <MenuItem value={25}>25</MenuItem>
+                    </Select>
+                  </Box>
 
-            
+                  <Box display="flex" alignItems="center">
+                    <Typography variant="body2" color="text.secondary" sx={{ mr: 1 }}>
+                      {`${(page - 1) * pageSize + 1}-${Math.min(page * pageSize, totalTickets)} of ${totalTickets}`}
+                    </Typography>
+                    <Box display="flex">
+                      <IconButton
+                        size="small"
+                        onClick={() => {
+                          const newPage = Math.max(page - 1, 1);
+                          setPage(newPage);
+                          loadTickets(newPage, pageSize);
+                        }}
+                        disabled={page === 1}
+                      >
+                        <span>&lt;</span>
+                      </IconButton>
+                      <IconButton
+                        size="small"
+                        onClick={() => {
+                          if (page * pageSize < totalTickets) {
+                            const newPage = page + 1;
+                            setPage(newPage);
+                            loadTickets(newPage, pageSize);
+                          }
+                        }}
+                        disabled={page * pageSize >= totalTickets}
+                      >
+                        <span>&gt;</span>
+                      </IconButton>
+                    </Box>
+                  </Box>
+                </Box>
+              </>
+            )}
+
           </Box>
         </Paper>
       </Box>

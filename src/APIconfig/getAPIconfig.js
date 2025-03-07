@@ -282,7 +282,7 @@ export const fetchSessions = async (authToken) => {
 
 const API_BASE_URL = "https://znginx.perisync.work/api/v1/support";
 
-export const fetchSupportTickets = async (page = 1, size = 5, searchKey = "", status = "all", userId = "", productId = "") => {
+export const fetchSupportTickets = async (page = 1, size = 5, searchKey = "", status = "", userId = "", productId = "") => {
   const token = localStorage.getItem("at"); 
 
   try {

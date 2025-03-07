@@ -206,3 +206,26 @@ export const changePassword = async ({ oldPassword, newPassword, otp, killSessio
 
 
 
+
+
+export const updateBillingAddress = async (billingData) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/billingAddress`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("at")}`,
+      },
+      body: JSON.stringify(billingData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update billing address");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error updating billing address:", error);
+    return null;
+  }
+};

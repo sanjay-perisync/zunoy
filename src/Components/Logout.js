@@ -61,7 +61,7 @@ function LogoutPopup() {
 
       {/* Logout Confirmation Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10">
           <div className="bg-white py-3 space-y-2 rounded-lg shadow-lg w-[600px]">
             <h2 className="text-[25px] font-bold border-b px-5 py-5">
               Confirmation!

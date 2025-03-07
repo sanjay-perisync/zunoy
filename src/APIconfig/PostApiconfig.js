@@ -226,6 +226,7 @@ export const loginUser = async (email, password) => {
 
 
 const API_BASE_URL = "https://znginx.perisync.work/api/v1";
+const TOKEN = localStorage.getItem("at");
 
 export const createSupportTicket = async (ticketData) => {
     try {
@@ -249,3 +250,36 @@ export const createSupportTicket = async (ticketData) => {
         return { success: false, error: "An error occurred. Please try again." };
     }
 };
+
+
+
+
+export const postComment = async (comment, ticketId) => {
+  const formData = new FormData();
+  formData.append("comment", comment);
+  formData.append("ticketId", ticketId);
+
+  console.log("Sending FormData:", formData);
+
+  try {
+      const response = await fetch(`${API_BASE_URL}/support/comment`, {
+          method: "POST",
+          headers: {
+              Authorization: `Bearer ${localStorage.getItem("at")}`,
+          },
+          body: formData,
+      });
+
+      if (!response.ok) {
+          const errorText = await response.text();
+          console.error("API Error Response:", errorText);
+          throw new Error("Failed to post comment");
+      }
+
+      return await response.json();
+  } catch (error) {
+      console.error("Error posting comment:", error);
+      return null;
+  }
+};
+

@@ -3,7 +3,7 @@ import Navbar from './Navbar';
 import Mainpagefooter from './Mainpagefooter';
 import { useState, useRef, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Accordion, AccordionSummary, AccordionDetails, TextField, CircularProgress } from "@mui/material";
+import { Accordion, AccordionSummary, AccordionDetails, TextField, CircularProgress,Box } from "@mui/material";
 import { ExpandMore } from "@mui/icons-material";
 import { requestOtpFor2FA } from '../APIconfig/getAPIconfig';
 import toast from "react-hot-toast";
@@ -667,47 +667,45 @@ function Security() {
                             </table>
                         </div> */}
 
+<div className="w-full">
+ 
+    <DataGrid
+      rows={sessions}
+      columns={columns}
+      hideFooter
+      disableSelectionOnClick
+      disableColumnMenu
+      experimentalFeatures={{ newEditingApi: true }}
+      localeText={{
+        noRowsLabel: (
+          <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+            <CircularProgress />
+          </Box>
+        ),
+      }}
+      sx={{
+        "& .MuiDataGrid-columnHeaders": {
+          color: "#4b5563",
+        },
+        "& .MuiDataGrid-columnHeader:focus, & .MuiDataGrid-columnHeader:focus-within": {
+          outline: "none",
+        },
+        "& .MuiDataGrid-columnSeparator": {
+          display: "none",
+        },
+        "& .MuiDataGrid-root": {
+          border: "none",
+        },
+        "& .MuiDataGrid-cell": {
+          borderLeft: "none",
+          borderRight: "none",
+          borderBottom: "1px solid #e5e7eb",
+        },
+      }}
+    />
 
+</div>
 
-                        <div className="w-full" >
-                            <DataGrid
-                                rows={sessions}
-                                columns={columns}
-                                hideFooter
-                                disableSelectionOnClick
-                                disableColumnMenu
-                                experimentalFeatures={{ newEditingApi: true }}
-                                localeText={{
-                                    noRowsLabel: 'No active sessions found.'
-                                }}
-                                sx={{
-                                    '& .MuiDataGrid-columnHeaders': {
-
-                                        color: '#4b5563',
-
-
-
-                                    },
-                                    '& .MuiDataGrid-columnHeader:focus, & .MuiDataGrid-columnHeader:focus-within': {
-                                        outline: 'none',
-
-                                    },
-                                    '& .MuiDataGrid-columnSeparator': {
-                                        display: 'none'
-                                    },
-                                    '& .MuiDataGrid-root': {
-                                        border: 'none'
-                                    },
-                                    '& .MuiDataGrid-cell': {
-                                        borderLeft: 'none',
-                                        borderRight: 'none',
-                                        borderBottom: '1px solid #e5e7eb',
-
-
-                                    }
-                                }}
-                            />
-                        </div>
                     </section>
 
 

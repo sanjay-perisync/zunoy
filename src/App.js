@@ -13,6 +13,7 @@ import Security from "./Components/Security";
 import Support from "./Components/Support";
 import Billing from "./Components/Billing";
 import CreateTicket from "./Components/CreateTicket";
+import SupportTicketDetails from "./Components/SupportTicketDetails";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             <Route path="/support" element={<Support />} />
             <Route path="/billing" element={<Billing />} />
             <Route path="/support/create" element={<CreateTicket />} />
+            <Route path="/support/details/:id" element={<SupportTicketDetails />} />
 
           </Routes>
         </div>
