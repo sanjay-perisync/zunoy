@@ -133,7 +133,7 @@ export const createUser = async (data, { setLoader, onSuccess, onError }) => {
 export const CreateRegister = async (data, { setLoader, onSuccess, onError }) => {
   try {
     setLoader(true);
-    console.log("🔄 Sending API Request with Data:", data);
+    console.log(" Sending API Request with Data:", data);
 
 
     if (!data.firstName || !data.lastName || !data.email || !data.phoneNo || !data.accountType || !data.knowAboutUs) {
@@ -156,6 +156,9 @@ export const CreateRegister = async (data, { setLoader, onSuccess, onError }) =>
 
     if (response.status === 201) {
       toast.success(" Registration successful!");
+      localStorage.setItem("firstName", data.firstName);
+      localStorage.setItem("lastName", data.lastName);
+      localStorage.setItem("email", data.email);
       onSuccess?.(response.data);
       return response.data;
     }

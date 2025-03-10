@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux"; 
-// import store from "./Redux/Store/Store/Store";
 
 import Login from "./Components/Login";
 import Register from "./Components/Register"; 
@@ -14,10 +13,11 @@ import Support from "./Components/Support";
 import Billing from "./Components/Billing";
 import CreateTicket from "./Components/CreateTicket";
 import SupportTicketDetails from "./Components/SupportTicketDetails";
+import { store } from "./Redux/Store"; 
 
 function App() {
   return (
-    // <Provider store={store}>
+    <Provider store={store}> 
       <Router>
         <div className="App">
           <Routes>
@@ -28,17 +28,15 @@ function App() {
             <Route path="/mainpage" element={<MainPage />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/account" element={<Account />} />
-            <Route path="/mainpage" element={<MainPage />} />
             <Route path="/security" element={<Security />} />
             <Route path="/support" element={<Support />} />
             <Route path="/billing" element={<Billing />} />
             <Route path="/support/create" element={<CreateTicket />} />
             <Route path="/support/details/:id" element={<SupportTicketDetails />} />
-
           </Routes>
         </div>
       </Router>
-    // </Provider>
+    </Provider>
   );
 }
 

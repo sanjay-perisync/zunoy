@@ -247,8 +247,8 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white flex flex-col justify-between rounded-lg h-[500px] w-[500px] p-4">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center  z-50">
+      <div className="bg-white flex flex-col justify-start rounded-lg h-[500px] overflow-y-auto w-[500px] p-4">
         <div className="flex justify-between items-center mb-4 border-b pb-4">
           <h2 className="text-lg font-semibold">Choose your Avatar</h2>
         </div>
@@ -260,7 +260,7 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
         ) : error ? (
           <div className="text-center text-red-500 py-4">{error}</div>
         ) : (
-          <div className="flex gap-4">
+          <div className="flex justify-between items-start gap-20">
             {/*Selected avatar and Remove option */}
             <div className="flex flex-col items-center justify-center space-y-2">
               <div
@@ -529,9 +529,11 @@ const Account = ({ onEdit, onRequestDelete }) => {
               <div className="relative flex items-center justify-center mt-5 group">
                 {/* Avatar Container */}
                 <div
-                  className="w-20 md:w-28 h-20 md:h-28 rounded-full flex items-center justify-center overflow-hidden cursor-pointer border-2 border-dashed border-gray-200 p-1 relative"
+                  className="w-20 md:w-28 h-20 md:h-28 rounded-full bg-gray-200  flex items-center justify-center overflow-hidden cursor-pointer border-2 border-dashed border-gray-200 p-4 relative"
                   onClick={() => setIsAvatarSelectorOpen(true)}
                 >
+
+                  <div>
                   {profilePicture ? (
                     <img
                       src={profilePicture}
@@ -539,9 +541,10 @@ const Account = ({ onEdit, onRequestDelete }) => {
                       className="h-full w-full object-cover rounded-full"
                     />
                   ) : (
-                    <span className="text-2xl">👤</span>
+                    // <span className="text-2xl">👤</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12.25a3.75 3.75 0 1 1 3.75-3.75A3.75 3.75 0 0 1 12 12.25m0-6a2.25 2.25 0 1 0 2.25 2.25A2.25 2.25 0 0 0 12 6.25m7 13a.76.76 0 0 1-.75-.75c0-1.95-1.06-3.25-6.25-3.25s-6.25 1.3-6.25 3.25a.75.75 0 0 1-1.5 0c0-4.75 5.43-4.75 7.75-4.75s7.75 0 7.75 4.75a.76.76 0 0 1-.75.75"/></svg>
                   )}
-
+                  </div>
 
                   <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <svg
@@ -614,7 +617,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
               {!isEditing ? (
                 <button
                   onClick={handleEdit}
-                  className="ml-auto px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl"
+                  className="ml-auto px-5 py-2 bg-indigo-500 text-white font-semibold rounded-xl"
                 >
                   Edit
                 </button>

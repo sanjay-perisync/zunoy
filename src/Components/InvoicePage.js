@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from "react";
-import { TextField, Checkbox, Typography, Paper, InputAdornment, Box } from "@mui/material";
+import { TextField, Checkbox, Typography, InputAdornment, Box } from "@mui/material";
 import { DataGrid } from '@mui/x-data-grid';
 import { Search, CalendarToday, KeyboardArrowDown, NavigateBefore, NavigateNext } from "@mui/icons-material";
 
@@ -39,7 +39,7 @@ const InvoicePage = () => {
   const rows = [];
 
   return (
-    <div className="p-6 flex flex-wrap gap-6">
+    <div className="p-6 flex flex-wrap lg:flex-nowrap gap-6">
       <div className="w-full lg:w-1/4 border rounded-lg">
         <div className='border-b p-4'>
           Filters
@@ -111,7 +111,7 @@ const InvoicePage = () => {
         </div>
       </div>
 
-      <div className="flex-1">
+      <div className="flex max-w-5xl">
         <Box sx={{ 
           border: '1px solid #e0e0e0', 
           borderRadius: '8px', 

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { LogoutApi } from "../APIconfig/DeleteApiConfig";
-
 import { useNavigate } from "react-router-dom";
+import { CircularProgress } from "@mui/material";
 
-function Logout() {
+function LogoutPopup() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -11,13 +11,13 @@ function Logout() {
 
   useEffect(() => {
     if (isModalOpen) {
-      document.body.style.overflow = "hidden"; 
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "auto"; 
+      document.body.style.overflow = "auto";
     }
 
     return () => {
-      document.body.style.overflow = "auto"; 
+      document.body.style.overflow = "auto";
     };
   }, [isModalOpen]);
 
@@ -26,19 +26,19 @@ function Logout() {
     LogoutApi({ setloader: setLoading })
       .then(() => {
         setIsModalOpen(false);
+        navigate("/");
       })
       .catch(() => {
         setLoading(false);
       });
   };
-  
-  
+
   return (
     <div>
-      {/* Logout Button */}
+   
       <button
         onClick={() => setIsModalOpen(true)}
-        className="flex items-center space-x-2 px-4 py-2 text-red-500 border border-red-300 rounded-xl hover:bg-red-50"
+        className="flex items-center w-auto space-x-2 px-4 py-2 text-red-500 border border-red-300 rounded-xl hover:bg-red-50"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -56,10 +56,10 @@ function Logout() {
           <polyline points="16 17 21 12 16 7"></polyline>
           <line x1="21" y1="12" x2="9" y2="12"></line>
         </svg>
-        <span className="font-semibold text-[16px]">Logout</span>
+        <span className="font-semibold text-[16px]">Signout all Accounts</span>
       </button>
 
-      {/* Logout Confirmation Modal */}
+ 
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10">
           <div className="bg-white py-3 space-y-2 rounded-lg shadow-lg w-[600px]">
@@ -83,10 +83,10 @@ function Logout() {
               </button>
               <button
                 onClick={handleLogout}
-                className="px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600"
+                className="px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 flex items-center justify-center"
                 disabled={loading}
               >
-                {loading ? "Logging out..." : "Logout"}
+                {loading ? <CircularProgress size={20} color="inherit" /> : "Logout"}
               </button>
             </div>
           </div>
@@ -96,4 +96,4 @@ function Logout() {
   );
 }
 
-export default Logout;
+export default LogoutPopup;

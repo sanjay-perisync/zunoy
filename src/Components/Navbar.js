@@ -1,7 +1,9 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
-import LogoutPopup from "./Logout";
+import LogoutPopup from "./Signout";
+import { useState, useEffect } from "react";
+import Logout from "./Logout";
 
 function Navbar() {
   const location = useLocation();
@@ -14,6 +16,22 @@ function Navbar() {
   location.pathname === "/security" ? "Security" :
   "All apps";
    
+
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [userData, setUserData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+  });
+
+  useEffect(() => {
+    const firstName = localStorage.getItem("firstName") || "User";
+    const lastName = localStorage.getItem("lastName") || "";
+    const email = localStorage.getItem("email") || "No email available";
+
+    setUserData({ firstName, lastName, email });
+  }, []);
 
   return (
     <div>
@@ -38,15 +56,35 @@ function Navbar() {
                 d="M8.7449 20.1c.6346.5601 1.4682.9 2.3812.9.913 0 1.7466-.3399 2.3813-.9m3.0187-11.7a5.4 5.4 0 1 0-10.8 0c0 2.7812-.7016 4.6854-1.4853 5.9449-.661 1.0624-.9916 1.5936-.9795 1.7418.0134.1641.0482.2266.1804.3247.1194.0886.6578.0886 1.7344.0886h11.9c1.0767 0 1.615 0 1.7344-.0886.1322-.0981.167-.1606.1804-.3247.0121-.1482-.3184-.6794-.9795-1.7418-.7837-1.2595-1.4853-3.1637-1.4853-5.9449Z"
               />
             </svg>
-            <div className="bg-gray-200 rounded-full p-1">
-              <svg className="w-7 h-7 text-black" viewBox="0 0 24 24" fill="none">
-                <path
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  d="M20 21c0-1.3956 0-2.0933-.1722-2.6611a4.0002 4.0002 0 0 0-2.6667-2.6667C16.5933 15.5 15.8956 15.5 14.5 15.5h-5c-1.3956 0-2.0934 0-2.6611.1722a4.0001 4.0001 0 0 0-2.6667 2.6667C4 18.9067 4 19.6044 4 21M16.5 7.5c0 2.4853-2.0147 4.5-4.5 4.5S7.5 9.9853 7.5 7.5 9.5147 3 12 3s4.5 2.0147 4.5 4.5Z"
-                />
-              </svg>
-            </div>
+            <div className="relative">
+      {/* User Icon */}
+      <div
+        className="bg-gray-200 rounded-full p-1 cursor-pointer"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <svg className="w-7 h-7 text-black" viewBox="0 0 24 24" fill="none">
+          <path
+            stroke="currentColor"
+            strokeWidth="2"
+            d="M20 21c0-1.3956 0-2.0933-.1722-2.6611a4.0002 4.0002 0 0 0-2.6667-2.6667C16.5933 15.5 15.8956 15.5 14.5 15.5h-5c-1.3956 0-2.0934 0-2.6611.1722a4.0001 4.0001 0 0 0-2.6667 2.6667C4 18.9067 4 19.6044 4 21M16.5 7.5c0 2.4853-2.0147 4.5-4.5 4.5S7.5 9.9853 7.5 7.5 9.5147 3 12 3s4.5 2.0147 4.5 4.5Z"
+          />
+        </svg>
+      </div>
+
+      {/* Dropdown Menu */}
+      {isOpen && (
+        <div className="absolute w-64 right-0 mt-2 flex flex-col gap-2  items-start bg-white shadow-lg rounded-lg p-3">
+          <p className="text-gray-700 font-medium">
+            {userData.firstName} {userData.lastName}
+          </p>
+          <p className="text-sm text-gray-500">{userData.email}</p>
+          {/* <button className="mt-2 w-full text-red-500 border border-red-500 rounded-md py-1 hover:bg-red-100">
+            Sign out of all accounts
+          </button> */}
+          <LogoutPopup/>
+        </div>
+      )}
+    </div>
           </div>
         </div>
 
@@ -167,7 +205,8 @@ function Navbar() {
           </div>
 
           {/* Right Section */}
-          <LogoutPopup />
+          {/* <LogoutPopup /> */}
+          <Logout/>
         </nav>
       </header>
     </div>

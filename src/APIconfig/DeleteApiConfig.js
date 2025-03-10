@@ -35,14 +35,13 @@ export const LogoutApi = ({ setloader }) => {
   return new Promise((resolve, reject) => {
     const token = localStorage.getItem("at");
 
-    console.log(" Logout API Called - Token:", token);
+    
 
     if (!token) {
-      console.warn(" No token found. User might already be logged out.");
+     
       toast.error("Session expired. Redirecting...");
       localStorage.clear();
-      console.log("Redirecting to /login...");
-      window.location.href = "/";
+      window.location.replace("/login"); 
       return;
     }
 
@@ -52,31 +51,25 @@ export const LogoutApi = ({ setloader }) => {
       },
     };
 
-    console.log(" Sending DELETE request to:", `${AccountsRootUrl}/account/logout`);
-    console.log("Headers:", options);
-
+   
+    
     deleteAPICall(`${AccountsRootUrl}/account/logout`, options)
       .then((res) => {
-        console.log("Logout API Success:", res);
         setloader(false);
-        localStorage.clear();
-        // toast.success("You've logged out successfully");
+        // localStorage.clear();
+        window.location.replace("/"); 
         resolve(res);
       })
       .catch((err) => {
-        console.error("Logout API Error:", err);
-
         setloader(false);
-        if (err.response?.status === 401) {
-          toast.error("Session expired. Redirecting...");
-          localStorage.clear();
-        } else {
-          toast.error(err?.response?.data?.msg || " Logout failed. Please try again.");
-        }
+        toast.error("Logout failed. Please try again.");
+        // localStorage.clear();
+        window.location.replace("/"); 
         reject(err);
-      })
+      });
   });
 };
+
 
 
 
