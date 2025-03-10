@@ -3,6 +3,7 @@ import { Box, Typography, TextField, Tabs, Tab } from "@mui/material";
 import Navbar from "./Navbar";
 import Mainpagefooter from "./Mainpagefooter";
 import { updateBillingAddress } from "../APIconfig/PutApiconfig";
+import InvoicePage from "./InvoicePage";
 
 function Billing() {
   const [activeTab, setActiveTab] = useState(0);
@@ -33,7 +34,9 @@ function Billing() {
 
   return (
     <div>
-      <Navbar />
+
+      <header className="top-0 left-0 sticky bg-white z-10"><Navbar /></header>
+      
       <div className="mx-auto max-w-[1400px] my-5">
 
         <Tabs value={activeTab} onChange={(_, newValue) => setActiveTab(newValue)} indicatorColor="primary" className="px-2">
@@ -45,10 +48,10 @@ function Billing() {
         {activeTab === 0 && (
           <div className="border rounded-xl mt-5 p-0 mx-2">
             {!showForm && (
-              <div className="flex justify-between items-center border-b border-gray-300 p-4">
+              <div className="flex justify-between items-center border-b border-gray-300 p-6">
                 <h6 className="font-semibold text-xl">Billing Information</h6>
                 <button
-                  className="bg-[#635DFF] text-white font-bold rounded-lg px-4 py-2 hover:bg-[#5349E6]"
+                  className="bg-[#635DFF] text-white font-bold rounded-xl px-4 py-2 hover:bg-[#5349E6]"
                   onClick={() => setShowForm(true)}
                 >
                   {billingInfo ? "Edit" : "Add"}
@@ -117,7 +120,7 @@ function Billing() {
                   ]
                     .map((field, index) =>
                       field ? (
-                        <div key={index} className="flex items-center gap-3 border-b py-4 px-4 last:border-b-0">
+                        <div key={index} className="flex items-center gap-10 border-b py-4 px-6 last:border-b-0">
                           <span className="text-lg">{field.icon}</span>
                           <div>
                             <p className="font-semibold">{field.label}</p>
@@ -268,7 +271,7 @@ function Billing() {
         )}
 
 
-        {activeTab === 1 && <div className="p-5">No invoices available.</div>}
+        {activeTab === 1 && <div className="p-5"><InvoicePage/></div>}
       </div>
       <footer className="mx-auto max-w-[1400px]">
         <Mainpagefooter />

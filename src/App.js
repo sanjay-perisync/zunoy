@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux"; 
-import store from "./Redux/Store/Store";
+// import store from "./Redux/Store/Store/Store";
 
 import Login from "./Components/Login";
 import Register from "./Components/Register"; 
@@ -17,7 +17,7 @@ import SupportTicketDetails from "./Components/SupportTicketDetails";
 
 function App() {
   return (
-    <Provider store={store}>
+    // <Provider store={store}>
       <Router>
         <div className="App">
           <Routes>
@@ -38,7 +38,7 @@ function App() {
           </Routes>
         </div>
       </Router>
-    </Provider>
+    // </Provider>
   );
 }
 

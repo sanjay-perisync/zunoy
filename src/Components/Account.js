@@ -609,7 +609,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
 
           {/* profile details */}
           <div className="w-full lg:max-w-[1400px] mx-auto space-y-4 px-5 py-4 border rounded-xl">
-            <div className="flex justify-between border-b py-2">
+            <div className="flex items-center justify-between border-b py-2">
               <p className="font-semibold text-[20px]">Profile Information</p>
               {!isEditing ? (
                 <button

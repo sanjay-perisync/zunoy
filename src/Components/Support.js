@@ -191,7 +191,11 @@ function Support() {
 
   return (
     <Box>
+
+      <header className="left-0 top-0 sticky z-10 bg-white">
       <Navbar />
+      </header>
+      
 
       <Box className="mx-auto max-w-[1400px] my-10">
         <Paper elevation={0}>
