@@ -23,13 +23,19 @@
 
 
 import { combineReducers } from "@reduxjs/toolkit";
-import { billingReducer } from "../Slices/Billing/index";
+import billingReducer from "../Slices/Billing";
+import productsSliceReducer from "../Slices/Products"; 
+import accountSliceReducer from "../Slices/Account";
+import TicketSliceReducer from "../Slices/Support";
 
 const rootReducer = combineReducers({
-  billing: billingReducer,
- 
+  productsSliceReducer,
+  billingReducer,
+  accountSliceReducer,
+  TicketSliceReducer
 });
 
 export default rootReducer;
+
 
 

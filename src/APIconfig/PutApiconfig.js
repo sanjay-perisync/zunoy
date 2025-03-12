@@ -2,6 +2,7 @@ import { AccountsRootUrl } from "./ConstantRootURL/RootUrl";
 import axios from 'axios';
 import { toast } from "react-hot-toast";
 import { putAPICall } from "./axiosMethodCalls";
+import { setBillingInfo } from "../Redux/Slices/Billing/billingSlice";
 
 
 
@@ -229,3 +230,5 @@ export const updateBillingAddress = async (billingData) => {
     return null;
   }
 };
+
+

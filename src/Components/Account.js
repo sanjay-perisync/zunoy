@@ -4,32 +4,38 @@ import Mainpagefooter from "./Mainpagefooter";
 import { Icon } from "@iconify/react";
 import CircularProgress from "@mui/material/CircularProgress";
 import { TextField } from "@mui/material";
+import { FetchAccountDetails } from "../APIconfig/getAPIconfig";
+import { useDispatch,useSelector } from "react-redux";
 
-const fetchAccountData = async () => {
-  try {
-    const token = localStorage.getItem('at');
 
-    if (!token) {
-      throw new Error("No authentication token found in localStorage");
-    }
 
-    const response = await fetch("https://znginx.perisync.work/api/v1/acc/account/read", {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    });
+// const fetchAccountData = async () => {
+//   try {
+//     const token = localStorage.getItem('at');
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch account data");
-    }
+//     if (!token) {
+//       throw new Error("No authentication token found in localStorage");
+//     }
 
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching account data:", error);
-    throw error;
-  }
-};
+//     const response = await fetch("https://znginx.perisync.work/api/v1/acc/account/read", {
+//       headers: {
+//         'Authorization': `Bearer ${token}`,
+//         'Content-Type': 'application/json'
+//       }
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("Failed to fetch account data");
+//     }
+
+//     return await response.json();
+//   } catch (error) {
+//     console.error("Error fetching account data:", error);
+//     throw error;
+//   }
+// };
+
+
 
 
 const uploadProfilePicture = async (file) => {
@@ -349,29 +355,29 @@ const AvatarSelector = ({ isOpen, onClose, setProfilePicture }) => {
 
 
 const Account = ({ onEdit, onRequestDelete }) => {
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // const [error, setError] = useState(null);
   const [profilePicture, setProfilePicture] = useState(null);
   const [isAvatarSelectorOpen, setIsAvatarSelectorOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [errors, setError] = useState({});
   const [focused, setFocused] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: user?.firstName || "",
-    lastName: user?.lastName || "",
-    email: user?.email || "",
-    phoneNo: user?.phoneNo || "",
+    // firstName: user?.firstName || "",
+    // lastName: user?.lastName || "",
+    // email: user?.email || "",
+    // phoneNo: user?.phoneNo || "",
   });
 
-  useEffect(() => {
-    setFormData({
-      firstName: user?.firstName || "",
-      lastName: user?.lastName || "",
-      email: user?.email || "",
-      phoneNo: user?.phoneNo || "",
-    });
-  }, [user]);
+  // useEffect(() => {
+  //   setFormData({
+  //     firstName: user?.firstName || "",
+  //     lastName: user?.lastName || "",
+  //     email: user?.email || "",
+  //     phoneNo: user?.phoneNo || "",
+  //   });
+  // }, [user]);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -439,33 +445,33 @@ const Account = ({ onEdit, onRequestDelete }) => {
     }
   };
 
-  useEffect(() => {
-    const getUserData = async () => {
-      try {
-        const data = await fetchAccountData();
-        setUser(data);
+  // useEffect(() => {
+  //   const getUserData = async () => {
+  //     try {
+  //       const data = await fetchAccountData();
+  //       setUser(data);
 
 
-        if (data.profilePictureUrl) {
-          setProfilePicture(data.profilePictureUrl);
-          localStorage.setItem("profilePicture", data.profilePictureUrl);
-        } else {
-          const storedProfilePic = localStorage.getItem("profilePicture");
-          if (storedProfilePic) {
-            setProfilePicture(storedProfilePic);
-          }
-        }
-        setError(null);
-      } catch (error) {
-        console.error("Failed to load user data");
-        setError("Failed to load user data. Please try logging in again.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  //       if (data.profilePictureUrl) {
+  //         setProfilePicture(data.profilePictureUrl);
+  //         localStorage.setItem("profilePicture", data.profilePictureUrl);
+  //       } else {
+  //         const storedProfilePic = localStorage.getItem("profilePicture");
+  //         if (storedProfilePic) {
+  //           setProfilePicture(storedProfilePic);
+  //         }
+  //       }
+  //       setError(null);
+  //     } catch (error) {
+  //       console.error("Failed to load user data");
+  //       setError("Failed to load user data. Please try logging in again.");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    getUserData();
-  }, []);
+  //   getUserData();
+  // }, []);
 
 
 
@@ -476,7 +482,26 @@ const Account = ({ onEdit, onRequestDelete }) => {
   //     </div>
   //   );
   // }
+  // const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+  
+  
 
+
+  const user = useSelector(
+    (state) => state?.accountSliceReducer?.AccountDetailsSlice || []
+  );
+  const error = useSelector(
+    (state) => state?.rootReducer?.accountSliceReducer?.error
+  );
+
+  useEffect(() => {
+    setLoading(true)
+    dispatch(FetchAccountDetails({setLoading}));
+  }, [dispatch]);
+
+  // console.log("Account Details:", details);
 
 
   const handleProfilePictureChange = async (event) => {
@@ -489,8 +514,8 @@ const Account = ({ onEdit, onRequestDelete }) => {
       if (response.profilePictureUrl) {
         setProfilePicture(response.profilePictureUrl);
         localStorage.setItem("profilePicture", response.profilePictureUrl); // Save to localStorage
-        const userData = await fetchAccountData();
-        setUser(userData);
+        const userData = await FetchAccountDetails();
+        // setUser(userData);
       }
     } catch (error) {
       setError("Failed to upload profile picture. Please try again.");
@@ -529,7 +554,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
               <div className="relative flex items-center justify-center mt-5 group">
                 {/* Avatar Container */}
                 <div
-                  className="w-20 md:w-28 h-20 md:h-28 rounded-full bg-gray-200  flex items-center justify-center overflow-hidden cursor-pointer border-2 border-dashed border-gray-200 p-4 relative"
+                  className="w-20 md:w-28 h-20 md:h-28 rounded-full   flex items-center justify-center overflow-hidden cursor-pointer border-2 border-dashed border-gray-200 p-1 relative"
                   onClick={() => setIsAvatarSelectorOpen(true)}
                 >
 
@@ -593,7 +618,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
               <div>
 
                 <p className="text-gray-500 text-xs md:text-sm">
-                  {user?.email?.toUpperCase()}
+                  {user?.email}
                 </p>
 
                 <h2 className="text-xl font-semibold">
@@ -659,7 +684,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
                     name="firstName"
                     label="First Name"
                     variant="filled"
-                    value={formData.firstName}
+                    value={user.firstName}
                     onChange={handleChange}
                     sx={{
                       "& .MuiInputBase-root": {
@@ -669,6 +694,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
                         backgroundColor: "white",
                         transition: "border-color 0.3s ease",
                       },
+                      paddingY:"10px",
                       "& .MuiInputBase-root:hover": {
 
                         backgroundColor: "#F8F8F8",
@@ -686,7 +712,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
               ) : (
                 <div className="flex flex-col pb-2">
                   <span className="text-gray-600">First Name</span>
-                  <span className="font-medium text-gray-900">{formData.firstName}</span>
+                  <span className="font-medium text-gray-900">{user.firstName}</span>
                 </div>
               )}
             </div>
@@ -727,7 +753,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
                     name="lastName"
                     label="Last Name"
                     variant="filled"
-                    value={formData.lastName}
+                    value={user.lastName}
                     onChange={handleChange}
                     sx={{
                       "& .MuiInputBase-root": {
@@ -737,6 +763,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
                         backgroundColor: "white",
                         transition: "border-color 0.3s ease",
                       },
+                      paddingY:"10px",
                       "& .MuiInputBase-root:hover": {
 
                         backgroundColor: "#F8F8F8",
@@ -754,7 +781,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
               ) : (
                 <div className="flex flex-col pb-2">
                   <span className="text-gray-600">Last Name</span>
-                  <span className="font-medium text-gray-900">{formData.lastName}</span>
+                  <span className="font-medium text-gray-900">{user.lastName}</span>
                 </div>
               )}
             </div>
@@ -792,7 +819,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
                     name="email"
                     label="Email Address"
                     variant="filled"
-                    value={formData.email}
+                    value={user.email}
                     disabled
                     sx={{
                       "& .MuiInputBase-root": {
@@ -802,6 +829,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
                         backgroundColor: "#F8F8F8",
                         cursor: "not-allowed",
                       },
+                      paddingY:"10px",
                       "& .MuiInputBase-root:hover": {
                         borderColor: "#BEBEBE",
                         backgroundColor: "#F8F8F8",
@@ -819,7 +847,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
               ) : (
                 <div className="flex flex-col pb-2">
                   <span className="text-gray-600">Email</span>
-                  <span className="font-medium text-gray-900">{formData.email}</span>
+                  <span className="font-medium text-gray-900">{user.email}</span>
                 </div>
               )}
             </div>
@@ -857,11 +885,9 @@ const Account = ({ onEdit, onRequestDelete }) => {
                     label="phoneNo"
                     variant="filled"
                     name="phoneNo"
-                    value={formData.phoneNo}
+                    value={user.phoneNo}
                     onChange={handleChange}
-                    error={!!errors.phoneNo}
-                    helperText={errors.phoneNo}
-                    InputLabelProps={{ shrink: true }}
+                   
                     sx={{
                       "& .MuiInputBase-root": {
                         border: "3px solid",
@@ -870,6 +896,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
                         backgroundColor: "white",
                         transition: "border-color 0.3s ease",
                       },
+                      paddingY:"10px",
                       "& .MuiInputBase-root:hover": {
 
                         backgroundColor: "#F8F8F8",
@@ -887,7 +914,7 @@ const Account = ({ onEdit, onRequestDelete }) => {
               ) : (
                 <div className="flex flex-col pb-2">
                   <span className="text-gray-600">Contact Number</span>
-                  <span className="font-medium text-gray-900">{formData.phoneNo}</span>
+                  <span className="font-medium text-gray-900">{user.phoneNo}</span>
                 </div>
               )}
             </div>

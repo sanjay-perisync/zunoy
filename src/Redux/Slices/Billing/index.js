@@ -1,3 +1,12 @@
-import billingReducer from "./billingSlice";
+import billingdetailsSlice from "./billingSlice";
+import { combineReducers } from "@reduxjs/toolkit";
 
-export { billingReducer };
+
+
+
+const billingReducer=combineReducers({
+    billingdetailsSlice
+})
+
+
+export default billingReducer;

@@ -8,6 +8,7 @@ import {
     FormControl,
     Typography,
     Box,
+    CircularProgress
 } from "@mui/material";
 import Mainpagefooter from './Mainpagefooter';
 import { Link } from 'react-router-dom';
@@ -75,13 +76,14 @@ function CreateTicket() {
     const [file, setFile] = useState(null);
     const [description, setDescription] = useState("");
     const [reachOut, setReachOut] = useState(false);
+    const [loading, setLoading] = useState(false);
 
 
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
     };
 
-  
+
     const handleSubmit = async () => {
         if (!products) {
             toast.error("Please select a Product/Service.");
@@ -96,10 +98,12 @@ function CreateTicket() {
             return;
         }
 
+        setLoading(true);
+
         const serviceID = serviceIDMapping[products];
 
         const ticketData = {
-            serviceID: serviceID, 
+            serviceID: serviceID,
             reachOut: reachOut,
             priority: priority.toLowerCase(),
             description: description,
@@ -107,18 +111,27 @@ function CreateTicket() {
             target: "support"
         };
 
-        const response = await createSupportTicket(ticketData); 
+        const response = await createSupportTicket(ticketData);
+
+        setLoading(false);
 
         if (response.success) {
             toast.success("Ticket created successfully!");
 
-       
+
+            setProducts("");
+            setCategory("");
+            setPriority("Medium");
+            setFile(null);
+            setDescription("");
+            setReachOut(false);
+
+
             window.dispatchEvent(new Event("ticketCreated"));
         } else {
             toast.error(response.error);
         }
     };
-
     return (
         <div>
             <header className='top-0 left-0 sticky z-10 bg-white'>
@@ -154,7 +167,7 @@ function CreateTicket() {
                                     value={products}
                                     onChange={(e) => {
                                         setProducts(e.target.value);
-                                        setCategory(""); 
+                                        setCategory("");
                                     }}
                                     displayEmpty
                                 >
@@ -241,10 +254,15 @@ function CreateTicket() {
                         </Box>
 
                         <div className='flex justify-end items-end'>
-                            <button onClick={handleSubmit} className='bg-indigo-500 text-white rounded-xl px-4 py-2 font-semibold'>
-                                Submit
+                            <button
+                                onClick={handleSubmit}
+                                className='bg-indigo-500 text-white rounded-xl px-4 py-2 font-semibold flex items-center justify-center gap-2'
+                                disabled={loading} 
+                            >
+                                {loading ? <CircularProgress size={20} color="inherit" /> : "Submit"}
                             </button>
                         </div>
+
                     </Box>
                 </div>
             </Box>

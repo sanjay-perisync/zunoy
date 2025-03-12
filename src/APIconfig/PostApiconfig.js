@@ -1,6 +1,8 @@
 import { toast } from "react-hot-toast";
 import axios from "axios";
+import { postAPICall } from "./axiosMethodCalls";
 import { AccountsRootUrl } from "./ConstantRootURL/RootUrl";
+import { chatCommentSuccess } from "../Redux/Slices/Support/postComment";
 
 const api = axios.create({
   baseURL: AccountsRootUrl,
@@ -257,32 +259,62 @@ export const createSupportTicket = async (ticketData) => {
 
 
 
-export const postComment = async (comment, ticketId) => {
-  const formData = new FormData();
-  formData.append("comment", comment);
-  formData.append("ticketId", ticketId);
+// export const postComment = async (comment, ticketId) => {
+//   const formData = new FormData();
+//   formData.append("comment", comment);
+//   formData.append("ticketId", ticketId);
 
-  console.log("Sending FormData:", formData);
+//   console.log("Sending FormData:", formData);
 
-  try {
-      const response = await fetch(`${API_BASE_URL}/support/comment`, {
-          method: "POST",
-          headers: {
-              Authorization: `Bearer ${localStorage.getItem("at")}`,
-          },
-          body: formData,
+//   try {
+//       const response = await fetch(`${API_BASE_URL}/support/comment`, {
+//           method: "POST",
+//           headers: {
+//               Authorization: `Bearer ${localStorage.getItem("at")}`,
+//           },
+//           body: formData,
+//       });
+
+//       if (!response.ok) {
+//           const errorText = await response.text();
+//           console.error("API Error Response:", errorText);
+//           throw new Error("Failed to post comment");
+//       }
+
+//       return await response.json();
+//   } catch (error) {
+//       console.error("Error posting comment:", error);
+//       return null;
+//   }
+// };
+
+
+
+export const postComment = (comment, ticketId, { setLoading }) => {
+  return (dispatch) => {
+    setLoading(true);
+
+    const formData = new FormData();
+    formData.append("comment", comment);
+    formData.append("ticketId", ticketId);
+
+    const options = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("at")}`,
+      },
+    };
+
+    postAPICall(`${API_BASE_URL}/support/comment`, formData, options)
+      .then((response) => {
+        setLoading(false);
+        dispatch(chatCommentSuccess(response));
+      })
+      .catch((err) => {
+        setLoading(false);
+        dispatch({ type: "POST_COMMENT_FAILED", payload: err });
+        toast.error(
+          err?.response?.data?.msg || "Unable to post comment. Please try again later."
+        );
       });
-
-      if (!response.ok) {
-          const errorText = await response.text();
-          console.error("API Error Response:", errorText);
-          throw new Error("Failed to post comment");
-      }
-
-      return await response.json();
-  } catch (error) {
-      console.error("Error posting comment:", error);
-      return null;
-  }
+  };
 };
-

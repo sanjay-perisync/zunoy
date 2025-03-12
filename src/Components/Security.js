@@ -3,7 +3,7 @@ import Navbar from './Navbar';
 import Mainpagefooter from './Mainpagefooter';
 import { useState, useRef, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Accordion, AccordionSummary, AccordionDetails, TextField, CircularProgress,Box } from "@mui/material";
+import { Accordion, AccordionSummary, AccordionDetails, TextField, CircularProgress, Box } from "@mui/material";
 import { ExpandMore } from "@mui/icons-material";
 import { requestOtpFor2FA } from '../APIconfig/getAPIconfig';
 import toast from "react-hot-toast";
@@ -14,7 +14,6 @@ import { handleConfirmDelete } from '../APIconfig/DeleteApiConfig';
 import { endAllSessions } from '../APIconfig/DeleteApiConfig';
 import { DataGrid } from "@mui/x-data-grid";
 
-import DeleteIcon from "@mui/icons-material/Delete";
 
 
 
@@ -97,36 +96,6 @@ function Security() {
     }, [isDialogOpen]);
 
 
-
-    // useEffect(() => {
-    //     const handleClickOutside = (event) => {
-    //         if (modalRef.current && !modalRef.current.contains(event.target)) {
-    //             setIsDialogOpen(false);
-    //         }
-    //     };
-    //     if (isDialogOpen) {
-    //         document.addEventListener("mousedown", handleClickOutside);
-    //     }
-    //     return () => {
-    //         document.removeEventListener("mousedown", handleClickOutside);
-    //     };
-    // }, [isModalOpen]);
-
-
-
-    // useEffect(() => {
-    //     const handleClickOutside = (event) => {
-    //         if (modalRef.current && !modalRef.current.contains(event.target)) {
-    //             setIsDialogOpen(false);
-    //         }
-    //     };
-    //     if (isDialogOpen) {
-    //         document.addEventListener("mousedown", handleClickOutside);
-    //     }
-    //     return () => {
-    //         document.removeEventListener("mousedown", handleClickOutside);
-    //     };
-    // }, [isEndAllSessionsModalOpen]);
 
 
 
@@ -354,7 +323,7 @@ function Security() {
             sortable: false,
             resizable: false,
             disableColumnMenu: true,
-            
+
             renderCell: (params) => {
                 const session = params.row;
                 return (
@@ -410,12 +379,7 @@ function Security() {
                             <AccordionDetails className="space-y-5  border-t">
 
                                 <div>
-                                    {/* <button
-                                    className="bg-customGreen text-white text-sm font-semibold rounded-xl px-5 py-2 mt-5"
-                                    onClick={() => setIsDialogOpen(true)}
-                                >
-                                    Turn On
-                                </button> */}
+
 
 
 
@@ -438,8 +402,8 @@ function Security() {
 
 
                                     {isDialogOpen && (
-                                        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center px-4 z-50">
-                                            <div className="bg-white rounded-lg shadow-lg max-w-xl w-ful" ref={modalRef} >
+                                        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center  z-50">
+                                            <div className="bg-white rounded-lg shadow-lg max-w-xl p-6 w-full" ref={modalRef} >
                                                 <h2 className="text-[24px] font-semibold">Enter password & validate</h2>
 
 
@@ -559,7 +523,7 @@ function Security() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    {/* <p className="text-red-500">Off</p> */}
+
                                     <p className={`flex items-center font-semibold ${is2FAEnabled ? "text-green-500" : "text-red-500"}`}>
                                         <span className={`w-2 h-2 mr-2 rounded-full ${is2FAEnabled ? "bg-green-500" : "bg-red-500"}`}></span>
                                         {is2FAEnabled ? "On" : "Off"}
@@ -578,8 +542,7 @@ function Security() {
 
 
 
-                    {/* <ChangePassword/> */}
-                    {/* <ChangePassword is2FAEnabled={true} /> */}
+
 
                     <ChangePassword is2FAEnabled={is2FAEnabled} onLogout={handleLogout} />
 
@@ -597,44 +560,44 @@ function Security() {
                         </div>
 
 
-<div className="w-full">
- 
-    <DataGrid
-      rows={sessions}
-      columns={columns}
-      hideFooter
-      disableSelectionOnClick
-      disableColumnMenu
-      experimentalFeatures={{ newEditingApi: true }}
-      localeText={{
-        noRowsLabel: (
-          <Box display="flex" justifyContent="center" alignItems="center" height="100%">
-            <CircularProgress />
-          </Box>
-        ),
-      }}
-      sx={{
-        "& .MuiDataGrid-columnHeaders": {
-          color: "#4b5563",
-        },
-        "& .MuiDataGrid-columnHeader:focus, & .MuiDataGrid-columnHeader:focus-within": {
-          outline: "none",
-        },
-        "& .MuiDataGrid-columnSeparator": {
-          display: "none",
-        },
-        "& .MuiDataGrid-root": {
-          border: "none",
-        },
-        "& .MuiDataGrid-cell": {
-          borderLeft: "none",
-          borderRight: "none",
-          borderBottom: "1px solid #e5e7eb",
-        },
-      }}
-    />
+                        <div className="w-full">
 
-</div>
+                            <DataGrid
+                                rows={sessions}
+                                columns={columns}
+                                hideFooter
+                                disableSelectionOnClick
+                                disableColumnMenu
+                                experimentalFeatures={{ newEditingApi: true }}
+                                localeText={{
+                                    noRowsLabel: (
+                                        <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+                                            <CircularProgress />
+                                        </Box>
+                                    ),
+                                }}
+                                sx={{
+                                    "& .MuiDataGrid-columnHeaders": {
+                                        color: "#4b5563",
+                                    },
+                                    "& .MuiDataGrid-columnHeader:focus, & .MuiDataGrid-columnHeader:focus-within": {
+                                        outline: "none",
+                                    },
+                                    "& .MuiDataGrid-columnSeparator": {
+                                        display: "none",
+                                    },
+                                    "& .MuiDataGrid-root": {
+                                        border: "none",
+                                    },
+                                    "& .MuiDataGrid-cell": {
+                                        borderLeft: "none",
+                                        borderRight: "none",
+                                        borderBottom: "1px solid #e5e7eb",
+                                    },
+                                }}
+                            />
+
+                        </div>
 
                     </section>
 

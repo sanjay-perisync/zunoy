@@ -23,6 +23,7 @@ import {
 import { Add as AddIcon, Search as SearchIcon } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
+import { useDispatch, useSelector } from "react-redux";
 
 
 const productLogos = {
@@ -56,28 +57,46 @@ function Support() {
   }, [page, pageSize, activeTab, selectedProduct, searchKey]);
 
 
-
+  const dispatch = useDispatch()
   const loadTickets = async (currentPage = page, currentPageSize = pageSize) => {
     setLoading(true);
     const status = activeTab === "All" ? "all" : activeTab.toLowerCase();
-    const response = await fetchSupportTickets(
-      currentPage,
+    dispatch(fetchSupportTickets(currentPage,
       currentPageSize,
       searchKey,
       status,
       "",
-      selectedProduct
-    );
-    setTickets(response.data || []);
-    setTotalTickets(response.total || 0);
-    setLoading(false);
+      selectedProduct, { setLoading }
+    ))
+    // const response = await fetchSupportTickets(
+    //   currentPage,
+    //   currentPageSize,
+    //   searchKey,
+    //   status,
+    //   "",
+    //   selectedProduct
+    // );
+    // setTickets(response.data || []);
+    // setTotalTickets(response.total || 0);
+    // setLoading(false);
   };
   const loadStatusCounts = async () => {
     const response = await fetchStatusCounts(searchKey, selectedProduct);
     setStatusCounts(response || {});
   };
 
+  const ticket = useSelector(
+    (state) => state?.TicketSliceReducer?.TicketSlice || []
+  );
 
+
+  // const count = useSelector(
+  //   (state) => state?.TicketSliceReducer?.statusSlice || []
+  // );
+
+  useEffect(() => {
+    console.log("Redux ticket data:", ticket);
+  }, [ticket]);
 
   const columns = [
     {
@@ -193,9 +212,9 @@ function Support() {
     <Box>
 
       <header className="left-0 top-0 sticky z-10 bg-white">
-      <Navbar />
+        <Navbar />
       </header>
-      
+
 
       <Box className="mx-auto max-w-[1400px] my-10">
         <Paper elevation={0}>
@@ -326,7 +345,7 @@ function Support() {
               <Box display="flex" justifyContent="center" alignItems="center" py={4}>
                 <CircularProgress />
               </Box>
-            ) : tickets.length === 0 ? (
+            ) : ticket.length === 0 ? (
               <Box py={4} textAlign="center">
                 <div className="flex flex-col justify-center items-center">
                   <img
@@ -342,7 +361,7 @@ function Support() {
             ) : (
               <>
                 <DataGrid
-                  rows={tickets}
+                  rows={ticket}
                   columns={columns}
                   hideFooter={true}
                   autoHeight

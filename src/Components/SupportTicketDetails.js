@@ -1,43 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import Navbar from "./Navbar";
 import Mainpagefooter from "./Mainpagefooter";
 import { CircularProgress, Tab, Tabs } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import { Icon } from "@iconify/react";
 import { postComment } from "../APIconfig/PostApiconfig";
+import { fetchTicketDetails, fetchChat } from "../APIconfig/getAPIconfig";
 const SupportTicketDetails = () => {
     const { id } = useParams();
-    const [ticket, setTicket] = useState(null);
+
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState(0);
     const [selectedFile, setSelectedFile] = useState(null);
 
-
+    const dispatch = useDispatch();
     const [message, setMessage] = useState("");
 
-const [chatHistory, setChatHistory] = useState([]);
+    const [chatHistory, setChatHistory] = useState([]);
+
+
+
+    const ticket = useSelector((state) => state.TicketSliceReducer.TicketDetailsSlice);
+
+    console.log("ticket info : ", ticket);
+
 
     useEffect(() => {
-        const fetchTicketDetails = async () => {
-            try {
-                const response = await fetch(`https://znginx.perisync.work/api/v1/support?id=${id}`, {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("at")}`,
-                    },
-                });
-                const data = await response.json();
-                setTicket(data);
-            } catch (error) {
-                console.error("Error fetching ticket details:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchTicketDetails();
-    }, [id]);
+        dispatch(fetchTicketDetails(id, { setLoading }));
+    }, [dispatch, id]);
 
     const handleFileChange = (event) => {
         setSelectedFile(event.target.files[0]);
@@ -51,15 +43,43 @@ const [chatHistory, setChatHistory] = useState([]);
     };
 
 
-    const handlePostMessage = async () => {
+    // const handlePostMessage = async () => {
+    //     if (!message.trim()) return;
+
+    //     const newMessage = await postComment(message, 124);
+    //     if (newMessage) {
+    //         setChatHistory((prev) => [newMessage, ...prev]);
+    //         setMessage("");
+    //     }
+    // };
+
+
+    const handlePostMessage = () => {
         if (!message.trim()) return;
     
-        const newMessage = await postComment(message, 124);
-        if (newMessage) {
-            setChatHistory((prev) => [newMessage, ...prev]);
-            setMessage("");
+        dispatch(postComment(message, id, { setLoading }));
+        setMessage("");
+    };
+
+    
+    const postComments=useSelector((state)=>state.TicketSliceReducer.postCommentSlice);
+    console.log("comment:", postComments);
+    
+
+    // useEffect(() => {
+    //     dispatch(fetchChat( id, {setLoading }));
+    //   }, [dispatch, id]);
+
+    const handleTabChange = (event, newValue) => {
+        setActiveTab(newValue);
+        if (newValue === 1) {
+            dispatch(fetchChat(id, { setLoading }));
         }
     };
+
+
+    const chat = useSelector((state) => state.TicketSliceReducer.ChatSlice);
+
 
     return (
         <div>
@@ -76,7 +96,7 @@ const [chatHistory, setChatHistory] = useState([]);
 
                 <h2 className="text-3xl font-bold mb-4">Ticket ID: {ticket?.id}</h2>
 
-                <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)}>
+                <Tabs value={activeTab} onChange={handleTabChange}>
                     <Tab label="Overview" />
                     <Tab label="Chat" />
                 </Tabs>
@@ -148,86 +168,86 @@ const [chatHistory, setChatHistory] = useState([]);
                             </div>
                         )}
 
-{activeTab === 1 && (
-    <div className="mt-4 rounded-lg">
-        {/* Message Input Section */}
-        <div className="border rounded-lg p-4">
-            <div className="font-semibold mb-2">Enter the message</div>
-            <textarea
-                className="w-full border rounded-lg p-2 text-sm"
-                placeholder="What's the status of the Ticket"
-                maxLength={512}
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-            />
-            <div className="flex items-center justify-between mt-2">
-                <label className="cursor-pointer flex items-center gap-1">
-                    <input
-                        type="file"
-                        className="hidden"
-                        onChange={(e) => setSelectedFile(e.target.files[0])}
-                    />
-                    <Icon icon="mdi:paperclip" className="text-gray-600 text-xl" />
-                    {selectedFile ? (
-                        <div className="flex items-center space-x-2 border px-2 py-1 rounded-lg">
-                            <span className="text-red-500 text-sm">{selectedFile.name}</span>
-                            <button onClick={() => setSelectedFile(null)} className="text-red-500">
-                                <Icon icon="mdi:close-circle" className="text-lg" />
-                            </button>
-                        </div>
-                    ) : (
-                        <p>Select file from device</p>
-                    )}
-                </label>
+                        {activeTab === 1 && (
+                            <div className="mt-4 rounded-lg">
+                                {/* Message Input Section */}
+                                <div className="border rounded-lg p-4">
+                                    <div className="font-semibold mb-2">Enter the message</div>
+                                    <textarea
+                                        className="w-full border rounded-lg p-2 text-sm"
+                                        placeholder="What's the status of the Ticket"
+                                        maxLength={512}
+                                        value={message}
+                                        onChange={(e) => setMessage(e.target.value)}
+                                    />
+                                    <div className="flex items-center justify-between mt-2">
+                                        <label className="cursor-pointer flex items-center gap-1">
+                                            <input
+                                                type="file"
+                                                className="hidden"
+                                                onChange={(e) => setSelectedFile(e.target.files[0])}
+                                            />
+                                            <Icon icon="mdi:paperclip" className="text-gray-600 text-xl" />
+                                            {selectedFile ? (
+                                                <div className="flex items-center space-x-2 border px-2 py-1 rounded-lg">
+                                                    <span className="text-red-500 text-sm">{selectedFile.name}</span>
+                                                    <button onClick={() => setSelectedFile(null)} className="text-red-500">
+                                                        <Icon icon="mdi:close-circle" className="text-lg" />
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <p>Select file from device</p>
+                                            )}
+                                        </label>
 
-                <button
-                    className="bg-indigo-500 text-white px-4 py-2 rounded-lg"
-                    onClick={handlePostMessage}
-                    disabled={!message.trim()}
-                >
-                    Post
-                </button>
-            </div>
-        </div>
+                                        <button
+                                            className="bg-indigo-500 text-white px-4 py-2 rounded-lg"
+                                            onClick={handlePostMessage}
+                                            disabled={!message.trim()}
+                                        >
+                                            Post
+                                        </button>
+                                    </div>
+                                </div>
 
-        {/* Chat History Section */}
-        <div className="mt-4 border rounded-lg p-4">
-            <div className="font-semibold border-b py-2 mb-4">Chat History</div>
-            {chatHistory.length > 0 ? (
-                chatHistory.map((chat) => (
-                    <div key={chat.id} className="flex items-start space-x-3 mt-2 ">
-                        <img
-                            src={chat.profilePic}
-                            alt="User"
-                            className="w-10 h-10 object-cover rounded-full"
-                        />
-                        <div className="flex-1 flex justify-between bg-gray-100 p-3 rounded-lg">
-                            <div className="font-semibold">{chat.name}
-                            <p className="text-gray-600">{chat.comment}</p>
+                                {/* Chat History Section */}
+                                <div className="mt-4 border rounded-lg p-4">
+                                    <div className="font-semibold border-b py-2 mb-4">Chat History</div>
+                                    {chat.length > 0 ? (
+                                        chat.map((chat) => (
+                                            <div key={chat.id} className="flex items-start space-x-3 mt-2 ">
+                                                <img
+                                                    src={chat.profilePic}
+                                                    alt="User"
+                                                    className="w-10 h-10 object-cover rounded-full"
+                                                />
+                                                <div className="flex-1 flex justify-between bg-gray-100 p-3 rounded-lg">
+                                                    <div className="font-semibold">{chat.name}
+                                                        <p className="text-gray-600">{chat.comment}</p>
+                                                    </div>
+
+                                                    <div>
+                                                        <span className="text-gray-400 text-xs">
+                                                            {new Date(chat.createdAt).toLocaleString(undefined, {
+                                                                hour: 'numeric',
+                                                                minute: 'numeric',
+                                                                year: 'numeric',
+                                                                month: 'short',
+                                                                day: 'numeric'
+                                                            })}
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="text-gray-500 text-sm mt-2">No data available</div>
+                                    )}
+                                </div>
                             </div>
-                           
-                            <div>
-                            <span className="text-gray-400 text-xs"> 
-    {new Date(chat.createdAt).toLocaleString(undefined, {
-        hour: 'numeric',
-        minute: 'numeric',
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-    })}
-</span>
-                        </div>
-                        </div>
-                
-
-                    </div>
-                ))
-            ) : (
-                <div className="text-gray-500 text-sm mt-2">No data available</div>
-            )}
-        </div>
-    </div>
-)}
+                        )}
 
                     </>
                 ) : (

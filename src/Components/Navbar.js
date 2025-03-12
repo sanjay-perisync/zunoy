@@ -10,12 +10,12 @@ function Navbar() {
 
 
   const activeTab =
-  location.pathname.startsWith("/support") ? "Support" :
-  location.pathname === "/account" ? "Account" :
-  location.pathname === "/billing" ? "Billing" :
-  location.pathname === "/security" ? "Security" :
-  "All apps";
-   
+    location.pathname.startsWith("/support") ? "Support" :
+      location.pathname === "/account" ? "Account" :
+        location.pathname === "/billing" ? "Billing" :
+          location.pathname === "/security" ? "Security" :
+            "All apps";
+
 
 
   const [isOpen, setIsOpen] = useState(false);
@@ -39,11 +39,11 @@ function Navbar() {
         {/* Top Header */}
         <div className="px-6 py-4 flex justify-between items-center border-b">
           {/* Left Side */}
-          <div className="flex items-center gap-4"> 
+          <div className="flex items-center gap-4">
             <svg className="hidden lg:flex" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_2062_2205)"><path d="M2.46466 0.0686505L9.61466 1.98508C11.069 2.37503 11.556 4.1928 10.4913 5.25734L5.25666 10.4913C4.19166 11.5562 2.37366 11.0689 1.984 9.61446L0.0686637 2.46402C-0.321003 1.00953 1.01033 -0.320967 2.46466 0.0686505Z" fill="#7A00FF"></path><path d="M21.5353 0.0686505L14.3853 1.98508C12.931 2.37503 12.444 4.1928 13.5087 5.25734L18.7433 10.4913C19.8083 11.5562 21.6263 11.0689 22.016 9.61446L23.9313 2.46402C24.321 1.00953 22.9897 -0.320967 21.5353 0.0686505Z" fill="#F9464C"></path><path d="M2.46466 23.931L9.61466 22.0146C11.069 21.6246 11.556 19.8069 10.4913 18.7423L5.25666 13.5083C4.19166 12.4435 2.37366 12.9307 1.984 14.3852L0.0686637 21.536C-0.321003 22.9905 1.01033 24.321 2.46466 23.9313V23.931Z" fill="#088BF5"></path><path d="M21.5353 23.931L14.3853 22.0146C12.931 21.6246 12.444 19.8069 13.5087 18.7423L18.7433 13.5083C19.8083 12.4435 21.6263 12.9307 22.016 14.3852L23.9313 21.5356C24.321 22.9901 22.9897 24.3206 21.5353 23.931Z" fill="#1AD3BB"></path></g><defs><clipPath id="clip0_2062_2205"><rect width="24" height="24" fill="white"></rect></clipPath></defs></svg>
             <h6 className="text-xl font-semibold hidden lg:flex">Zunoy Accounts</h6>
 
-            <svg xmlns="http://www.w3.org/2000/svg" className="flex lg:hidden text-gray-500" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 17h14M5 12h14M5 7h14"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" className="flex lg:hidden text-gray-500" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 17h14M5 12h14M5 7h14" /></svg>
           </div>
 
           {/* Right Side */}
@@ -57,34 +57,34 @@ function Navbar() {
               />
             </svg>
             <div className="relative">
-      {/* User Icon */}
-      <div
-        className="bg-gray-200 rounded-full p-1 cursor-pointer"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <svg className="w-7 h-7 text-black" viewBox="0 0 24 24" fill="none">
-          <path
-            stroke="currentColor"
-            strokeWidth="2"
-            d="M20 21c0-1.3956 0-2.0933-.1722-2.6611a4.0002 4.0002 0 0 0-2.6667-2.6667C16.5933 15.5 15.8956 15.5 14.5 15.5h-5c-1.3956 0-2.0934 0-2.6611.1722a4.0001 4.0001 0 0 0-2.6667 2.6667C4 18.9067 4 19.6044 4 21M16.5 7.5c0 2.4853-2.0147 4.5-4.5 4.5S7.5 9.9853 7.5 7.5 9.5147 3 12 3s4.5 2.0147 4.5 4.5Z"
-          />
-        </svg>
-      </div>
+              {/* User Icon */}
+              <div
+                className="bg-gray-200 rounded-full p-1 cursor-pointer"
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                <svg className="w-7 h-7 text-black" viewBox="0 0 24 24" fill="none">
+                  <path
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    d="M20 21c0-1.3956 0-2.0933-.1722-2.6611a4.0002 4.0002 0 0 0-2.6667-2.6667C16.5933 15.5 15.8956 15.5 14.5 15.5h-5c-1.3956 0-2.0934 0-2.6611.1722a4.0001 4.0001 0 0 0-2.6667 2.6667C4 18.9067 4 19.6044 4 21M16.5 7.5c0 2.4853-2.0147 4.5-4.5 4.5S7.5 9.9853 7.5 7.5 9.5147 3 12 3s4.5 2.0147 4.5 4.5Z"
+                  />
+                </svg>
+              </div>
 
-      {/* Dropdown Menu */}
-      {isOpen && (
-        <div className="absolute w-64 right-0 mt-2 flex flex-col gap-2  items-start bg-white shadow-lg rounded-lg p-3">
-          <p className="text-gray-700 font-medium">
-            {userData.firstName} {userData.lastName}
-          </p>
-          <p className="text-sm text-gray-500">{userData.email}</p>
-          {/* <button className="mt-2 w-full text-red-500 border border-red-500 rounded-md py-1 hover:bg-red-100">
+              {/* Dropdown Menu */}
+              {isOpen && (
+                <div className="absolute w-64 right-0 mt-2 flex flex-col gap-2  items-start bg-white shadow-lg rounded-lg p-3">
+                  <p className="text-gray-700 font-medium">
+                    {userData.firstName} {userData.lastName}
+                  </p>
+                  <p className="text-sm text-gray-500">{userData.email}</p>
+                  {/* <button className="mt-2 w-full text-red-500 border border-red-500 rounded-md py-1 hover:bg-red-100">
             Sign out of all accounts
           </button> */}
-          <LogoutPopup/>
-        </div>
-      )}
-    </div>
+                  <LogoutPopup />
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -206,7 +206,7 @@ function Navbar() {
 
           {/* Right Section */}
           {/* <LogoutPopup /> */}
-          <Logout/>
+          <Logout />
         </nav>
       </header>
     </div>

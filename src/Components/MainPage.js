@@ -3,7 +3,9 @@ import Navbar from './Navbar';
 import Banner from './Banner';
 import Mainpagefooter from './Mainpagefooter';
 import { Avatar, AvatarGroup, Skeleton } from "@mui/material";
-import { fetchProducts } from '../APIconfig/getAPIconfig';
+import { ProductsFetchAPI } from '../APIconfig/getAPIconfig';
+import { useDispatch,useSelector } from 'react-redux';
+
 
 const badgeImage = "https://dev-account.zoop360.com/images/newbannerlogo.svg";
 
@@ -15,25 +17,24 @@ const productLogos = [
 ];
 
 function MainPage() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+  
+  const products = useSelector(
+    (state) => state?.productsSliceReducer?.productsListSlice || []
+  );
+  const error = useSelector(
+    (state) => state?.rootReducer?.productSliceReducer?.error
+  );
 
   useEffect(() => {
-    const getProducts = async () => {
-      try {
-        setLoading(true);
-        const data = await fetchProducts();
-        setProducts(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+    setLoading(true)
+    dispatch(ProductsFetchAPI({setLoading}));
+  }, [dispatch]);
 
-    getProducts();
-  }, []);
+  console.log("Fetched Products:", products);
 
   return (
     <div>
@@ -46,8 +47,8 @@ function MainPage() {
           <h2 className="text-[28px] font-bold mb-6">Our Products</h2>
 
           {loading ? (
-            /* Skeleton Loader Grid */
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+     
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
               {Array(3).fill().map((_, index) => (
                 <div key={index} className="bg-white p-8 rounded-lg border h-[450px]">
                   <Skeleton variant="rectangular" width="100%" height={200} />
@@ -59,19 +60,19 @@ function MainPage() {
                   <Skeleton variant="rectangular" width="100px" height={40} className="mt-4" />
                 </div>
               ))}
-              {/* Skeleton for Coming Soon Card */}
+       
               <div className="bg-white p-10 rounded-lg border h-[450px] flex flex-col justify-center items-center">
                 <Skeleton variant="text" width={150} height={30} />
                 <Skeleton variant="text" width={200} height={20} className="mt-2" />
                 <Skeleton variant="circular" width={50} height={50} className="mt-3" />
               </div>
-            </div>
-          ) : error ? (
-            <div className="text-red-500 text-center p-4">
+            </div> 
+           ) : error ? (
+             <div className="text-red-500 text-center p-4">
               Error loading products: {error}
             </div>
-          ) : (
-            /* Product Cards */
+           ) : ( 
+         
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
               {products.map((product, index) => (
                 <div key={product.id} className="relative bg-white p-8 flex flex-col justify-between rounded-lg border h-[450px]">
@@ -82,7 +83,7 @@ function MainPage() {
                     className="absolute translate-x-[4px] top-0 right-0 w-[80px] h-[30px]"
                   />
 
-                  {/* Product Info */}
+       
                   <div className="mt-5 flex-grow">
                     <div className="flex items-center gap-4">
                       <img src={productLogos[index % productLogos.length]} alt={product.name} className="w-10 h-10" />
@@ -95,7 +96,7 @@ function MainPage() {
                     <p className="text-black text-[18px] mt-2">{product.description}</p>
                   </div>
 
-                  {/* Button and Links */}
+                 
                   <div className="flex flex-col items-start gap-3">
                     <a
                       href={product.url}
@@ -115,14 +116,13 @@ function MainPage() {
                 </div>
               ))}
 
-              {/* Coming Soon Card */}
+             
               <div className="bg-white p-10 rounded-lg border flex flex-col items-center justify-center h-[450px]">
                 <h3 className="text-red-500 font-semibold text-xl">Coming Soon</h3>
                 <p className="text-gray-600 text-center text-[18px]">
                   We're cooking something special...
                 </p>
 
-                {/* Icons Section */}
                 <div className="flex mt-3 items-center">
                   <AvatarGroup max={5}>
                     <img
@@ -161,7 +161,7 @@ function MainPage() {
                 </div>
               </div>
             </div>
-          )}
+           )} 
         </div>
       </section>
 
