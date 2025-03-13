@@ -40,7 +40,7 @@ const InvoicePage = () => {
 
   return (
     <div className="p-6 flex flex-wrap lg:flex-nowrap gap-6">
-      <div className="w-full lg:w-1/4 border rounded-lg">
+      <div className="w-auto lg:w-1/4 border rounded-lg">
         <div className='border-b p-4'>
           Filters
         </div>

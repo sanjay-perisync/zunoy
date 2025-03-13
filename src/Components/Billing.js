@@ -4,11 +4,14 @@ import Navbar from "./Navbar";
 import Mainpagefooter from "./Mainpagefooter";
 import { updateBillingAddress } from "../APIconfig/PutApiconfig";
 import InvoicePage from "./InvoicePage";
+import { useDispatch,useSelector } from 'react-redux';
 
 function Billing() {
   const [activeTab, setActiveTab] = useState(0);
   const [showForm, setShowForm] = useState(false);
   const [billingInfo, setBillingInfo] = useState(null);
+    const dispatch = useDispatch();
+  
   const [formData, setFormData] = useState({
     line1: "",
     line2: "",
@@ -23,14 +26,42 @@ function Billing() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // const handleUpdate = async (e) => {
+  //   e.preventDefault();
+  //   const updatedData = await updateBillingAddress(formData);
+  //   if (updatedData) {
+  //     setBillingInfo(updatedData);
+  //     dispatch(updatedData);
+  //     // setShowForm(false);
+  //   }
+  // };
+
   const handleUpdate = async (e) => {
     e.preventDefault();
-    const updatedData = await updateBillingAddress(formData);
-    if (updatedData) {
-      setBillingInfo(updatedData);
-      setShowForm(false);
-    }
+    dispatch(updateBillingAddress(formData)); 
   };
+  
+
+   const billing = useSelector(
+      (state) => state?.billingReducer?.billingdetailsSlice || []
+    );
+
+
+    console.log("billing info:",billing);
+    
+
+  // const handleUpdate = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const updatedData = await updateBillingAddress(formData);
+  //     if (updatedData) {
+  //       dispatch(updateBillingInfo(updatedData));
+  //       setShowForm(false);
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to update billing address:", error);
+  //   }
+  // };
 
   return (
     <div>
@@ -142,6 +173,8 @@ function Billing() {
                   </div>
                 )
             )
+
+
 
 
 

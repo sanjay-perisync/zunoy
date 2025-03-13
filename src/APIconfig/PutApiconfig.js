@@ -3,6 +3,7 @@ import axios from 'axios';
 import { toast } from "react-hot-toast";
 import { putAPICall } from "./axiosMethodCalls";
 import { setBillingInfo } from "../Redux/Slices/Billing/billingSlice";
+import { BillingSuccess } from "../Redux/Slices/Billing/billingSlice";
 
 
 
@@ -209,26 +210,79 @@ export const changePassword = async ({ oldPassword, newPassword, otp, killSessio
 
 
 
-export const updateBillingAddress = async (billingData) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/billingAddress`, {
-      method: "PUT",
+// export const updateBillingAddress = async (billingData) => {
+//   try {
+//     const response = await fetch(`${API_BASE_URL}/billingAddress`, {
+//       method: "PUT",
+//       headers: {
+//         "Content-Type": "application/json",
+//         Authorization: `Bearer ${localStorage.getItem("at")}`,
+//       },
+//       body: JSON.stringify(billingData),
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("Failed to update billing address");
+//     }
+
+//     return await response.json();
+//   } catch (error) {
+//     console.error("Error updating billing address:", error);
+//     return null;
+//   }
+// };
+
+
+// export const updateBillingAddress = (billingData) => {
+//   return (dispatch) => {
+//     // setLoading(true);
+
+//     const options = {
+//       headers: {
+//         Authorization: `Bearer ${localStorage.getItem("at")}`,
+//       },
+//     };
+
+//     putAPICall(`${API_BASE_URL}/billingAddress`, options)
+//       .then((response) => {
+//         // setLoading(false);
+//         dispatch(BillingSuccess(response));
+//       })
+//       .catch((err) => {
+//         // setLoading(false);
+//         dispatch({ type: "FETCH_Billing_DETAILS_FAILED", payload: err });
+//         toast.error(
+//           err?.response?.data?.msg ||
+//             "Unable to fetch Billing details. Please try again later."
+//         );
+//       });
+//   };
+// };
+
+
+
+
+
+
+export const updateBillingAddress = (billingData) => {
+  return (dispatch) => {
+    const options = {
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("at")}`,
       },
-      body: JSON.stringify(billingData),
-    });
+    };
 
-    if (!response.ok) {
-      throw new Error("Failed to update billing address");
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Error updating billing address:", error);
-    return null;
-  }
+    putAPICall(`${API_BASE_URL}/billingAddress`, billingData, options) 
+      .then((response) => {
+        dispatch(BillingSuccess(response.data)); 
+        toast.success("Billing address updated successfully!");
+      })
+      .catch((err) => {
+        dispatch({ type: "FETCH_BILLING_DETAILS_FAILED", payload: err });
+        toast.error(
+          err?.response?.data?.msg ||
+            "Unable to update Billing details. Please try again later."
+        );
+      });
+  };
 };
-
-
