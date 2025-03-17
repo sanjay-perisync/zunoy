@@ -93,14 +93,17 @@ function Navbar() {
             <li>
               <Link to="/support" className="block py-2 px-4" onClick={() => setIsMenuOpen(false)}>Support</Link>
             </li>
+            <li>
+              <Link to="/guestmanagement" className="block py-2 px-4" onClick={() => setIsMenuOpen(false)}>Guest Management</Link>
+            </li>
           </ul>
         </nav>
       )}
 
-      {/* Desktop Navigation */}
+ 
       <nav className="hidden lg:flex items-center justify-between px-6 py-4 bg-white border-b">
       <div className="flex items-center space-x-6">
-        
+
             {/* All Apps */}
             <Link to="/mainpage">
               <button className={`flex items-center space-x-4 px-3 py-1.5 rounded-lg font-semibold ${activeTab === "All apps" ? "bg-gray-200" : ""}`}>
