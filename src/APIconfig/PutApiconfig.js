@@ -4,6 +4,8 @@ import { toast } from "react-hot-toast";
 import { putAPICall } from "./axiosMethodCalls";
 import { setBillingInfo } from "../Redux/Slices/Billing/billingSlice";
 import { BillingSuccess } from "../Redux/Slices/Billing/billingSlice";
+import { guestrooturl } from "./getAPIconfig";
+import { UpdateGuestSuccess } from "../Redux/Slices/Guest/GuestSlice";
 
 
 
@@ -282,6 +284,42 @@ export const updateBillingAddress = (billingData) => {
         toast.error(
           err?.response?.data?.msg ||
             "Unable to update Billing details. Please try again later."
+        );
+      });
+  };
+};
+
+
+
+
+
+
+export const UpdateGuestAPI = (formData, setLoading) => {
+  return async (dispatch) => {
+    setLoading(true);
+    
+    const options = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "x-app-id": "2"
+        
+      },
+    };
+  
+
+    putAPICall(`${guestrooturl}/guest`,formData, options)
+      .then((response) => {
+        setLoading(false);
+        // dispatch(UpdateGuestSuccess(response));
+        dispatch(UpdateGuestSuccess(response?.data));
+        toast.success("Guest updated successfully!");
+      })
+      .catch((err) => {
+        setLoading(false);
+        dispatch({ type: "Update_Failed", payload: err });
+
+        toast.error(
+          err?.response?.data?.msg || "Unable to Update. Please try again later."
         );
       });
   };

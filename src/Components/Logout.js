@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { LogoutApi } from "../APIconfig/DeleteApiConfig";
 
 import { useNavigate } from "react-router-dom";
+import { CircularProgress } from "@mui/material";
 
 function Logout() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,7 +39,7 @@ function Logout() {
       {/* Logout Button */}
       <button
         onClick={() => setIsModalOpen(true)}
-        className="flex items-center space-x-2 px-4 py-2 text-red-500 border border-red-300 rounded-xl hover:bg-red-50"
+        className="flex items-center space-x-[5px] px-4 py-2 text-red-500 border border-red-300 rounded-xl hover:bg-red-50 max-w-[500px]"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -56,7 +57,7 @@ function Logout() {
           <polyline points="16 17 21 12 16 7"></polyline>
           <line x1="21" y1="12" x2="9" y2="12"></line>
         </svg>
-        <span className="font-semibold text-[16px]">Logout</span>
+        <span className="font-semibold">Sign Out of all accounts</span>
       </button>
 
       {/* Logout Confirmation Modal */}
@@ -86,7 +87,7 @@ function Logout() {
                 className="px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600"
                 disabled={loading}
               >
-                {loading ? "Logging out..." : "Logout"}
+                {loading ? <CircularProgress/> : "Logout"}
               </button>
             </div>
           </div>

@@ -14,6 +14,7 @@ import Billing from "./Components/Billing";
 import CreateTicket from "./Components/CreateTicket";
 import SupportTicketDetails from "./Components/SupportTicketDetails";
 import { store } from "./Redux/Store"; 
+import Guest from "./Components/Guest Management/Guest";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
             <Route path="/billing" element={<Billing />} />
             <Route path="/support/create" element={<CreateTicket />} />
             <Route path="/support/details/:id" element={<SupportTicketDetails />} />
+            <Route path="/guestmanagement" element={<Guest />} />
           </Routes>
         </div>
       </Router>

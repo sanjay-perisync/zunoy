@@ -11,6 +11,8 @@ import { TicketSuccess } from "../Redux/Slices/Support/TicketSlice";
 // import { StatusSuccess } from "../Redux/Slices/Support/StatusCountSlice";
 import { TicketinfoSuccess } from "../Redux/Slices/Support/TicketDetailsSlice";
 import { chatSuccess } from "../Redux/Slices/Support/chatSlice";
+import { GuestlistSuccess } from "../Redux/Slices/Guest/GuestSlice";
+
 
 
 
@@ -536,6 +538,47 @@ export const fetchChat = (id, {setLoading }) => {
       });
   };
 };
+
+
+
+
+
+
+export const guestrooturl = 'https://twfroute.perisync.work/api/v1/acc/buildingAdmin';
+
+export const GuestAPI = (setLoading ) => {
+  return async (dispatch) => {
+    setLoading(true);
+    
+      const options = {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "x-app-id": "2",
+        },
+      };
+
+      getAPICall(
+        `${guestrooturl}/guest?page=1&size=5`,
+        options )
+        .then((response) => {
+      setLoading(false);
+      dispatch(GuestlistSuccess(response));
+    })
+     .catch ((err) => {
+      setLoading(false);
+      dispatch({ type: "FETCH_GUESTS_FAILED", payload: err });
+
+      toast.error(
+        err?.response?.data?.msg ||
+          "Unable to fetch guest details. Please try again later."
+      );
+    });
+  };
+};
+
+
+
+
 
 
 

@@ -27,12 +27,14 @@ import billingReducer from "../Slices/Billing";
 import productsSliceReducer from "../Slices/Products"; 
 import accountSliceReducer from "../Slices/Account";
 import TicketSliceReducer from "../Slices/Support";
+import guestSliceReducer from "../Slices/Guest";
 
 const rootReducer = combineReducers({
   productsSliceReducer,
   billingReducer,
   accountSliceReducer,
-  TicketSliceReducer
+  TicketSliceReducer,
+  guestSliceReducer
 });
 
 export default rootReducer;

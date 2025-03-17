@@ -3,6 +3,8 @@ import axios from "axios";
 import { postAPICall } from "./axiosMethodCalls";
 import { AccountsRootUrl } from "./ConstantRootURL/RootUrl";
 import { chatCommentSuccess } from "../Redux/Slices/Support/postComment";
+import { AddGuestSuccess } from "../Redux/Slices/Guest/GuestSlice";
+import { guestrooturl } from "./getAPIconfig";
 
 const api = axios.create({
   baseURL: AccountsRootUrl,
@@ -314,6 +316,39 @@ export const postComment = (comment, ticketId, { setLoading }) => {
         dispatch({ type: "POST_COMMENT_FAILED", payload: err });
         toast.error(
           err?.response?.data?.msg || "Unable to post comment. Please try again later."
+        );
+      });
+  };
+};
+
+
+
+
+export const AddGuestAPI = (formData, setLoading) => {
+  return async (dispatch) => {
+    setLoading(true);
+    
+    const options = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "x-app-id": "2"
+        
+      },
+    };
+  
+
+    postAPICall(`${guestrooturl}/guest`,formData, options)
+      .then((response) => {
+        setLoading(false);
+        dispatch(AddGuestSuccess(response));
+        toast.success("Guest added successfully!");
+      })
+      .catch((err) => {
+        setLoading(false);
+        dispatch({ type: "ADD_GUESTS_FAILED", payload: err });
+
+        toast.error(
+          err?.response?.data?.msg || "Unable to add guest. Please try again later."
         );
       });
   };

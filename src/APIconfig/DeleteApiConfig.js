@@ -2,7 +2,8 @@
 import { toast } from "react-hot-toast";
 import { deleteAPICall } from "./axiosMethodCalls";
 import { AccountsRootUrl } from "./ConstantRootURL/RootUrl";
-
+import { guestrooturl } from "./getAPIconfig";
+import { DeleteGuestSuccess } from "../Redux/Slices/Guest/GuestSlice";
 // export const LogoutApi = ({ setloader }) => {
 //   return (dispatch) => {
 //     const options = {
@@ -150,4 +151,34 @@ export const endAllSessions = async () => {
           message: "Error ending all sessions" 
       };
   }
+};
+
+
+
+export const DeleteGuestAPI = (guestId, setLoading) => {
+  return async (dispatch) => {
+    setLoading(true);
+    
+    const options = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "x-app-id": "2"
+      },
+    };
+  
+    deleteAPICall(`${guestrooturl}/guest?userId=${guestId}`, options)
+      .then((response) => {
+        setLoading(false);
+        dispatch(DeleteGuestSuccess(guestId));
+        toast.success("Guest deleted successfully");
+      })
+      .catch((err) => {
+        setLoading(false);
+        dispatch({ type: "Delete", payload: err });
+
+        toast.error(
+          err?.response?.data?.msg || "Unable to delete. Please try again later."
+        );
+      });
+  };
 };
