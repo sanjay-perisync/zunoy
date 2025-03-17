@@ -74,31 +74,43 @@ function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <nav className="lg:hidden bg-white shadow-md p-4 absolute top-16 left-0 w-full z-50 h-screen">
-          <ul className="flex flex-col gap-4">
-            <li>
-              <Link to="/mainpage" className="block py-2 px-4" onClick={() => setIsMenuOpen(false)}>All apps</Link>
-            </li>
-            <li>
-              <Link to="/account" className="block py-2 px-4" onClick={() => setIsMenuOpen(false)}>Account</Link>
-            </li>
-            <li>
-              <Link to="/billing" className="block py-2 px-4" onClick={() => setIsMenuOpen(false)}>Billing</Link>
-            </li>
-            <li>
-              <Link to="/security" className="block py-2 px-4" onClick={() => setIsMenuOpen(false)}>Security</Link>
-            </li>
-            <li>
-              <Link to="/support" className="block py-2 px-4" onClick={() => setIsMenuOpen(false)}>Support</Link>
-            </li>
-            <li>
-              <Link to="/guestmanagement" className="block py-2 px-4" onClick={() => setIsMenuOpen(false)}>Guest Management</Link>
-            </li>
-          </ul>
-        </nav>
-      )}
+   {/* Mobile Menu */}
+{isMenuOpen && (
+  <nav className="lg:hidden bg-white shadow-md p-4 absolute top-16 left-0 w-full z-50 h-screen">
+
+    <button
+      onClick={() => setIsMenuOpen(false)}
+      className="absolute top-6 right-4 text-black"
+      aria-label="Close menu"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 6 6 18M6 6l12 12"/>
+      </svg>
+    </button>
+
+    <ul className="flex flex-col gap-4 mt-8">
+      <li>
+        <Link to="/mainpage" className="block py-2 px-4" onClick={() => setIsMenuOpen(false)}>All apps</Link>
+      </li>
+      <li>
+        <Link to="/account" className="block py-2 px-4" onClick={() => setIsMenuOpen(false)}>Account</Link>
+      </li>
+      <li>
+        <Link to="/billing" className="block py-2 px-4" onClick={() => setIsMenuOpen(false)}>Billing</Link>
+      </li>
+      <li>
+        <Link to="/security" className="block py-2 px-4" onClick={() => setIsMenuOpen(false)}>Security</Link>
+      </li>
+      <li>
+        <Link to="/support" className="block py-2 px-4" onClick={() => setIsMenuOpen(false)}>Support</Link>
+      </li>
+      <li>
+        <Link to="/guestmanagement" className="block py-2 px-4" onClick={() => setIsMenuOpen(false)}>Guest Management</Link>
+      </li>
+    </ul>
+  </nav>
+)}
+
 
  
       <nav className="hidden lg:flex items-center justify-between px-6 py-4 bg-white border-b">
