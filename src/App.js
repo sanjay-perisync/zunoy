@@ -15,6 +15,8 @@ import CreateTicket from "./Components/CreateTicket";
 import SupportTicketDetails from "./Components/SupportTicketDetails";
 import { store } from "./Redux/Store"; 
 import Guest from "./Components/Guest Management/Guest";
+import Monitor from "./Components/WatchTower/Monitor";
+import CreateMonitor from "./Components/WatchTower/CreateMonitor";
 
 function App() {
   return (
@@ -35,6 +37,8 @@ function App() {
             <Route path="/support/create" element={<CreateTicket />} />
             <Route path="/support/details/:id" element={<SupportTicketDetails />} />
             <Route path="/guestmanagement" element={<Guest />} />
+            <Route path="/monitors" element={<Monitor />} />
+            <Route path="/monitors/Create" element={<CreateMonitor />} />
           </Routes>
         </div>
       </Router>

@@ -1,12 +1,11 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import GuestSlice from "./GuestSlice";
-import AddGuestSlice from "./AddGuestSlice";
+
 
 
 
 const guestSliceReducer = combineReducers({
-    GuestSlice,
-    AddGuestSlice
+    GuestSlice
 });
 
 export default guestSliceReducer 

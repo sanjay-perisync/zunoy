@@ -310,8 +310,9 @@ export const UpdateGuestAPI = (formData, setLoading) => {
     putAPICall(`${guestrooturl}/guest`,formData, options)
       .then((response) => {
         setLoading(false);
-        // dispatch(UpdateGuestSuccess(response));
-        dispatch(UpdateGuestSuccess(response?.data));
+        // dispatch(UpdateGuestSuccess(response?.data));
+        dispatch(UpdateGuestSuccess({ data: response?.data }));
+
         toast.success("Guest updated successfully!");
       })
       .catch((err) => {

@@ -5,6 +5,7 @@ import Mainpagefooter from './Mainpagefooter';
 import { Avatar, AvatarGroup, Skeleton } from "@mui/material";
 import { ProductsFetchAPI } from '../APIconfig/getAPIconfig';
 import { useDispatch,useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 
 const badgeImage = "https://dev-account.zoop360.com/images/newbannerlogo.svg";
@@ -16,10 +17,11 @@ const productLogos = [
   "https://account.zunoy.com/images/zooptime.svg"
 ];
 
+
+const tryNowRoutes = ["/MyForms", "/projects", "/monitors"];
+
 function MainPage() {
-  // const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-  // const [error, setError] = useState(null);
   const dispatch = useDispatch();
   
   const products = useSelector(
@@ -74,7 +76,9 @@ function MainPage() {
            ) : ( 
          
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-              {products.map((product, index) => (
+              
+              {/* {products.map((product, index) => (
+                 
                 <div key={product.id} className="relative bg-white p-8 flex flex-col justify-between rounded-lg border h-[450px]">
 
                   <img
@@ -107,6 +111,9 @@ function MainPage() {
                       Try Now
                     </a>
 
+
+
+
                     <div className="flex flex-col text-gray-500 underline space-y-1">
                       <a href={"#"}>Read more</a>
                       <a href={"#"}>Documentation</a>
@@ -114,8 +121,54 @@ function MainPage() {
                     </div>
                   </div>
                 </div>
-              ))}
+              ))} */}
 
+
+{products.map((product, index) => {
+  const tryNowLink = tryNowRoutes[index]; 
+
+  return (
+    <div key={product.id} className="relative bg-white p-8 flex flex-col justify-between rounded-lg border h-[450px]">
+      
+ 
+      <img
+        src={badgeImage}
+        alt="New Badge"
+        className="absolute translate-x-[4px] top-0 right-0 w-[80px] h-[30px]"
+      />
+
+
+      <div className="mt-5 flex-grow">
+        <div className="flex items-center gap-4">
+          <img src={productLogos[index % productLogos.length]} alt={product.name} className="w-10 h-10" />
+          <h3 className="font-semibold text-[20px]">{product.name}</h3>
+          <span className="bg-gray-300 px-3 py-[2px] rounded-full">
+            {product.tierInfo?.name || "Free"}
+          </span>
+        </div>
+
+        <p className="text-black text-[18px] mt-2">{product.description}</p>
+      </div>
+
+     
+      <div className="flex flex-col items-start gap-3">
+        <Link
+          to={tryNowLink}
+          className="bg-indigo-500 text-white px-4 py-2 mt-4 lg:mt-0 mb-5 rounded-xl w-24 text-center"
+        >
+          Try Now
+        </Link>
+
+       
+        <div className="flex flex-col text-gray-500 underline space-y-1">
+          <a href={"#"}>Read more</a>
+          <a href={"#"}>Documentation</a>
+          <a href={"#"}>Raise a Ticket</a>
+        </div>
+      </div>
+    </div>
+  );
+})}
              
               <div className="bg-white p-10 rounded-lg border flex flex-col items-center justify-center h-[450px]">
                 <h3 className="text-red-500 font-semibold text-xl">Coming Soon</h3>

@@ -14,6 +14,8 @@ function Navbar() {
     location.pathname === "/billing" ? "Billing" :
     location.pathname === "/security" ? "Security" :
     location.pathname === "/guestmanagement" ? "Guest Management" :
+    // location.pathname === "/monitors" ? "Monitors" :
+    location.pathname.startsWith("/monitors") ? "Monitors" :
     "All apps";
 
   const [userData, setUserData] = useState({
@@ -233,10 +235,10 @@ function Navbar() {
 
 
             <Link to="/guestmanagement">
-              <button className={`flex items-center space-x-4 px-3 py-1.5 rounded-lg font-semibold ${activeTab === "guestmanagement" ? "bg-gray-200" : ""}`}>
+              <button className={`flex items-center space-x-4 px-3 py-1.5 rounded-lg font-semibold ${activeTab === "Guest Management" ? "bg-gray-200" : ""}`}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className={`h-5 w-5 ${activeTab === "guestmanagement" ? "text-indigo-500" : "text-gray-400"}`}
+                  className={`h-5 w-5 ${activeTab === "Guest Management" ? "text-indigo-500" : "text-gray-400"}`}
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -249,8 +251,33 @@ function Navbar() {
                   <line x1="12" y1="8" x2="12.01" y2="8"></line>
                 </svg>
                 
-                <span className={`font-semibold text-[16px] ${activeTab === "guestmanagement" ? "text-black" : "text-slate-600"}`}>
+                <span className={`font-semibold text-[16px] ${activeTab === "Guest Management" ? "text-black" : "text-slate-600"}`}>
                   Guest Management
+                </span>
+              </button>
+            </Link>
+
+
+
+            <Link to="/monitors">
+              <button className={`flex items-center space-x-4 px-3 py-1.5 rounded-lg font-semibold ${activeTab === "Monitors" ? "bg-gray-200" : ""}`}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`h-5 w-5 ${activeTab === "Monitors" ? "text-indigo-500" : "text-gray-400"}`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="16" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                
+                <span className={`font-semibold text-[16px] ${activeTab === "Monitors" ? "text-black" : "text-slate-600"}`}>
+                  Monitors
                 </span>
               </button>
             </Link>

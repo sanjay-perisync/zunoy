@@ -30,7 +30,7 @@ function DeleteBtn({ isModalOpen, setIsModalOpen, selectedGuest }) {
 
         <div className="mt-4 flex justify-end space-x-2 p-4">
           <button
-            className="px-4 py-2 text-gray-400 font-semibold"
+            className="px-4 py-2 hover text-gray-400 font-semibold"
             onClick={() => setIsModalOpen(false)} 
           >
             CANCEL

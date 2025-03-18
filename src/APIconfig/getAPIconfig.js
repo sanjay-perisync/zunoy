@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { getAPICall } from "./axiosMethodCalls";
 import { useDispatch } from "react-redux";
-import { AccountsRootUrl } from "./ConstantRootURL/RootUrl";
+import { AccountsRootUrl, ListURL } from "./ConstantRootURL/RootUrl";
 import toast from "react-hot-toast";
 import { GetProductsSuccess, SetLoading } from "../Redux/Slices/Products/ProductSlice";
 import axios from "axios";
@@ -12,6 +12,7 @@ import { TicketSuccess } from "../Redux/Slices/Support/TicketSlice";
 import { TicketinfoSuccess } from "../Redux/Slices/Support/TicketDetailsSlice";
 import { chatSuccess } from "../Redux/Slices/Support/chatSlice";
 import { GuestlistSuccess } from "../Redux/Slices/Guest/GuestSlice";
+import { MonitorslistSuccess } from "../Redux/Slices/Monitors/MonitorSlice";
 
 
 
@@ -577,6 +578,38 @@ export const GuestAPI = (setLoading ) => {
 };
 
 
+
+
+
+export const MonitorListAPI = (setLoading ) => {
+  return async (dispatch) => {
+    setLoading(true);
+    
+      const options = {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("mt")}`,
+          "x-app-id": "2",
+        },
+      };
+
+      getAPICall(
+        `${ListURL}/uptime/278/monitor?page=1&size=5&search=&status=&type=ping,port,https,keyword&tags=`,
+        options )
+        .then((response) => {
+      setLoading(false);
+      dispatch(MonitorslistSuccess(response));
+    })
+     .catch ((err) => {
+      setLoading(false);
+      dispatch({ type: "FETCH_GUESTS_FAILED", payload: err });
+
+      toast.error(
+        err?.response?.data?.msg ||
+          "Unable to fetch guest details. Please try again later."
+      );
+    });
+  };
+};
 
 
 
