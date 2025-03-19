@@ -359,22 +359,23 @@ export const AddGuestAPI = (formData, setLoading) => {
 
 
 
-export const AddMonitorAPI = (formData, setLoading) => {
+export const AddMonitorAPI = (payload, setLoading) => {
   return async (dispatch) => {
     setLoading(true);
     
     const options = {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        // "x-app-id": "2"
+        Authorization: `Bearer ${localStorage.getItem("mt")}`,
+       
       },
     };
   
-
-    postAPICall(`${ListURL}/uptime/281/monitor`,formData, options)
+    
+    postAPICall(`${ListURL}/uptime/281/monitor`,payload, options)
       .then((response) => {
         setLoading(false);
-        dispatch(AddMonitorSuccess(response));
+        console.log("API Response:", response.data);
+        dispatch(AddMonitorSuccess(response.data));
         toast.success("Monitor added successfully!");
       })
       .catch((err) => {
