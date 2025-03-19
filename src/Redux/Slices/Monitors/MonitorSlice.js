@@ -9,9 +9,10 @@ const MonitorSlice = createSlice({
             
         },
         AddMonitorSuccess: (state, action) => {
-            console.log("slice data:",action.payload?.data?.data);
+            // console.log("slice data:",action.payload?.data?.data);
             
-            return [...state, action.payload?.data?.data];
+            return [...state, action.payload];
+            // return [...state, action.payload?.data?.data];
         },
        
         ResetState: () => [],

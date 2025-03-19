@@ -65,7 +65,7 @@ const CreateMonitor = () => {
                 email: false,
                 whatsApp: true,
                 bulkAlert: true,
-                members: [{ id: 194, firstName: "sanjay", active: true }]
+                members: []
             },
             certificateExpire: {
                 status: false,
@@ -82,19 +82,31 @@ const CreateMonitor = () => {
                 }
             },
             https: {
-                host: formData.monitorURL,
+                host: formData.monitorURL?.trim(),
                 protocol: formData.protocol + "://",
                 redirect: false,
                 interval: intervalMapping[formData.interval] || 300,
                 timeout: 30,
-                method: "HEAD"
+                method: "HEAD",
+                advanced: {
+                    authentication: {
+                        username: "",
+                        password: ""
+                    },
+                    customHeaders: [],
+                    queryParam: [],
+                    body: ""
+                }
             },
             statusCode: [200],
             tags: []
         };
 
         console.log("payload data:", payload);
-        dispatch(AddMonitorAPI(payload, setLoading));
+        // dispatch(AddMonitorAPI(payload, setLoading));
+        dispatch(AddMonitorAPI(payload, setLoading))
+        .catch((error) => console.error("API Error:", error.response?.data || error.message));
+
     };
 
     return (
