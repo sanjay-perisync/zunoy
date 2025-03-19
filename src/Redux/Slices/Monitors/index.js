@@ -5,7 +5,8 @@ import MonitorSlice from "./MonitorSlice";
 
 
 const MonitorSliceReducer = combineReducers({
-    MonitorSlice
+    MonitorSlice,
+    
 });
 
 export default MonitorSliceReducer 

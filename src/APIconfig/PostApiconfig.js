@@ -5,6 +5,8 @@ import { AccountsRootUrl } from "./ConstantRootURL/RootUrl";
 import { chatCommentSuccess } from "../Redux/Slices/Support/postComment";
 import { AddGuestSuccess } from "../Redux/Slices/Guest/GuestSlice";
 import { guestrooturl } from "./getAPIconfig";
+import { ListURL } from "./ConstantRootURL/RootUrl";
+import { AddMonitorSuccess } from "../Redux/Slices/Monitors/MonitorSlice";
 
 const api = axios.create({
   baseURL: AccountsRootUrl,
@@ -349,6 +351,38 @@ export const AddGuestAPI = (formData, setLoading) => {
 
         toast.error(
           err?.response?.data?.msg || "Unable to add guest. Please try again later."
+        );
+      });
+  };
+};
+
+
+
+
+export const AddMonitorAPI = (formData, setLoading) => {
+  return async (dispatch) => {
+    setLoading(true);
+    
+    const options = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        // "x-app-id": "2"
+      },
+    };
+  
+
+    postAPICall(`${ListURL}/uptime/281/monitor`,formData, options)
+      .then((response) => {
+        setLoading(false);
+        dispatch(AddMonitorSuccess(response));
+        toast.success("Monitor added successfully!");
+      })
+      .catch((err) => {
+        setLoading(false);
+        dispatch({ type: "Monitor", payload: err });
+
+        toast.error(
+          err?.response?.data?.msg || "Unable to add Monitor. Please try again later."
         );
       });
   };

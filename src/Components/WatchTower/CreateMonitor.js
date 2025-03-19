@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TextField, Button, Box, p, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { TextField, Button, Box, FormControlLabel, Switch, ToggleButton, ToggleButtonGroup, CircularProgress } from "@mui/material";
 import { Link } from "react-router-dom";
 import Navbar from "../Navbar";
 import AlertComp from "./AlertComp";
@@ -10,8 +10,18 @@ import AdditionalSet from "./AdditionalSet";
 
 const CreateMonitor = () => {
     const [monitorName, setMonitorName] = useState("");
-    const [monitorType, setMonitorType] = useState("HTTPS");
+    const [monitorType, setMonitorType] = useState("");
     const [focused, setFocused] = useState(false);
+    const [keyFound, setkeyFound] = useState(true);
+    const [keyNotFound, setkeyNotFound] = useState(false);
+
+    const togglekeyFound = () => {
+        setkeyFound(!keyFound);
+    }
+
+    const togglekeyNotFound = () => {
+        setkeyNotFound(!keyNotFound);
+    }
 
     const handleTypeChange = (event, newType) => {
         if (newType !== null) setMonitorType(newType);
@@ -111,7 +121,7 @@ const CreateMonitor = () => {
                     </Box>
                 </Box>
 
-
+                {/* HTTPS */}
                 {monitorType === "HTTPS" && (
                     <div className="bg-white flex flex-wrap lg:flex-nowrap border rounded-xl p-6 mt-4">
 
@@ -182,7 +192,7 @@ const CreateMonitor = () => {
 
 
 
-
+                {/* PORT */}
                 {monitorType === "PORT" && (
                     <div className="bg-white flex flex-wrap lg:flex-nowrap border rounded-xl p-6 mt-4">
 
@@ -285,9 +295,9 @@ const CreateMonitor = () => {
 
 
 
+                {/* KEYWORD */}
 
-                
-{monitorType === "KEYWORD" && (
+                {monitorType === "KEYWORD" && (
                     <div className="bg-white flex flex-wrap lg:flex-nowrap border rounded-xl p-6 mt-4">
 
                         <div>
@@ -343,8 +353,125 @@ const CreateMonitor = () => {
                                 <TextField
 
                                     label="Keyword"
-                                    variant="Zoop_Time"
+                                    variant="filled"
                                     placeholder="4536"
+                                    sx={{
+                                        "& .MuiInputBase-root": {
+                                            border: "3px solid",
+                                            borderColor: focused ? "#1976D2" : "#F8F8F8",
+                                            borderRadius: "8px",
+                                            backgroundColor: "white",
+                                            transition: "border-color 0.3s ease",
+                                        },
+                                        "& .MuiInputBase-root:hover": {
+                                            borderColor: focused ? "#1976D2" : "#BEBEBE",
+                                            backgroundColor: "#F8F8F8",
+                                        },
+                                        "& .MuiInputBase-root.Mui-focused": {
+                                            borderColor: "#1976D2",
+                                            backgroundColor: "white",
+                                        },
+                                        "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+                                            display: "none",
+                                        },
+                                    }}
+                                />
+
+
+                            </section>
+
+
+
+                            <div className="flex flex-col gap-5">
+
+                                <select className="border rounded-lg px-3 py-4 bg-white">
+                                    <option>Every 5 minutes</option>
+                                    <option>Every 10 minutes</option>
+                                    <option>Every 30 minutes</option>
+                                    <option>Every 1 hour</option>
+                                </select>
+
+
+
+
+
+                                <div>
+                                    <div className="flex justify-between items-center my-4">
+                                        <p>Make Keyword as Case Sensitive</p>
+                                        <FormControlLabel
+                                            control={<Switch />}
+
+                                        />
+                                    </div>
+
+                                    <div className="flex gap-5">
+
+                                        <button
+                                            className={`flex items-center rounded border px-3 py-2 ${keyFound ? ' border' : 'bg-gray-100'}`}
+                                            onClick={togglekeyFound}
+                                        >
+                                            <span className="mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17 2H7c-1.103 0-2 .897-2 2v16c0 1.103.897 2 2 2h10c1.103 0 2-.897 2-2V4c0-1.103-.897-2-2-2M7 16.999V5h10l.002 11.999z" /></svg></span>
+                                            <span className="pr-2">Keyword is Found
+                                            </span>
+                                            <input
+                                                type="checkbox"
+                                                checked={keyFound}
+                                                readOnly
+                                                className="h-5 w-5"
+                                            />
+                                        </button>
+
+
+                                        <button
+                                            className={`flex items-center rounded border px-3 py-2 ${keyNotFound ? ' border' : 'bg-gray-100'}`}
+                                            onClick={togglekeyNotFound}
+                                        >
+                                            <span className="mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17 2H7c-1.103 0-2 .897-2 2v16c0 1.103.897 2 2 2h10c1.103 0 2-.897 2-2V4c0-1.103-.897-2-2-2M7 16.999V5h10l.002 11.999z" /></svg></span>
+                                            <span className="pr-2">Keyword is Not Found</span>
+                                            <input
+                                                type="checkbox"
+                                                checked={keyNotFound}
+                                                readOnly
+                                                className="h-5 w-5"
+                                            />
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+
+
+
+
+
+                {/* ping */}
+
+                {monitorType === "PING" && (
+                    <div className="bg-white flex flex-wrap lg:flex-nowrap border rounded-xl p-6 mt-4">
+
+                        <div>
+                            <p className="font-semibold text-lg">Monitor Information</p>
+                            <p className="text-gray-500 max-w-lg mb-4">
+                                The provided URL will be monitored, and the specified interval will ensure continuous site performance and optimal uptime.
+                            </p></div>
+
+
+                        <div className="flex flex-col gap-4 w-full">
+
+
+                            <section className="flex gap-5">
+
+
+
+                                <TextField
+                                    fullWidth
+                                    label="IP address or Domain"
+                                    variant="filled"
+                                    placeholder="136.198.0.1"
                                     sx={{
                                         "& .MuiInputBase-root": {
                                             border: "3px solid",
@@ -384,11 +511,40 @@ const CreateMonitor = () => {
                 )}
 
 
+                {monitorType && (
+                    <>
+                        <AlertComp />
+                        <AdditionalSet />
+                        <WhitelistIPAccordion />
 
-                <AlertComp />
-                <AdditionalSet />
-                <WhitelistIPAccordion />
+
+                        <div className="sticky bottom-0 left-0 z-20 w-full bg-white/80 backdrop-blur-sm py-4 h-20 flex justify-end gap-4 mx-auto max-w-[1400px]">
+                            <button
+                                type="button"
+                                className="px-6 py-2 font-semibold flex items-center"
+                            >
+
+                    <Link to="/monitors">
+                            Cancel
+                        </Link>
+                            </button>
+                            <button
+                                type="submit"
+                                className=" bg-blue-600 px-6 py-2 rounded-xl font-semibold hover:bg-blue-700 text-white"
+
+
+                            >
+
+                                Submit
+                            </button>
+                        </div>
+                    </>
+                )}
+
             </div>
+
+
+
             <footer className="mx-auto max-w-[1400px] mt-5">
                 {/* <Mainpagefooter/> */}
             </footer>

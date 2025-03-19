@@ -78,8 +78,10 @@ function Navbar() {
 
    {/* Mobile Menu */}
 {isMenuOpen && (
-  <nav className="lg:hidden bg-white shadow-md p-4 absolute top-16 left-0 w-full z-50 h-screen">
+  <nav className="lg:hidden flex flex-col justify-around  bg-white shadow-md p-4 absolute top-16 left-0 w-full z-10 h-screen">
 
+
+<div>
     <button
       onClick={() => setIsMenuOpen(false)}
       className="absolute top-6 right-4 text-black"
@@ -90,26 +92,176 @@ function Navbar() {
       </svg>
     </button>
 
-    <ul className="flex flex-col gap-4 mt-8">
-      <li>
-        <Link to="/mainpage" className="block py-2 px-4" onClick={() => setIsMenuOpen(false)}>All apps</Link>
-      </li>
-      <li>
-        <Link to="/account" className="block py-2 px-4" onClick={() => setIsMenuOpen(false)}>Account</Link>
-      </li>
-      <li>
-        <Link to="/billing" className="block py-2 px-4" onClick={() => setIsMenuOpen(false)}>Billing</Link>
-      </li>
-      <li>
-        <Link to="/security" className="block py-2 px-4" onClick={() => setIsMenuOpen(false)}>Security</Link>
-      </li>
-      <li>
-        <Link to="/support" className="block py-2 px-4" onClick={() => setIsMenuOpen(false)}>Support</Link>
-      </li>
-      <li>
-        <Link to="/guestmanagement" className="block py-2 px-4" onClick={() => setIsMenuOpen(false)}>Guest Management</Link>
-      </li>
+    <ul className="flex flex-col gap-4  font-semibold text-[16px]">
+      {/* All Apps */}
+      <Link to="/mainpage">
+              <button className={`flex items-center space-x-4 px-3 py-1.5 hover:bg-gray-100 w-full rounded-lg font-semibold ${activeTab === "All apps" ? "bg-gray-200" : ""}`}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`h-5 w-5 ${activeTab === "All apps" ? "text-indigo-500" : "text-gray-400"}`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                  <line x1="8" y1="21" x2="16" y2="21"></line>
+                  <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+                <span className={`font-semibold text-[16px] ${activeTab === "All apps" ? "text-black" : "text-slate-600"}`}>
+                  All apps
+                </span>
+              </button>
+            </Link>
+
+            {/* Account */}
+            <Link to="/account">
+              <button className={`flex items-center hover:bg-gray-100 w-full space-x-4 px-3 py-1.5 rounded-lg font-semibold ${activeTab === "Account" ? "bg-gray-200" : ""}`}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`h-5 w-5 ${activeTab === "Account" ? "text-indigo-500" : "text-gray-400"}`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span className={`font-semibold text-[16px] ${activeTab === "Account" ? "text-black" : "text-slate-600"}`}>
+                  Account
+                </span>
+              </button>
+            </Link>
+
+            {/* Billing */}
+            <Link to="/billing">
+              <button className={`flex items-center hover:bg-gray-100 w-full space-x-4 px-3 py-1.5 rounded-lg font-semibold ${activeTab === "Billing" ? "bg-gray-200" : ""}`}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`h-5 w-5 ${activeTab === "Billing" ? "text-indigo-500" : "text-gray-400"}`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                  <line x1="1" y1="10" x2="23" y2="10"></line>
+                </svg>
+                <span className={`font-semibold text-[16px] ${activeTab === "Billing" ? "text-black" : "text-slate-600"}`}>
+                  Billing
+                </span>
+              </button>
+            </Link>
+
+            {/* Security */}
+            <Link to="/security">
+              <button className={`flex items-center hover:bg-gray-100 w-full space-x-4 px-3 py-1.5 rounded-lg font-semibold ${activeTab === "Security" ? "bg-gray-200" : ""}`}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`h-5 w-5 ${activeTab === "Security" ? "text-indigo-500" : "text-gray-400"}`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                <span className={`font-semibold text-[16px] ${activeTab === "Security" ? "text-black" : "text-slate-600"}`}>
+                  Security
+                </span>
+              </button>
+            </Link>
+
+            {/* Support */}
+            <Link to="/support">
+              <button className={`flex items-center hover:bg-gray-100 w-full space-x-4 px-3 py-1.5 rounded-lg font-semibold ${activeTab === "Support" ? "bg-gray-200" : ""}`}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`h-5 w-5 ${activeTab === "Support" ? "text-indigo-500" : "text-gray-400"}`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="16" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                <span className={`font-semibold text-[16px] ${activeTab === "Support" ? "text-black" : "text-slate-600"}`}>
+                  Support
+                </span>
+              </button>
+            </Link>
+
+
+
+
+
+
+            <Link to="/guestmanagement">
+              <button className={`flex items-center hover:bg-gray-100 w-full space-x-4 px-3 py-1.5 rounded-lg font-semibold ${activeTab === "Guest Management" ? "bg-gray-200" : ""}`}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`h-5 w-5 ${activeTab === "Guest Management" ? "text-indigo-500" : "text-gray-400"}`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="16" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                
+                <span className={`font-semibold text-[16px] ${activeTab === "Guest Management" ? "text-black" : "text-slate-600"}`}>
+                  Guest Management
+                </span>
+              </button>
+            </Link>
+
+
+
+            <Link to="/monitors">
+              <button className={`flex items-center hover:bg-gray-100 w-full space-x-4 px-3 py-1.5 rounded-lg font-semibold ${activeTab === "Monitors" ? "bg-gray-200" : ""}`}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`h-5 w-5 ${activeTab === "Monitors" ? "text-indigo-500" : "text-gray-400"}`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="16" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                
+                <span className={`font-semibold text-[16px] ${activeTab === "Monitors" ? "text-black" : "text-slate-600"}`}>
+                  Monitors
+                </span>
+              </button>
+            </Link>
     </ul>
+    </div>
+
+    <div>
+      <Logout/>
+    </div>
   </nav>
 )}
 
