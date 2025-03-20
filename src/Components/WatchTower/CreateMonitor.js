@@ -37,11 +37,8 @@ const CreateMonitor = () => {
 
     console.log("monitor data:", monitor);
 
-
-
     const handleSubmit = () => {
         setLoading(true);
-
 
         const intervalMapping = {
             "5": 300,
@@ -50,8 +47,8 @@ const CreateMonitor = () => {
             "60": 3600,
         };
 
-        const payload = {
-
+       
+        let payload = {
             type: formData.type.toLowerCase(),
             alert: true,
             name: formData.name,
@@ -81,33 +78,159 @@ const CreateMonitor = () => {
                     frequency: 1
                 }
             },
-            https: {
-                host: formData.monitorURL?.trim(),
-                protocol: formData.protocol + "://",
-                redirect: false,
-                interval: intervalMapping[formData.interval] || 300,
-                timeout: 30,
-                method: "HEAD",
-                advanced: {
-                    authentication: {
-                        username: "",
-                        password: ""
-                    },
-                    customHeaders: [],
-                    queryParam: [],
-                    body: ""
-                }
-            },
             statusCode: [200],
             tags: []
         };
 
-        console.log("payload data:", payload);
-        // dispatch(AddMonitorAPI(payload, setLoading));
-        dispatch(AddMonitorAPI(payload, setLoading))
-        .catch((error) => console.error("API Error:", error.response?.data || error.message));
+        switch (formData.type.toLowerCase()) {
+            case "https":
+                payload = {
+                    ...payload,
+                    https: {
+                        host: formData.monitorURL?.trim(),
+                        protocol: formData.protocol + "://",
+                        redirect: false,
+                        interval: intervalMapping[formData.interval] || 300,
+                        timeout: 30,
+                        method: "HEAD",
+                        advanced: {
+                            authentication: {
+                                username: "",
+                                password: ""
+                            },
+                            customHeaders: [],
+                            queryParam: [],
+                            body: ""
+                        }
+                    }
+                };
+                break;
 
+            case "port":
+                payload = {
+                    ...payload,
+                    port: {
+                        host: formData.monitorURL?.trim(),
+                        protocol: formData.protocol + "://",
+                        port: parseInt(formData.port),
+                        interval: intervalMapping[formData.interval] || 300,
+                        timeout: 30
+                    }
+                };
+                break;
+
+            case "keyword":
+                payload = {
+                    ...payload,
+                    keyword: {
+                        host: formData.monitorURL?.trim(),
+                        protocol: formData.protocol + "://",
+                        keyword: formData.keyword,
+                        alertWhen: formData.keyFound ? "found" : "notFound",
+                        caseSensitive: formData.caseSensitive,
+                        method: "GET",
+                        redirect: false,
+                        interval: intervalMapping[formData.interval] || 300,
+                        timeout: 30,
+                        advanced: {
+                            authentication: {
+                                username: "",
+                                password: ""
+                            },
+                            customHeaders: [],
+                            queryParam: [],
+                            body: ""
+                        }
+                    }
+                };
+                break;
+
+            case "ping":
+                payload = {
+                    ...payload,
+                    ping: {
+                        host: formData.monitorURL?.trim(),
+                        interval: intervalMapping[formData.interval] || 300
+                    }
+                };
+                break;
+
+            default:
+                break;
+        }
+
+        console.log("payload data:", payload);
+        dispatch(AddMonitorAPI(payload, setLoading));
     };
+
+    // const handleSubmit = () => {
+    //     setLoading(true);
+
+
+    //     const intervalMapping = {
+    //         "5": 300,
+    //         "10": 600,
+    //         "30": 1800,
+    //         "60": 3600,
+    //     };
+
+    //     const payload = {
+
+    //         type: formData.type.toLowerCase(),
+    //         alert: true,
+    //         name: formData.name,
+    //         alertInterval: 5,
+    //         location: ["MUMBAI"],
+    //         incident: true,
+    //         alertInfo: {
+    //             notification: true,
+    //             call: false,
+    //             sms: false,
+    //             email: false,
+    //             whatsApp: true,
+    //             bulkAlert: true,
+    //             members: []
+    //         },
+    //         certificateExpire: {
+    //             status: false,
+    //             notify: {
+    //                 From: 2,
+    //                 frequency: 1
+    //             }
+    //         },
+    //         domainExpire: {
+    //             status: false,
+    //             notify: {
+    //                 From: 2,
+    //                 frequency: 1
+    //             }
+    //         },
+    //         https: {
+    //             host: formData.monitorURL?.trim(),
+    //             protocol: formData.protocol + "://",
+    //             redirect: false,
+    //             interval: intervalMapping[formData.interval] || 300,
+    //             timeout: 30,
+    //             method: "HEAD",
+    //             advanced: {
+    //                 authentication: {
+    //                     username: "",
+    //                     password: ""
+    //                 },
+    //                 customHeaders: [],
+    //                 queryParam: [],
+    //                 body: ""
+    //             }
+    //         },
+    //         statusCode: [200],
+    //         tags: []
+    //     };
+
+    //     console.log("payload data:", payload);
+    //     dispatch(AddMonitorAPI(payload, setLoading));
+       
+
+    // };
 
     return (
         <div className="">
@@ -134,7 +257,7 @@ const CreateMonitor = () => {
                             <p className="font-semibold text-lg">
                                 Monitor Name & Type
                             </p>
-                            <p className="text-gray-500 text-sm mb-4 mx-auto max-w-xl">
+                            <p className="text-gray-500  mb-4 mx-auto max-w-xl">
                                 Give your monitor a unique name to make it easy to identify in your workspace. Then, choose the monitor type that suits your needs.
                             </p>
                         </div>

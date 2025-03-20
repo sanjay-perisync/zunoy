@@ -12,7 +12,7 @@ import { TicketSuccess } from "../Redux/Slices/Support/TicketSlice";
 import { TicketinfoSuccess } from "../Redux/Slices/Support/TicketDetailsSlice";
 import { chatSuccess } from "../Redux/Slices/Support/chatSlice";
 import { GuestlistSuccess } from "../Redux/Slices/Guest/GuestSlice";
-import { MonitorslistSuccess } from "../Redux/Slices/Monitors/MonitorSlice";
+import { MonitorslistSuccess, viewMonitorSuccess } from "../Redux/Slices/Monitors/MonitorSlice";
 
 
 
@@ -613,5 +613,30 @@ export const MonitorListAPI = (setLoading ) => {
 
 
 
+export const viewMonitorDetails = (id, setLoading ) => {
+  return (dispatch) => {
+    setLoading(true);
+
+    const options = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("mt")}`,
+      },
+    };
+
+    getAPICall(`${ListURL}/uptime/281/monitor?id=${id}`, options)
+      .then((response) => {
+        setLoading(false);
+        dispatch(viewMonitorSuccess(response));
+      })
+      .catch((err) => {
+        setLoading(false);
+        dispatch({ type: "VIEW_DETAILS_FAILED", payload: err });
+        toast.error(
+          err?.response?.data?.msg ||
+            "Unable to View details. Please try again later."
+        );
+      });
+  };
+};
 
 

@@ -1,6 +1,6 @@
 import { useState,useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { MenuItem, Select, TextField, IconButton, Menu, Tabs, Tab } from "@mui/material";
+import { MenuItem, Select, TextField, IconButton, Menu, Tabs, Tab,Chip  } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Navbar from "../Navbar";
 import { MonitorListAPI } from "../../APIconfig/getAPIconfig";
@@ -8,11 +8,16 @@ import { useDispatch,useSelector } from "react-redux";
 import moment from "moment/moment";
 import { Link } from "react-router-dom";
 import { Add as AddIcon } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+
+
+
 
 
 
 const ActionColumn = () => {
   const [option, setOption] = useState(null);
+  const navigate = useNavigate();
 
   const handleClick = (event) => {
     setOption(event.currentTarget);
@@ -21,6 +26,11 @@ const ActionColumn = () => {
   const handleClose = () => {
     setOption(null);
   };
+
+
+
+ 
+
 
   return (
     <>
@@ -60,6 +70,7 @@ export default function MonitorsPage() {
   const dispatch=useDispatch();
   const [activeTab, setActiveTab] = useState(0);
   const tabs = ["All", "Up", "Down", "Paused"];
+  const navigate = useNavigate();
 
     useEffect(() => {
       setLoading(true);
@@ -71,13 +82,36 @@ export default function MonitorsPage() {
 const monitorInfo = useSelector((state) => state?.MonitorSliceReducer?.MonitorSlice || []);
 console.log("List monitor info:",monitorInfo);
 
-const rows = monitorInfo.map((monitor) => ({
-  id: monitor.id,
-  monitorName: monitor.name,
-  tags:"No Tags",
-  host: monitor.https?.host,
-  lastChecked: moment(monitor.recentCheckAt).format('Do MMMM YYYY , h:mm a'),
-}));
+// const rows = monitorInfo.map((monitor) => ({
+//   id: monitor.id,
+//   monitorName: monitor.name,
+//   tags:"No Tags",
+//   host: monitor.https?.host ||
+//   monitor.ping?.host ||
+//   monitor.keyword?.host ||
+//   monitor.port?.host ||
+//   "N/A",
+//   lastChecked: moment(monitor.recentCheckAt).format('Do MMMM YYYY , h:mm a'),
+// }));
+
+const rows = Array.isArray(monitorInfo)
+  ? monitorInfo.map((monitor) => ({
+      id: monitor.id,
+      monitorName: monitor.name,
+      tags: "No Tags",
+      host:
+        monitor.https?.host ||
+        monitor.ping?.host ||
+        monitor.keyword?.host ||
+        monitor.port?.host ||
+        "N/A",
+      lastChecked: moment(monitor.recentCheckAt).format("Do MMMM YYYY, h:mm a"),
+    }))
+  : [];
+
+const handleRowClick = (params) => {
+  navigate(`/monitors/${params.row.id}/view`);
+};
 
 
   return (
@@ -132,7 +166,7 @@ const rows = monitorInfo.map((monitor) => ({
         </div>
 
         <div className="bg-white overflow-x-auto">
-          <DataGrid rows={rows} columns={columns} pageSize={5} autoHeight loading={loading}
+          <DataGrid rows={rows} columns={columns} autoHeight loading={loading}  onRowClick={handleRowClick}
           sx={{
             minWidth: "800px",
             "& .MuiDataGrid-columnSeparator": { display: "none" },

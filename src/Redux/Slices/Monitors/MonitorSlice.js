@@ -14,11 +14,16 @@ const MonitorSlice = createSlice({
             return [...state, action.payload];
             // return [...state, action.payload?.data?.data];
         },
+        viewMonitorSuccess: (state, action) => {
+            // console.log(action.payload);
+
+            return action.payload || [];
+        },
        
         ResetState: () => [],
     },
 });
 
-export const { MonitorslistSuccess, AddMonitorSuccess, ResetState } = MonitorSlice.actions;
+export const { MonitorslistSuccess, AddMonitorSuccess,viewMonitorSuccess, ResetState } = MonitorSlice.actions;
 
 export default MonitorSlice.reducer;

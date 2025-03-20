@@ -17,6 +17,7 @@ import { store } from "./Redux/Store";
 import Guest from "./Components/Guest Management/Guest";
 import Monitor from "./Components/WatchTower/Monitor";
 import CreateMonitor from "./Components/WatchTower/CreateMonitor";
+import View from "./Components/WatchTower/View";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
             <Route path="/guestmanagement" element={<Guest />} />
             <Route path="/monitors" element={<Monitor />} />
             <Route path="/monitors/Create" element={<CreateMonitor />} />
+            <Route path="/monitors/:id/view" element={<View />} />
           </Routes>
         </div>
       </Router>
