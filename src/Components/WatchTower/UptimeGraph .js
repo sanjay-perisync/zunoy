@@ -8,10 +8,10 @@ const UptimeGraph = ({ monitorId }) => {
   const dispatch = useDispatch();
   const graphData = useSelector((state) => state?.MonitorSliceReducer?.ViewGraphSlice || {});
   
-  console.log("Pill Graph Data:", graphData);
+  // console.log("Pill Graph Data:", graphData);
 
   useEffect(() => {
-    console.log("Monitor ID:", monitorId);
+    // console.log("Monitor ID:", monitorId);
     if (monitorId) {
       dispatch(pillGraphDetails(monitorId));
     }
@@ -76,7 +76,7 @@ const UptimeGraph = ({ monitorId }) => {
   useEffect(() => {
     const rawData = graphData?.data?.data || [];
     if (rawData.length) {
-      console.log("Raw Data:", rawData);
+      // console.log("Raw Data:", rawData);
       const newCategories = rawData.map((item) =>
         moment(item.start).format("hh:mm:ss A")
       );

@@ -9,17 +9,15 @@ const MonitorSlice = createSlice({
         },
         AddMonitorSuccess: (state, action) => {
             return [...state, action.payload];
-        }
-        ,
-        // DeleteMonitorSuccess: (state, action) => {
-        //     const idToDelete = action.payload; 
-        //     return state.filter((monitor) => monitor.id !== idToDelete);
-        // },
-        
+        },
+        DeleteMonitorSuccess: (state, action) => {
+            const idToDelete = action.payload; 
+            return state.filter((monitor) => monitor.id !== idToDelete);
+        },
         ResetState: () => [],
     },
 });
 
-export const { MonitorslistSuccess, AddMonitorSuccess, ResetState } = MonitorSlice.actions;
+export const { MonitorslistSuccess, AddMonitorSuccess,DeleteMonitorSuccess, ResetState } = MonitorSlice.actions;
 
 export default MonitorSlice.reducer;

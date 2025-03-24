@@ -25,19 +25,24 @@ const View = () => {
 
     const monitor = useSelector((state) => state?.MonitorSliceReducer?.ViewMonitorSlice || []);
 
-    console.log("details:", monitor);
+    // console.log("details:", monitor);
 
     const monitorName = monitor?.data?.name;
+    const status = monitor?.data?.operationalStatus?.status;
     const monitorHost =
         monitor?.data?.https?.host ||
         monitor?.data?.ping?.host ||
         monitor?.data?.keyword?.host ||
         monitor?.data?.port?.host ||
         "N/A";
-
+// console.log("status", status)
     return (
         <div>
-            <Navbar />
+
+            <header className="top-0 left-0 sticky bg-white z-10">
+            <Navbar/>
+            </header>
+            
 
             <section className="mx-auto max-w-[1400px] px-4 mt-10">
                 <Link to={"/monitors"} className="flex items-center gap-2 mb-4 ">
@@ -49,12 +54,24 @@ const View = () => {
 
                 <div className="flex flex-wrap justify-between gap-4">
                     <div className="flex items-center gap-5">
-                        <div>
-                            <div className="bg-red-500 h-5 w-5 rounded-full"></div>
-                        </div>
+
+                        {status === "monitor is down" && (
+                            <div>
+                                <div className="bg-red-500 h-8 w-8 rounded-full"></div>
+                            </div>
+                        )}
+
+
+                        {status === "monitor is up" && (
+                            <div>
+                                <div className="bg-green-500 h-8 w-8 rounded-full"></div>
+                            </div>
+                        )}
+
+
                         <div className="flex flex-col gap-2">
                             <span className="font-bold text-[28px]">{monitorName}</span>
-                            <span className="bg-gray-300 px-2 py-[1px] rounded-xl">{monitorHost}</span>
+                            <span className="bg-gray-300 px-2 py-1 rounded-xl">{monitorHost}</span>
                         </div>
                     </div>
 
@@ -65,40 +82,40 @@ const View = () => {
 
                         <button>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                <path fill="currentColor" d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0-4 0m0-6a2 2 0 1 0 4 0a2 2 0 0 0-4 0m0 12a2 2 0 1 0 4 0a2 2 0 0 0-4 0"/>
+                                <path fill="currentColor" d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0-4 0m0-6a2 2 0 1 0 4 0a2 2 0 0 0-4 0m0 12a2 2 0 1 0 4 0a2 2 0 0 0-4 0" />
                             </svg>
                         </button>
                     </div>
                 </div>
 
-           <div className="border-b border-gray-300 overflow-x-auto scrollbar-hide">
-    <div className="overflow-x-auto whitespace-nowrap scrollbar-hide">
-        <Tabs
-            value={value}
-            onChange={(event, newValue) => setValue(newValue)}
-            aria-label="Monitor Tabs"
-            textColor="primary"
-            indicatorColor="primary"
-            sx={{
-                "& .MuiTab-root": { textTransform: "none", fontSize: "1rem", fontWeight: 500 },
-                "& .Mui-selected": { color: "#6366F1" }, 
-                display: "flex",
-                flexWrap: "nowrap",
-                minWidth: "max-content"
-            }}
-        >
-            <Tab label="Overview" />
-            <Tab label="Logs (beta)" />
-            <Tab label="Settings" />
-            <Tab label="Integration" />
-            <Tab label="Critical Settings" sx={{ color: "#DC2626" }} />
-        </Tabs>
-    </div>
-</div>
+                <div className="border-b border-gray-300 overflow-x-auto scrollbar-hide">
+                    <div className="overflow-x-auto whitespace-nowrap scrollbar-hide">
+                        <Tabs
+                            value={value}
+                            onChange={(event, newValue) => setValue(newValue)}
+                            aria-label="Monitor Tabs"
+                            textColor="primary"
+                            indicatorColor="primary"
+                            sx={{
+                                "& .MuiTab-root": { textTransform: "none", fontSize: "1rem", fontWeight: 500 },
+                                "& .Mui-selected": { color: "#6366F1" },
+                                display: "flex",
+                                flexWrap: "nowrap",
+                                minWidth: "max-content"
+                            }}
+                        >
+                            <Tab label="Overview" />
+                            <Tab label="Logs (beta)" />
+                            <Tab label="Settings" />
+                            <Tab label="Integration" />
+                            <Tab label="Critical Settings" sx={{ color: "#DC2626" }} />
+                        </Tabs>
+                    </div>
+                </div>
 
 
                 <div className="mt-6">
-                    {value === 0 && <Overview monitor={monitor}/>}
+                    {value === 0 && <Overview monitor={monitor} />}
                     {value === 1 && <Logs />}
                     {/* {value === 2 && <Settings />}
                     {value === 3 && <Integration />} */}

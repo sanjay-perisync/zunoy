@@ -36,7 +36,7 @@ const CreateMonitor = () => {
 
     const monitor = useSelector((state) => state?.MonitorSliceReducer?.MonitorSlice || []);
 
-    console.log("monitor data:", monitor);
+    // console.log("monitor data:", monitor);
 
     const handleSubmit = () => {
         setLoading(true);
@@ -161,8 +161,8 @@ const CreateMonitor = () => {
         }
 
         console.log("payload data:", payload);
-        dispatch(AddMonitorAPI(payload, setLoading));
-        navigate('/monitors');
+        dispatch(AddMonitorAPI(payload,navigate, setLoading));
+        // navigate('/monitors');
     };
 
     // const handleSubmit = () => {

@@ -8,6 +8,9 @@ import { guestrooturl } from "./getAPIconfig";
 import { ListURL } from "./ConstantRootURL/RootUrl";
 import { AddMonitorSuccess } from "../Redux/Slices/Monitors/MonitorSlice";
 
+
+
+
 const api = axios.create({
   baseURL: AccountsRootUrl,
   headers: {
@@ -359,7 +362,7 @@ export const AddGuestAPI = (formData, setLoading) => {
 
 
 
-export const AddMonitorAPI = (payload, setLoading) => {
+export const AddMonitorAPI = (payload,navigate, setLoading) => {
   return async (dispatch) => {
     setLoading(true);
     
@@ -377,6 +380,7 @@ export const AddMonitorAPI = (payload, setLoading) => {
         console.log("API Response:", response.data);
         dispatch(AddMonitorSuccess(response.data));
         toast.success("Monitor added successfully!");
+        navigate("/monitors");
       })
       .catch((err) => {
         setLoading(false);

@@ -17,8 +17,11 @@ const CriticalSettings = () => {
     (state) => state?.MonitorSliceReducer?.ViewMonitorSlice || []
   );
 
+//   console.log(monitor);
+  
+
   const id = monitor?.data?.id;
-  console.log("ID:",id);
+//   console.log("ID:",id);
   
 
   const monitorName = monitor?.data?.name;
@@ -28,11 +31,9 @@ const CriticalSettings = () => {
   const handleDelete = () => {
     if (id) {
       setLoading(true); 
-      dispatch(DeleteMonitorAPI(id,setLoading))
+      dispatch(DeleteMonitorAPI(id,setLoading,navigate))
         setIsModalOpen(false); 
-        setDeleteText("");
-        navigate('/monitors');
-       
+        setDeleteText("");   
     }
   };
 
@@ -84,7 +85,7 @@ const CriticalSettings = () => {
           className={`px-3 py-2 rounded-xl font-semibold ${
             deleteText === "DELETE"
               ? "bg-red-500 text-white"
-              : "bg-gray-300 text-gray-600 cursor-not-allowed"
+              : "bg-gray-200 text-gray-400 cursor-not-allowed"
           }`}
           onClick={() => setIsModalOpen(true)}
           disabled={deleteText !== "DELETE"}

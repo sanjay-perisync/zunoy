@@ -4,7 +4,8 @@ import { deleteAPICall } from "./axiosMethodCalls";
 import { AccountsRootUrl, ListURL } from "./ConstantRootURL/RootUrl";
 import { guestrooturl } from "./getAPIconfig";
 import { DeleteGuestSuccess } from "../Redux/Slices/Guest/GuestSlice";
-import { DeleteMonitorSuccess } from "../Redux/Slices/Monitors/ViewSlice";
+// import { DeleteMonitorSuccess } from "../Redux/Slices/Monitors/ViewSlice";
+import { DeleteMonitorSuccess } from "../Redux/Slices/Monitors/MonitorSlice";
 
 // export const LogoutApi = ({ setloader }) => {
 //   return (dispatch) => {
@@ -173,6 +174,7 @@ export const DeleteGuestAPI = (guestId, setLoading) => {
         setLoading(false);
         dispatch(DeleteGuestSuccess(guestId));
         toast.success("Guest deleted successfully");
+        
       })
       .catch((err) => {
         setLoading(false);
@@ -189,7 +191,7 @@ export const DeleteGuestAPI = (guestId, setLoading) => {
 
 
 
-export const DeleteMonitorAPI = (id, setLoading) => {
+export const DeleteMonitorAPI = (id, setLoading,navigate) => {
   return (dispatch) => {
     setLoading(true);
     
@@ -207,7 +209,7 @@ export const DeleteMonitorAPI = (id, setLoading) => {
         dispatch(DeleteMonitorSuccess(id));
         
         toast.success("Deleted successfully");
-        
+          navigate('/monitors');
       })
       .catch((err) => {
         setLoading(false);

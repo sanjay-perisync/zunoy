@@ -1,6 +1,6 @@
 import { useState,useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { MenuItem, Select, TextField, IconButton, Menu, Tabs, Tab,Chip  } from "@mui/material";
+import { MenuItem, Select, TextField, IconButton, Menu, Tabs, Tab,Chip, Typography, CircularProgress  } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Navbar from "../Navbar";
 import { MonitorListAPI } from "../../APIconfig/getAPIconfig";
@@ -9,6 +9,7 @@ import moment from "moment/moment";
 import { Link } from "react-router-dom";
 import { Add as AddIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { Box } from "lucide-react";
 
 
 
@@ -80,7 +81,7 @@ export default function MonitorsPage() {
    
 
 const monitorInfo = useSelector((state) => state?.MonitorSliceReducer?.MonitorSlice || []);
-console.log("List monitor info:",monitorInfo);
+// console.log("List monitor info:",monitorInfo);
 
 // const rows = monitorInfo.map((monitor) => ({
 //   id: monitor.id,
@@ -166,15 +167,24 @@ const handleRowClick = (params) => {
         </div>
 
         <div className="bg-white overflow-x-auto">
-          <DataGrid rows={rows} columns={columns} autoHeight loading={loading}  onRowClick={handleRowClick}
-          sx={{
-            minWidth: "800px",
-            "& .MuiDataGrid-columnSeparator": { display: "none" },
-            "& .MuiDataGrid-columnHeaders": { borderBottom: "none" },
-            "& .MuiDataGrid-cell": { borderBottom: "none" },
-            overflowX: "auto"
-          }}/>
-        </div>
+  
+    <DataGrid
+      rows={rows}
+      columns={columns}
+      autoHeight
+      loading={loading}
+      onRowClick={handleRowClick}
+      sx={{
+        minWidth: "800px",
+        "& .MuiDataGrid-columnSeparator": { display: "none" },
+        "& .MuiDataGrid-columnHeaders": { borderBottom: "none" },
+        "& .MuiDataGrid-cell": { borderBottom: "none" },
+        overflowX: "auto",
+      }}
+    />
+
+</div>
+
         </section>
       </main>
 

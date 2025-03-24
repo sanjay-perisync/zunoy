@@ -9,14 +9,15 @@ const ViewMonitorSlice = createSlice({
             return action.payload || [];
         },
         
-        DeleteMonitorSuccess: (state, action) => {
-            return action.payload?.data || [];
-        },
+        // DeleteMonitorSuccess: (state, action) => {
+        //     return action.payload?.data || [];
+        // },
+        
        
         ResetState: () => [],
     },
 });
 
-export const { viewMonitorSuccess,DeleteMonitorSuccess, ResetState } = ViewMonitorSlice.actions;
+export const { viewMonitorSuccess, ResetState } = ViewMonitorSlice.actions;
 
 export default ViewMonitorSlice.reducer;
