@@ -371,7 +371,7 @@ export const AddMonitorAPI = (payload, setLoading) => {
     };
   
     
-    postAPICall(`${ListURL}/uptime/281/monitor`,payload, options)
+    postAPICall(`${ListURL}/uptime/57/monitor`,payload, options)
       .then((response) => {
         setLoading(false);
         console.log("API Response:", response.data);

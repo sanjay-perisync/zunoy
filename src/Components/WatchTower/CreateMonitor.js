@@ -29,6 +29,7 @@ const CreateMonitor = () => {
 
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
 
 
@@ -92,7 +93,7 @@ const CreateMonitor = () => {
                         redirect: false,
                         interval: intervalMapping[formData.interval] || 300,
                         timeout: 30,
-                        method: "HEAD",
+                        method: "GET",
                         advanced: {
                             authentication: {
                                 username: "",
@@ -161,6 +162,7 @@ const CreateMonitor = () => {
 
         console.log("payload data:", payload);
         dispatch(AddMonitorAPI(payload, setLoading));
+        navigate('/monitors');
     };
 
     // const handleSubmit = () => {

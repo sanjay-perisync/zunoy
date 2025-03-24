@@ -12,7 +12,10 @@ import { TicketSuccess } from "../Redux/Slices/Support/TicketSlice";
 import { TicketinfoSuccess } from "../Redux/Slices/Support/TicketDetailsSlice";
 import { chatSuccess } from "../Redux/Slices/Support/chatSlice";
 import { GuestlistSuccess } from "../Redux/Slices/Guest/GuestSlice";
-import { MonitorslistSuccess, viewMonitorSuccess } from "../Redux/Slices/Monitors/MonitorSlice";
+import { MonitorslistSuccess } from "../Redux/Slices/Monitors/MonitorSlice";
+import { viewMonitorSuccess } from "../Redux/Slices/Monitors/ViewSlice";
+import {  PillGraphSuccess } from "../Redux/Slices/Monitors/GraphSlice";
+import { LineGraphSuccess } from "../Redux/Slices/Monitors/LineGraphSlice";
 
 
 
@@ -593,7 +596,7 @@ export const MonitorListAPI = (setLoading ) => {
       };
 
       getAPICall(
-        `${ListURL}/uptime/281/monitor?page=1&size=5&search=&status=&type=ping,port,https,keyword&tags=`,
+        `${ListURL}/uptime/57/monitor?page=1&size=5&search=&status=&type=ping,port,https,keyword&tags=`,
         options )
         .then((response) => {
       setLoading(false);
@@ -623,7 +626,7 @@ export const viewMonitorDetails = (id, setLoading ) => {
       },
     };
 
-    getAPICall(`${ListURL}/uptime/281/monitor?id=${id}`, options)
+    getAPICall(`${ListURL}/uptime/57/monitor?id=${id}`, options)
       .then((response) => {
         setLoading(false);
         dispatch(viewMonitorSuccess(response));
@@ -640,3 +643,53 @@ export const viewMonitorDetails = (id, setLoading ) => {
 };
 
 
+
+
+export const pillGraphDetails = (id) => {
+  return (dispatch) => {
+    const options = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("mt")}`,
+      },
+    };
+
+
+    getAPICall(`${ListURL}/uptime/57/monitor/pillGraph?monitorId=${id}&filter=1&start=null&end=null`, options)
+      .then((response) => {
+        dispatch(PillGraphSuccess(response));
+      })
+      .catch((err) => {
+        dispatch({ type: "PILL_GRAPH_DETAILS_FAILED", payload: err });
+        toast.error(
+          err?.response?.data?.msg ||
+            "Unable to fetch Pill Graph details. Please try again later."
+        );
+      });
+  };
+};
+
+
+
+
+export const LineGraphDetails = (id) => {
+  return (dispatch) => {
+    const options = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("mt")}`,
+      },
+    };
+
+
+    getAPICall(`${ListURL}/uptime/57/monitor/lineGraphWithFilter?monitorId=${id}&filter=1&start=null&end=null`, options)
+    .then((response) => {
+      dispatch(LineGraphSuccess(response));
+    })
+      .catch((err) => {
+        dispatch({ type: "LINE_GRAPH_DETAILS_FAILED", payload: err });
+        toast.error(
+          err?.response?.data?.msg ||
+            "Unable to fetch Line Graph details. Please try again later."
+        );
+      });
+  };
+};

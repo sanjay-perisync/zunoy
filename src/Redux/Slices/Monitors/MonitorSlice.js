@@ -5,25 +5,21 @@ const MonitorSlice = createSlice({
     initialState: [],
     reducers: {
         MonitorslistSuccess: (state, action) => {
-            return action.payload?.data?.data || [];
-            
+            return action.payload?.data?.data || []; 
         },
         AddMonitorSuccess: (state, action) => {
-            // console.log("slice data:",action.payload?.data?.data);
-            
             return [...state, action.payload];
-            // return [...state, action.payload?.data?.data];
-        },
-        viewMonitorSuccess: (state, action) => {
-            // console.log(action.payload);
-
-            return action.payload || [];
-        },
-       
+        }
+        ,
+        // DeleteMonitorSuccess: (state, action) => {
+        //     const idToDelete = action.payload; 
+        //     return state.filter((monitor) => monitor.id !== idToDelete);
+        // },
+        
         ResetState: () => [],
     },
 });
 
-export const { MonitorslistSuccess, AddMonitorSuccess,viewMonitorSuccess, ResetState } = MonitorSlice.actions;
+export const { MonitorslistSuccess, AddMonitorSuccess, ResetState } = MonitorSlice.actions;
 
 export default MonitorSlice.reducer;

@@ -6,6 +6,7 @@ import Navbar from "../Navbar";
 import { Tabs, Tab } from "@mui/material";
 import Overview from "./Overview";
 import Logs from "./Logs";
+import CriticalSettings from "./CriticalSettings";
 
 
 
@@ -22,7 +23,7 @@ const View = () => {
         }
     }, [dispatch, id]);
 
-    const monitor = useSelector((state) => state?.MonitorSliceReducer?.MonitorSlice || []);
+    const monitor = useSelector((state) => state?.MonitorSliceReducer?.ViewMonitorSlice || []);
 
     console.log("details:", monitor);
 
@@ -46,19 +47,19 @@ const View = () => {
                     <span className='hover:underline font-semibold'>Monitors</span>
                 </Link>
 
-                <div className="flex justify-between">
-                    <div className="flex items-center gap-10">
+                <div className="flex flex-wrap justify-between gap-4">
+                    <div className="flex items-center gap-5">
                         <div>
                             <div className="bg-red-500 h-5 w-5 rounded-full"></div>
                         </div>
-                        <div className="flex flex-col">
+                        <div className="flex flex-col gap-2">
                             <span className="font-bold text-[28px]">{monitorName}</span>
                             <span className="bg-gray-300 px-2 py-[1px] rounded-xl">{monitorHost}</span>
                         </div>
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <button className="bg-indigo-500 rounded-xl font-semibold text-white px-3 py-2">
+                        <button className="bg-indigo-500 rounded-xl font-semibold text-white px-2 py-1 lg:px-3 lg:py-2">
                             Check Status
                         </button>
 
@@ -70,33 +71,38 @@ const View = () => {
                     </div>
                 </div>
 
-                {/* Tabs Navigation */}
-                <div className="border-b border-gray-300">
-                    <Tabs
-                        value={value}
-                        onChange={(event, newValue) => setValue(newValue)}
-                        aria-label="Monitor Tabs"
-                        textColor="primary"
-                        indicatorColor="primary"
-                        sx={{
-                            "& .MuiTab-root": { textTransform: "none", fontSize: "1rem", fontWeight: 500 },
-                            "& .Mui-selected": { color: "#6366F1" }, 
-                        }}
-                    >
-                        <Tab label="Overview" />
-                        <Tab label="Logs (beta)" />
-                        <Tab label="Settings" />
-                        <Tab label="Integration" />
-                        <Tab label="Critical Settings" sx={{ color: "#DC2626" }} />
-                    </Tabs>
-                </div>
+           <div className="border-b border-gray-300 overflow-x-auto scrollbar-hide">
+    <div className="overflow-x-auto whitespace-nowrap scrollbar-hide">
+        <Tabs
+            value={value}
+            onChange={(event, newValue) => setValue(newValue)}
+            aria-label="Monitor Tabs"
+            textColor="primary"
+            indicatorColor="primary"
+            sx={{
+                "& .MuiTab-root": { textTransform: "none", fontSize: "1rem", fontWeight: 500 },
+                "& .Mui-selected": { color: "#6366F1" }, 
+                display: "flex",
+                flexWrap: "nowrap",
+                minWidth: "max-content"
+            }}
+        >
+            <Tab label="Overview" />
+            <Tab label="Logs (beta)" />
+            <Tab label="Settings" />
+            <Tab label="Integration" />
+            <Tab label="Critical Settings" sx={{ color: "#DC2626" }} />
+        </Tabs>
+    </div>
+</div>
+
 
                 <div className="mt-6">
                     {value === 0 && <Overview monitor={monitor}/>}
                     {value === 1 && <Logs />}
                     {/* {value === 2 && <Settings />}
-                    {value === 3 && <Integration />}
-                    {value === 4 && <CriticalSettings />} */}
+                    {value === 3 && <Integration />} */}
+                    {value === 4 && <CriticalSettings />}
                 </div>
             </section>
         </div>

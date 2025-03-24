@@ -1,9 +1,11 @@
 /* eslint-disable */
 import { toast } from "react-hot-toast";
 import { deleteAPICall } from "./axiosMethodCalls";
-import { AccountsRootUrl } from "./ConstantRootURL/RootUrl";
+import { AccountsRootUrl, ListURL } from "./ConstantRootURL/RootUrl";
 import { guestrooturl } from "./getAPIconfig";
 import { DeleteGuestSuccess } from "../Redux/Slices/Guest/GuestSlice";
+import { DeleteMonitorSuccess } from "../Redux/Slices/Monitors/ViewSlice";
+
 // export const LogoutApi = ({ setloader }) => {
 //   return (dispatch) => {
 //     const options = {
@@ -171,6 +173,41 @@ export const DeleteGuestAPI = (guestId, setLoading) => {
         setLoading(false);
         dispatch(DeleteGuestSuccess(guestId));
         toast.success("Guest deleted successfully");
+      })
+      .catch((err) => {
+        setLoading(false);
+        dispatch({ type: "Delete", payload: err });
+
+        toast.error(
+          err?.response?.data?.msg || "Unable to delete. Please try again later."
+        );
+      });
+  };
+};
+
+
+
+
+
+export const DeleteMonitorAPI = (id, setLoading) => {
+  return (dispatch) => {
+    setLoading(true);
+    
+    const options = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("mt")}`,
+        
+      },
+    };
+  
+     deleteAPICall(`${ListURL}/uptime/57/monitor?id=${id}`, options)
+      .then((response) => {
+        setLoading(false);
+
+        dispatch(DeleteMonitorSuccess(id));
+        
+        toast.success("Deleted successfully");
+        
       })
       .catch((err) => {
         setLoading(false);
