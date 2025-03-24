@@ -703,12 +703,12 @@ const CreateMonitor = () => {
                             </button>
                             <button
                                 type="submit"
-                                className="bg-blue-600 px-6 py-2 rounded-xl font-semibold hover:bg-blue-700 text-white flex items-center"
+                                className="bg-blue-600 px-4 py-2 rounded-xl font-semibold hover:bg-blue-700 text-white flex items-center"
                                 onClick={handleSubmit}
                                 disabled={loading}
                             >
                                 {loading ? (
-                                    <CircularProgress />
+                                    <CircularProgress size={20} color="inherit"/>
                                 ) : (
                                     "Submit"
                                 )}

@@ -128,7 +128,7 @@ const handleRowClick = (params) => {
         </div>
 
 
-<section className="">
+<section className="border rounded-xl">
 <Tabs
       value={activeTab}
       onChange={(event, newValue) => setActiveTab(newValue)}
@@ -136,6 +136,7 @@ const handleRowClick = (params) => {
       textColor="primary"
       variant="scrollable"
       scrollButtons="auto"
+    
     >
       {tabs.map((tab, index) => (
         <Tab key={index} label={tab} />
@@ -144,8 +145,27 @@ const handleRowClick = (params) => {
 
         
 
-        <div className="flex flex-wrap lg:flex-nowrap justify-between gap-4 my-4">
-          <TextField variant="outlined" placeholder="Search monitors by name" className="w-full" />
+        <div className="flex flex-wrap lg:flex-nowrap justify-between gap-4 my-4 p-4">
+          <TextField variant="filled" placeholder="Search monitors by name" className="w-full" 
+          sx={{
+            "& .MuiInputBase-root": {
+              border: "3px solid",
+              borderColor: "#F8F8F8",
+              borderRadius: "8px",
+              backgroundColor: "white",
+            },
+            "& .MuiInputBase-root:hover": {
+              borderColor: "#BEBEBE",
+              backgroundColor: "#F8F8F8",
+            },
+            "& .MuiInputBase-root.Mui-focused": {
+              borderColor: "#1976D2",
+              backgroundColor: "white",
+            },
+            "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
+              display: "none",
+            },
+          }}/>
 
 
       <div className="flex gap-4">
@@ -166,7 +186,7 @@ const handleRowClick = (params) => {
           </div>
         </div>
 
-        <div className="bg-white overflow-x-auto">
+        <div className="bg-white overflow-x-auto ">
   
     <DataGrid
       rows={rows}

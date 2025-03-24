@@ -37,6 +37,8 @@ function Navbar() {
       {/* Top Header */}
       <div className="px-6 py-4 flex justify-between items-center border-b">
         {/* Left Side */}
+
+        
         <div className="flex items-center gap-4">
           <button className="hidden lg:flex">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_2062_2205)"><path d="M2.46466 0.0686505L9.61466 1.98508C11.069 2.37503 11.556 4.1928 10.4913 5.25734L5.25666 10.4913C4.19166 11.5562 2.37366 11.0689 1.984 9.61446L0.0686637 2.46402C-0.321003 1.00953 1.01033 -0.320967 2.46466 0.0686505Z" fill="#7A00FF"></path><path d="M21.5353 0.0686505L14.3853 1.98508C12.931 2.37503 12.444 4.1928 13.5087 5.25734L18.7433 10.4913C19.8083 11.5562 21.6263 11.0689 22.016 9.61446L23.9313 2.46402C24.321 1.00953 22.9897 -0.320967 21.5353 0.0686505Z" fill="#F9464C"></path><path d="M2.46466 23.931L9.61466 22.0146C11.069 21.6246 11.556 19.8069 10.4913 18.7423L5.25666 13.5083C4.19166 12.4435 2.37366 12.9307 1.984 14.3852L0.0686637 21.536C-0.321003 22.9905 1.01033 24.321 2.46466 23.9313V23.931Z" fill="#088BF5"></path><path d="M21.5353 23.931L14.3853 22.0146C12.931 21.6246 12.444 19.8069 13.5087 18.7423L18.7433 13.5083C19.8083 12.4435 21.6263 12.9307 22.016 14.3852L23.9313 21.5356C24.321 22.9901 22.9897 24.3206 21.5353 23.931Z" fill="#1AD3BB"></path></g><defs><clipPath id="clip0_2062_2205"><rect width="24" height="24" fill="white"></rect></clipPath></defs></svg>
@@ -78,7 +80,7 @@ function Navbar() {
 
    {/* Mobile Menu */}
 {isMenuOpen && (
-  <nav className="lg:hidden flex flex-col justify-around  bg-white shadow-md p-4 absolute top-16 left-0 w-full z-10 h-screen">
+  <nav className="lg:hidden flex flex-col justify-around  bg-white shadow-md p-4 absolute top-16 left-0 w-72 z-30 h-screen">
 
 
 <div>
