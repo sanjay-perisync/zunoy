@@ -122,8 +122,12 @@ const handleRowClick = (params) => {
       <main className="mx-auto max-w-[1400px] mt-10 px-5">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-3xl lg:text-4xl font-semibold">Monitors</h1>
-          <Link to='/monitors/Create' className="bg-indigo-500 text-white px-4 py-2 rounded-xl font-semibold flex gap-2 justify-center items-center">
+          <Link to='/monitors/Create' className="bg-indigo-500 text-white px-4 py-2 rounded-xl font-semibold hidden md:flex gap-2 justify-center items-center">
             <div><AddIcon className="w-5 h-5" /></div> <span>Add Monitor</span>
+          </Link>
+
+          <Link to='/monitors/Create' className=" text-indigo-500  font-bold flex md:hidden gap-2 justify-center items-center">
+            <div><AddIcon className="w-10 h-10" /></div> 
           </Link>
         </div>
 

@@ -7,6 +7,8 @@ import { Tabs, Tab } from "@mui/material";
 import Overview from "./Overview";
 import Logs from "./Logs";
 import CriticalSettings from "./CriticalSettings";
+import Integration from "./Integration";
+import Settings from "./Settings";
 
 
 
@@ -35,14 +37,14 @@ const View = () => {
         monitor?.data?.keyword?.host ||
         monitor?.data?.port?.host ||
         "N/A";
-// console.log("status", status)
+    // console.log("status", status)
     return (
         <div>
 
             <header className="top-0 left-0 sticky bg-white z-10">
-            <Navbar/>
+                <Navbar />
             </header>
-            
+
 
             <section className="mx-auto max-w-[1400px] px-4 mt-10">
                 <Link to={"/monitors"} className="flex items-center gap-2 mb-4 ">
@@ -56,17 +58,31 @@ const View = () => {
                     <div className="flex items-center gap-5">
 
                         {status === "monitor is down" && (
-                            <div>
-                                <div className="bg-red-500 h-8 w-8 rounded-full"></div>
+                            <div className="flex items-center justify-center">
+                                <div className="relative flex items-center justify-center">
+
+                                    {/* Inner Circle */}
+                                    <div className="h-8 w-8 rounded-full bg-red-500 flex items-center justify-center animate-redGlow">
+                                        <div className="h-3 w-3 rounded-full bg-white"></div>
+                                    </div>
+                                </div>
                             </div>
                         )}
 
 
                         {status === "monitor is up" && (
-                            <div>
-                                <div className="bg-green-500 h-8 w-8 rounded-full"></div>
+                            <div className="flex items-center justify-center">
+                                <div className="relative flex items-center justify-center">
+
+                                    {/* Inner Circle */}
+                                    <div className="h-8 w-8 rounded-full bg-green-500 flex items-center justify-center animate-greenGlow">
+                                        <div className="h-3 w-3 rounded-full bg-white"></div>
+                                    </div>
+                                </div>
                             </div>
                         )}
+
+
 
 
                         <div className="flex flex-col gap-2">
@@ -93,7 +109,6 @@ const View = () => {
                         <Tabs
                             value={value}
                             onChange={(event, newValue) => setValue(newValue)}
-                            aria-label="Monitor Tabs"
                             textColor="primary"
                             indicatorColor="primary"
                             sx={{
@@ -117,8 +132,8 @@ const View = () => {
                 <div className="mt-6">
                     {value === 0 && <Overview monitor={monitor} />}
                     {value === 1 && <Logs />}
-                    {/* {value === 2 && <Settings />}
-                    {value === 3 && <Integration />} */}
+                    {value === 2 && <Settings />}
+                    {value === 3 && <Integration />}
                     {value === 4 && <CriticalSettings />}
                 </div>
             </section>
