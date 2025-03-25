@@ -87,7 +87,7 @@ const View = () => {
 
                         <div className="flex flex-col gap-2">
                             <span className="font-bold text-[28px]">{monitorName}</span>
-                            <span className="bg-gray-300 px-2 py-1 rounded-xl">{monitorHost}</span>
+                            <span className="bg-gray-300 px-2 py-1 text-sm rounded-xl font-medium">{monitorHost}</span>
                         </div>
                     </div>
 

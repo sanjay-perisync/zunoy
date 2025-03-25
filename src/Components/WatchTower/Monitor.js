@@ -117,8 +117,10 @@ const handleRowClick = (params) => {
 
   return (
     <div>
-      <Navbar />
 
+      <header className="top-0 left-0 sticky bg-white z-10">
+      <Navbar />
+      </header>
       <main className="mx-auto max-w-[1400px] mt-10 px-5">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-3xl lg:text-4xl font-semibold">Monitors</h1>
